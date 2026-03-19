@@ -2,35 +2,35 @@
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
-	description: "I'm a starter theme for Astro.build",
-	title: "About",
+	description: "Кратко о возможностях стартового сайта на Astro",
+	title: "О проекте",
 };
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-12">About</h1>
-	<div class="prose prose-sm prose-cactus max-w-none">
+	<h1 class="page-title mb-12">О проекте</h1>
+	<div class="prose prose-sm prose-content max-w-none">
 		<p>
-			Hi, I’m a starter Astro. I’m particularly great for getting you started with your own blogging
-			website.
+			Это стартовый шаблон на Astro, который помогает быстро запустить личный сайт, блог или
+			небольшую коллекцию заметок.
 		</p>
-		<p>Here are my some of my awesome built in features:</p>
+		<p>Что здесь уже есть из коробки:</p>
 		<ul class="list-inside list-disc" role="list">
-			<li>I'm ultra fast as I'm a static site</li>
-			<li>I'm fully responsive</li>
-			<li>I come with a light and dark mode</li>
-			<li>I'm easy to customise and add additional content</li>
-			<li>I have Tailwind CSS styling</li>
-			<li>Shiki code syntax highlighting</li>
-			<li>Satori for auto generating OG images for blog posts</li>
+			<li>Быстрая статическая генерация</li>
+			<li>Адаптивная верстка</li>
+			<li>Светлая и темная тема</li>
+			<li>Простое расширение и настройка контента</li>
+			<li>Стили на Tailwind CSS</li>
+			<li>Подсветка кода через Shiki</li>
+			<li>Автогенерация OG-изображений через Satori</li>
 		</ul>
 		<p>
-			Clone or fork my <a
-				class="cactus-link inline-block"
+			Можно клонировать или форкнуть <a
+				class="text-link inline-block"
 				href="https://github.com/chrismwilliams/astro-cactus"
 				rel="noreferrer"
-				target="_blank">repo</a
-			> if you like me!
+				target="_blank">репозиторий</a
+			>, если такой старт вам подходит.
 		</p>
 	</div>
 </PageLayout>

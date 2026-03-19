@@ -19,16 +19,16 @@ const comments = mentions.filter(
 {
 	!!comments.length && (
 		<div>
-			<p class="text-accent-2 mb-0">
-				<strong>{comments.length}</strong> Mention{comments.length > 1 ? "s" : ""}
+			<p class="text-heading mb-0">
+				<strong>{comments.length}</strong> упоминани{comments.length > 1 ? "я" : "е"}
 			</p>
-			<ul class="divide-global-text/20 mt-0 divide-y ps-0" role="list">
+			<ul class="divide-text/20 mt-0 divide-y ps-0" role="list">
 				{comments.map((mention) => (
 					<li class="p-comment h-cite my-0 flex items-start gap-x-5 py-5">
 						{mention.author?.photo && mention.author.photo !== "" ? (
 							mention.author.url && mention.author.url !== "" ? (
 								<a
-									class="u-author not-prose ring-global-text hover:ring-link focus-visible:ring-link shrink-0 overflow-hidden rounded-full ring-2 hover:ring-4 focus-visible:ring-4"
+									class="u-author not-prose ring-text hover:ring-link focus-visible:ring-link shrink-0 overflow-hidden rounded-full ring-2 hover:ring-4 focus-visible:ring-4"
 									href={mention.author.url}
 									rel="noreferrer"
 									target="_blank"
@@ -54,7 +54,7 @@ const comments = mentions.filter(
 						) : null}
 						<div class="flex-auto">
 							<div class="p-author h-card flex items-center justify-between gap-x-2">
-								<p class="p-name text-accent-2 my-0 line-clamp-1 font-semibold">
+								<p class="p-name text-heading my-0 line-clamp-1 font-semibold">
 									{mention.author?.name}
 								</p>
 								<a
@@ -65,7 +65,7 @@ const comments = mentions.filter(
 									target="_blank"
 								>
 									<span class="hidden" id="cmt-source">
-										Visit the source of this webmention
+										Открыть источник этого отклика
 									</span>
 									<Icon
 										aria-hidden="true"

@@ -1,12 +1,12 @@
 ---
-title: "Unique tags validation"
-publishDate: "30 January 2023"
-description: "This post is used for validating if duplicate tags are removed, regardless of the string case"
+title: "Проверка уникальности тегов"
+publishDate: "2023-01-30"
+description: "Материал для проверки удаления дублирующихся тегов независимо от регистра"
 tags: ["blog", "blog", "Blog", "test", "bloG", "Test", "BLOG"]
 ---
 
-## This post is to test zod transform
+## Проверка zod-трансформации
 
-If you open the file `src/content/post/unique-tags.md`, the tags array has a number of duplicate blog strings of various cases.
+Если открыть файл `src/content/post/unique-tags.md`, в массиве тегов можно увидеть несколько повторов слова blog в разном регистре.
 
-These are removed as part of the removeDupsAndLowercase function found in `src/content/config.ts`.
+Они удаляются функцией `removeDupsAndLowercase` из `src/content/config.ts`.

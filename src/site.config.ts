@@ -1,12 +1,12 @@
-import type { SiteConfig } from "@/types";
 import type { AstroExpressiveCodeOptions } from "astro-expressive-code";
+import type { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
 	// Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
 	author: "Chris Williams",
 	// Date.prototype.toLocaleDateString() parameters, found in src/utils/date.ts.
 	date: {
-		locale: "en-GB",
+		locale: "ru-RU",
 		options: {
 			day: "numeric",
 			month: "short",
@@ -14,11 +14,11 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	// Used as the default description meta property and webmanifest description
-	description: "An opinionated starter theme for Astro",
+	description: "Лаконичный персональный сайт на Astro для заметок и статей",
 	// HTML lang property, found in src/layouts/Base.astro L:18 & astro.config.ts L:48
-	lang: "en-GB",
+	lang: "ru-RU",
 	// Meta property, found in src/components/BaseHead.astro L:42
-	ogLocale: "en_GB",
+	ogLocale: "ru_RU",
 	/* 
 		- Used to construct the meta title property found in src/components/BaseHead.astro L:11 
 		- The webmanifest name found in astro.config.ts L:42
@@ -34,19 +34,15 @@ export const siteConfig: SiteConfig = {
 export const menuLinks: { path: string; title: string }[] = [
 	{
 		path: "/",
-		title: "Home",
-	},
-	{
-		path: "/about/",
-		title: "About",
+		title: "Главная",
 	},
 	{
 		path: "/posts/",
-		title: "Blog",
+		title: "Статьи",
 	},
 	{
 		path: "/notes/",
-		title: "Notes",
+		title: "Заметки",
 	},
 ];
 
@@ -66,7 +62,7 @@ export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
 	},
 	themeCssSelector(theme, { styleVariants }) {
 		// If one dark and one light theme are available
-		// generate theme CSS selectors compatible with cactus-theme dark mode switch
+		// generate theme CSS selectors compatible with the site's dark mode switch
 		if (styleVariants.length >= 2) {
 			const baseTheme = styleVariants[0]?.theme;
 			const altTheme = styleVariants.find((v) => v.theme.type !== baseTheme?.type)?.theme;

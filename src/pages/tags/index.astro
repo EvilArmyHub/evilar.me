@@ -5,28 +5,37 @@ import PageLayout from "@/layouts/Base.astro";
 const allPosts = await getAllPosts();
 const allTags = getUniqueTagsWithCount(allPosts);
 
+function getMaterialsLabel(count: number) {
+	if (count % 10 === 1 && count % 100 !== 11) return "материал";
+	if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) {
+		return "материала";
+	}
+
+	return "материалов";
+}
+
 const meta = {
-	description: "A list of all the topics I've written about in my posts",
-	title: "All Tags",
+	description: "Все темы, о которых есть материалы на сайте",
+	title: "Все теги",
 };
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-6">Tags</h1>
+	<h1 class="page-title mb-6">Теги</h1>
 	<ul class="space-y-4">
 		{
 			allTags.map(([tag, val]) => (
-				<li class="flex items-center gap-x-2">
+				<li>
 					<a
-						class="cactus-link inline-block"
+						class="group flex items-center gap-x-2 rounded-md bg-text/5 px-4 py-3 text-link no-underline transition-colors duration-200 ease-out hover:bg-text/10 focus-visible:bg-text/10 focus-visible:outline-none"
 						href={`/tags/${tag}/`}
-						title={`View posts with the tag: ${tag}`}
+						title={`Открыть материалы с тегом: ${tag}`}
 					>
-						&#35;{tag}
+						<span class="transition-colors duration-200 ease-out group-hover:text-link-hover group-focus-visible:text-link-hover">&#35;{tag}</span>
+						<span class="inline-block text-text/70">
+							- {val} {getMaterialsLabel(val)}
+						</span>
 					</a>
-					<span class="inline-block">
-						- {val} Post{val > 1 && "s"}
-					</span>
 				</li>
 			))
 		}

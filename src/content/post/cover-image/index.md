@@ -1,10 +1,22 @@
 ---
-title: "Example Cover Image"
-description: "This post is an example of how to add a cover/hero image"
-publishDate: "04 July 2023"
-updatedDate: "14 August 2023"
+title: "Пример обложки для статьи"
+description: "Небольшой пример того, как добавить cover/hero image"
+publishDate: "2023-07-04"
+updatedDate: "2023-08-14"
 coverImage:
   src: "./cover.png"
-  alt: "Astro build wallpaper"
+  alt: "Иллюстрация Astro"
 tags: ["test", "image"]
 ---
+
+## Как добавить картинку в шаблоне
+
+Если нужна обычная картинка прямо внутри текста статьи, достаточно положить файл рядом с markdown-файлом и использовать стандартный Markdown-синтаксис:
+
+```md
+![Иллюстрация Astro](./cover.png)
+```
+
+Ниже тот же пример уже в рендере:
+
+![Иллюстрация Astro](./cover.png)

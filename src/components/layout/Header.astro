@@ -3,28 +3,47 @@ import Search from "@/components/Search.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { menuLinks } from "@/site.config";
 import { siteConfig } from "../../site.config";
+
+interface Props {
+	isCompact?: boolean;
+}
+
+const { isCompact = false } = Astro.props;
 ---
 
-<header class="group relative mb-28 flex items-center sm:ps-18" id="main-header">
-	<div class="flex sm:flex-col">
-		<a
-			aria-current={Astro.url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center sm:relative sm:inline-block sm:grayscale sm:hover:filter-none"
-			href="/"
-		>
-			<img
-				alt=""
-				class="me-3 h-10 w-6 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12"
-				decoding="async"
-				height="480"
-				src="/icon.svg"
-				width="515"
-			/>
-			<span class="text-xl font-bold sm:text-2xl">{siteConfig.title}</span>
-		</a>
+<header
+	class:list={[
+		"group relative flex items-center",
+		isCompact ? "mb-6 gap-2 sm:mb-8" : "mb-6 sm:mb-8 sm:ps-18",
+	]}
+	id="main-header"
+>
+	<div class:list={["flex", !isCompact && "sm:flex-col"]}>
+		{
+			!isCompact && (
+				<a
+					aria-current={Astro.url.pathname === "/" ? "page" : false}
+					class="inline-flex items-center sm:relative sm:inline-block"
+					href="/"
+				>
+					<img
+						alt=""
+						class="me-3 h-10 w-6 transition-transform duration-200 ease-out hover:-rotate-3 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12"
+						decoding="async"
+						height="480"
+						src="/icon.svg"
+						width="515"
+					/>
+					<span class="text-xl font-bold sm:text-2xl">{siteConfig.title}</span>
+				</a>
+			)
+		}
 		<nav
-			aria-label="Main menu"
-			class="bg-global-bg absolute -inset-x-4 top-12 hidden flex-col px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:mt-1 sm:flex sm:flex-row sm:items-center sm:bg-transparent sm:p-0"
+			aria-label="Главное меню"
+			class:list={[
+				"bg-bg absolute -inset-x-4 hidden flex-col px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:flex sm:flex-row sm:items-center sm:bg-transparent sm:p-0",
+				isCompact ? "top-10 sm:mt-0" : "top-12 sm:mt-1",
+			]}
 			id="navigation-menu"
 		>
 			{
@@ -32,77 +51,110 @@ import { siteConfig } from "../../site.config";
 					<>
 						<a
 							aria-current={Astro.url.pathname === link.path ? "page" : false}
-							class="py-4 underline-offset-2 hover:underline sm:py-0 text-lg sm:text-base"
+							class="nav-link py-4 text-lg sm:py-0 sm:text-base aria-[current=page]:text-text"
 							href={link.path}
 						>
 							{link.title}
 						</a>
-						{index < menuLinks.length - 1 && <span class="text-accent-2 px-2 hidden sm:inline">·</span>}
+						{index < menuLinks.length - 1 && <span class="text-heading hidden px-2 sm:inline">·</span>}
 					</>
 				))
 			}
 		</nav>
 	</div>
-	<Search />
-	<ThemeToggle />
-	<mobile-button>
-		<button
-			aria-expanded="false"
-			aria-haspopup="menu"
-			class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
-			id="toggle-navigation-menu"
-			type="button"
-		>
-			<span class="sr-only">Open main menu</span>
-			<svg
-				aria-hidden="true"
-				class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
-				fill="none"
-				focusable="false"
-				id="line-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
+	<Search isCompact={isCompact} />
+	<ThemeToggle isCompact={isCompact} />
+	<mobile-nav-toggle>
+			<button
+				aria-expanded="false"
+				aria-haspopup="menu"
+				class:list={[
+					"group relative ms-4 sm:invisible sm:hidden",
+					isCompact ? "h-6 w-6" : "h-7 w-7",
+				]}
+				id="toggle-navigation-menu"
+				type="button"
 			>
-				<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
-				></path>
-			</svg>
-			<svg
-				aria-hidden="true"
-				class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
-				class="text-accent"
-				fill="none"
-				focusable="false"
-				id="cross-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-			</svg>
-		</button>
-	</mobile-button>
+				<span class="sr-only">Открыть главное меню</span>
+				<svg
+					aria-hidden="true"
+					class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
+					fill="none"
+					focusable="false"
+					stroke="currentColor"
+					stroke-width="1.5"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+				<svg
+					aria-hidden="true"
+					class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+					fill="none"
+					focusable="false"
+					stroke="currentColor"
+					stroke-width="1.5"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</button>
+	</mobile-nav-toggle>
 </header>
 
 <script>
 	import { toggleClass } from "@/utils/domElement";
 
 	class MobileNavBtn extends HTMLElement {
-		#menuOpen: boolean = false;
+		#menuOpen = false;
+		#button: HTMLButtonElement | null = null;
+		#headerEl: HTMLElement | null = null;
 
 		connectedCallback() {
-			const headerEl = document.getElementById("main-header")!;
-			const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
+			this.#headerEl = document.getElementById("main-header");
+			this.#button = this.querySelector<HTMLButtonElement>("button");
 
-			mobileButtonEl?.addEventListener("click", () => {
-				if (headerEl) toggleClass(headerEl, "menu-open");
-				this.#menuOpen = !this.#menuOpen;
-				mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
+			if (!this.#headerEl || !this.#button) {
+				return;
+			}
+
+			this.#button.addEventListener("click", this.#toggleMenu);
+			this.#headerEl.querySelectorAll<HTMLAnchorElement>("#navigation-menu a").forEach((link) => {
+				link.addEventListener("click", this.#closeMenu);
 			});
 		}
+
+		disconnectedCallback() {
+			this.#button?.removeEventListener("click", this.#toggleMenu);
+			this.#headerEl?.querySelectorAll<HTMLAnchorElement>("#navigation-menu a").forEach((link) => {
+				link.removeEventListener("click", this.#closeMenu);
+			});
+		}
+
+		#toggleMenu = () => {
+			if (!this.#headerEl) {
+				return;
+			}
+
+			toggleClass(this.#headerEl, "menu-open");
+			this.#menuOpen = !this.#menuOpen;
+			this.#button?.setAttribute("aria-expanded", String(this.#menuOpen));
+		};
+
+		#closeMenu = () => {
+			if (!this.#headerEl || !this.#menuOpen) {
+				return;
+			}
+
+			this.#headerEl.classList.remove("menu-open");
+			this.#menuOpen = false;
+			this.#button?.setAttribute("aria-expanded", "false");
+		};
 	}
 
-	customElements.define("mobile-button", MobileNavBtn);
+	if (!customElements.get("mobile-nav-toggle")) {
+		customElements.define("mobile-nav-toggle", MobileNavBtn);
+	}
 </script>

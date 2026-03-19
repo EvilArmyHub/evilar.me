@@ -5,19 +5,24 @@ import Likes from "./Likes.astro";
 
 const url = new URL(Astro.url.pathname, Astro.site);
 
-const webMentions = await getWebmentionsForUrl(`${url}`);
+const webMentions = await getWebmentionsForUrl(`${url}`).catch((error) => {
+	console.warn(
+		`Failed to load webmentions for ${url}: ${error instanceof Error ? error.message : "Unknown error"}`,
+	);
+	return [];
+});
 
 // Return if no webmentions
 if (!webMentions.length) return;
 ---
 
 <hr class="border-solid" />
-<h2 class="mb-8 before:hidden">Webmentions for this post</h2>
+<h2 class="mb-8 before:hidden">Отклики на эту статью</h2>
 <div class="space-y-10">
 	<Likes mentions={webMentions} />
 	<Comments mentions={webMentions} />
 </div>
 <p class="mt-8">
-	Responses powered by{" "}
+	Отклики работают на базе{" "}
 	<a href="https://webmention.io" rel="noreferrer" target="_blank">Webmentions</a>
 </p>

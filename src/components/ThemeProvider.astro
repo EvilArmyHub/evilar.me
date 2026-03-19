@@ -1,44 +1,70 @@
-{/* Inlined to avoid FOUC. This is a parser blocking script. */}
 <script is:inline>
-	const lightModePref = window.matchMedia("(prefers-color-scheme: light)");
+	const THEME_STORAGE_KEY = "theme";
+	const DARK_MODE_MEDIA_QUERY = "(prefers-color-scheme: dark)";
+	const darkModePreference = window.matchMedia(DARK_MODE_MEDIA_QUERY);
 
-	function getUserPref() {
-		const storedTheme = typeof localStorage !== "undefined" && localStorage.getItem("theme");
-		return storedTheme || (lightModePref.matches ? "light" : "dark");
+	function isThemePreference(value) {
+		return value === "light" || value === "dark";
 	}
 
-	function setTheme(newTheme) {
-		if (newTheme !== "light" && newTheme !== "dark") {
-			return console.warn(
-				`Invalid theme value '${newTheme}' received. Expected 'light' or 'dark'.`,
-			);
+	function getStoredThemePreference() {
+		try {
+			const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+			return isThemePreference(storedTheme) ? storedTheme : null;
+		} catch {
+			return null;
 		}
+	}
 
-		const root = document.documentElement;
+	function getResolvedTheme() {
+		return getStoredThemePreference() ?? (darkModePreference.matches ? "dark" : "light");
+	}
 
-		// root already set to newTheme, exit early
-		if (newTheme === root.getAttribute("data-theme")) {
+	function applyTheme(theme) {
+		if (!isThemePreference(theme)) {
 			return;
 		}
 
-		root.setAttribute("data-theme", newTheme);
+		const root = document.documentElement;
+		root.dataset.theme = theme;
+		root.style.colorScheme = theme;
+		document.dispatchEvent(new CustomEvent("theme-applied", { detail: { theme } }));
+	}
 
-		if (typeof localStorage !== "undefined") {
-			localStorage.setItem("theme", newTheme);
+	function persistTheme(theme) {
+		try {
+			if (isThemePreference(theme)) {
+				localStorage.setItem(THEME_STORAGE_KEY, theme);
+			} else {
+				localStorage.removeItem(THEME_STORAGE_KEY);
+			}
+		} catch {
+			// Storage access can fail in private browsing modes.
 		}
 	}
 
-	// initial setup
-	setTheme(getUserPref());
+	function syncTheme() {
+		applyTheme(getResolvedTheme());
+	}
 
-	// View Transitions hook to restore theme
-	document.addEventListener("astro:after-swap", () => setTheme(getUserPref()));
+	syncTheme();
 
-	// listen for theme-change custom event, fired in src/components/ThemeToggle.astro
-	document.addEventListener("theme-change", (e) => {
-		setTheme(e.detail.theme);
+	document.addEventListener("astro:after-swap", syncTheme);
+	document.addEventListener("theme-change", (event) => {
+		const nextTheme = event.detail?.theme;
+		if (!isThemePreference(nextTheme)) {
+			return;
+		}
+
+		persistTheme(event.detail?.persist === false ? null : nextTheme);
+		applyTheme(nextTheme);
 	});
 
-	// listen for prefers-color-scheme change.
-	lightModePref.addEventListener("change", (e) => setTheme(e.matches ? "light" : "dark"));
+	darkModePreference.addEventListener("change", () => {
+		if (getStoredThemePreference() !== null) {
+			return;
+		}
+
+		syncTheme();
+	});
 </script>

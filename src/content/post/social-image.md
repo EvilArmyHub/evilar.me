@@ -1,22 +1,22 @@
 ---
-title: "Example OG Social Image"
-publishDate: "27 January 2023"
-description: "An example post for Astro Cactus, detailing how to add a custom social image card in the frontmatter"
+title: "Пример OG-изображения"
+publishDate: "2023-01-27"
+description: "Пример того, как добавить собственную social card через frontmatter"
 tags: ["example", "blog", "image"]
 ogImage: "/social-card.png"
 ---
 
-## Adding your own social image to a post
+## Как добавить собственное изображение для соцсетей
 
-This post is an example of how to add a custom [open graph](https://ogp.me/) social image, also known as an OG image, to a blog post.
-By adding the optional ogImage property to the frontmatter of a post, you opt out of [satori](https://github.com/vercel/satori) automatically generating an image for this page.
+Этот материал показывает, как добавить к статье собственное [open graph](https://ogp.me/) изображение, также известное как OG image.
+Если указать необязательное поле `ogImage` во frontmatter, [satori](https://github.com/vercel/satori) перестанет автоматически генерировать изображение для этой страницы.
 
-If you open this markdown file `src/content/post/social-image.md` you'll see the ogImage property set to an image which lives in the public folder[^1].
+Если открыть файл `src/content/post/social-image.md`, вы увидите, что `ogImage` указывает на изображение из папки `public`[^1].
 
 ```yaml
 ogImage: "/social-card.png"
 ```
 
-You can view the one set for this template page [here](https://astro-cactus.chriswilliams.dev/social-card.png).
+Посмотреть изображение, заданное для этой страницы шаблона, можно [здесь](https://astro-cactus.chriswilliams.dev/social-card.png).
 
-[^1]: The image itself can be located anywhere you like.
+[^1]: Сам файл изображения может лежать в любом удобном месте.

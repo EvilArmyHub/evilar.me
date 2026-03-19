@@ -1,9 +1,28 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { parseStrictDateInput } from "./utils/date";
 
 function removeDupsAndLowerCase(array: string[]) {
 	return [...new Set(array.map((str) => str.toLowerCase()))];
+}
+
+function strictDateSchema(kind: "date" | "datetime") {
+	return z
+		.string()
+		.or(z.date())
+		.transform((value, ctx) => {
+			try {
+				return parseStrictDateInput(value, kind);
+			} catch (error) {
+				ctx.addIssue({
+					code: "custom",
+					message: error instanceof Error ? error.message : "Invalid date value",
+				});
+
+				return z.NEVER;
+			}
+		});
 }
 
 const titleSchema = z.string().max(60);
@@ -26,14 +45,8 @@ const post = defineCollection({
 			draft: z.boolean().default(false),
 			ogImage: z.string().optional(),
 			tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
-			publishDate: z
-				.string()
-				.or(z.date())
-				.transform((val) => new Date(val)),
-			updatedDate: z
-				.string()
-				.optional()
-				.transform((str) => (str ? new Date(str) : undefined)),
+			publishDate: strictDateSchema("date"),
+			updatedDate: strictDateSchema("date").optional(),
 			pinned: z.boolean().default(false),
 		}),
 });
@@ -42,7 +55,7 @@ const note = defineCollection({
 	loader: glob({ base: "./src/content/note", pattern: "**/*.{md,mdx}" }),
 	schema: baseSchema.extend({
 		description: z.string().optional(),
-		publishDate: z.iso.datetime({ offset: true }).transform((val) => new Date(val)),
+		publishDate: strictDateSchema("datetime"),
 	}),
 });
 

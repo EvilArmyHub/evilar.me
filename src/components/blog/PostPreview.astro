@@ -12,13 +12,13 @@ const { as: Tag = "div", post, withDesc = false } = Astro.props;
 ---
 
 <FormattedDate
-	class="min-w-30 font-semibold text-gray-600 dark:text-gray-400"
+	class="inline-block w-[8.5rem] flex-none text-gray-600 tabular-nums dark:text-gray-400"
 	date={post.data.publishDate}
 />
 <Tag>
-	{post.data.draft && <span class="text-red-500">(Draft) </span>}
-	<a class="cactus-link" href={`/posts/${post.id}/`}>
+	<a class="text-link" href={`/posts/${post.id}/`}>
 		{post.data.title}
+		{post.data.draft && <span aria-hidden="true"> 🚧</span>}
 	</a>
 </Tag>
 {withDesc && <q class="line-clamp-3 italic">{post.data.description}</q>}

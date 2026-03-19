@@ -1,15 +1,15 @@
 ---
-title: Test Tag
-description: This tag is used for testing various features of the theme.
+title: Тестовый тег
+description: Этот тег используется для проверки разных возможностей темы.
 ---
 
-This is an example of a custom intro on a tag page. Its markdown can be found in `src/content/tag/test.md`.
+Это пример пользовательского вступления на странице тега. Его markdown лежит в `src/content/tag/test.md`.
 
-This collection includes posts that demonstrate and test different features of the Astro Theme Cactus, including:
+Здесь собраны материалы, которые демонстрируют и проверяют разные возможности темы, в том числе:
 
-- Markdown rendering capabilities
-- Image handling and optimization
-- Table of contents generation
-- Various edge cases and scenarios
+- рендеринг Markdown
+- работу с изображениями и их оптимизацию
+- генерацию содержания
+- разные пограничные сценарии
 
-Feel free to explore these posts to understand how the theme handles different content types and configurations.
+Эти материалы помогают понять, как тема ведет себя с разными типами контента и настройками.

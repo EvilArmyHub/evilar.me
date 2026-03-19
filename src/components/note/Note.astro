@@ -13,34 +13,35 @@ const { Content } = await render(note);
 ---
 
 <article
-	class:list={[isPreview && "bg-global-text/5 inline-grid rounded-md px-4 py-3"]}
+	class:list={[isPreview && "group relative rounded-md transition-colors duration-200 ease-out"]}
 	data-pagefind-body={isPreview ? false : true}
 >
-	<Tag class="title" class:list={{ "text-base": isPreview }}>
-		{
-			isPreview ? (
-				<a class="cactus-link" href={`/notes/${note.id}/`}>
+	{
+		isPreview ? (
+			<a
+				class="block rounded-md bg-text/5 px-4 py-3 no-underline transition-colors duration-200 ease-out hover:bg-text/10 focus-visible:bg-text/10 focus-visible:outline-none"
+				href={`/notes/${note.id}/`}
+			>
+				<Tag class="page-title text-base text-link transition-colors duration-200 ease-out group-hover:text-link-hover group-focus-within:text-link-hover">
 					{note.data.title}
-				</a>
-			) : (
-				<>{note.data.title}</>
-			)
-		}
-	</Tag>
-	<FormattedDate
-		dateTimeOptions={{
-			hour: "2-digit",
-			minute: "2-digit",
-			year: "2-digit",
-			month: "2-digit",
-			day: "2-digit",
-		}}
-		date={note.data.publishDate}
-	/>
-	<div
-		class="prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0"
-		class:list={{ "line-clamp-6": isPreview }}
-	>
-		<Content />
-	</div>
+				</Tag>
+				<FormattedDate date={note.data.publishDate} />
+				<div class="prose prose-sm prose-content mt-4 max-w-none line-clamp-6 [&>p:last-of-type]:mb-0">
+					<Content />
+				</div>
+			</a>
+		) : (
+			<>
+				<Tag class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">
+					{note.data.title}
+				</Tag>
+				<div class="mt-2 text-gray-600 dark:text-gray-400">
+					<FormattedDate date={note.data.publishDate} />
+				</div>
+				<div class="prose prose-sm prose-content mt-12 max-w-none [&>p:last-of-type]:mb-0">
+					<Content />
+				</div>
+			</>
+		)
+	}
 </article>

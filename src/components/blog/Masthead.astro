@@ -32,23 +32,26 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 		</div>
 	)
 }
-{data.draft ? <span class="text-base text-red-500">(Draft)</span> : null}
-<h1 class="title">
+<h1 class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">
 	{data.title}
+	{data.draft && <span aria-hidden="true"> 🚧</span>}
 </h1>
-<div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-	<p class="font-semibold">
-		<FormattedDate date={data.publishDate} dateTimeOptions={dateTimeOptions} /> /{" "}
-		{readingTime}
+<div class="flex flex-wrap items-center gap-y-2">
+	<p class="text-gray-600 dark:text-gray-400">
+		<FormattedDate date={data.publishDate} dateTimeOptions={dateTimeOptions} />
+		{
+			data.updatedDate && (
+				<>
+					<span class="px-2" aria-hidden="true">·</span>
+					<span>
+						Обновлён <FormattedDate date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
+					</span>
+				</>
+			)
+		}
+		<span class="px-2" aria-hidden="true">·</span>
+		<span>{readingTime}</span>
 	</p>
-	{
-		data.updatedDate && (
-			<span class="bg-quote/5 text-quote rounded-lg px-2 py-1">
-				Updated:
-				<FormattedDate class="ms-1" date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
-			</span>
-		)
-	}
 </div>
 {
 	!!data.tags?.length && (
@@ -72,9 +75,8 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 			</svg>
 			{data.tags.map((tag, i) => (
 				<>
-					{/* prettier-ignore */}
 					<span class="contents">
-						<a class="cactus-link inline-block before:content-['#']" data-pagefind-filter={`tag:${tag}`} href={`/tags/${tag}/`}><span class="sr-only">View more blogs with the tag&nbsp;</span>{tag}
+						<a class="text-link inline-block before:content-['#']" data-pagefind-filter={`tag:${tag}`} href={`/tags/${tag}/`}><span class="sr-only">Открыть больше материалов с тегом&nbsp;</span>{tag}
 						</a>{i < data.tags.length - 1 && ", "}
 					</span>
 				</>

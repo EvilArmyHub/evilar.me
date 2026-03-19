@@ -1,4 +1,4 @@
-﻿import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
@@ -7,21 +7,41 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ["Inter", ...defaultTheme.fontFamily.sans],
+				display: ["Fraunces", ...defaultTheme.fontFamily.serif],
 			},
 			typography: () => ({
 				DEFAULT: {
 					css: {
+						fontSize: "1em",
+						lineHeight: "1.75",
 						a: {
-							textUnderlineOffset: "2px",
+							color: "var(--color-link)",
+							textDecoration: "none",
 							"&:hover": {
 								"@media (hover: hover)": {
-									textDecorationColor: "var(--color-link)",
-									textDecorationThickness: "2px",
+									color: "var(--color-link-hover)",
 								},
 							},
+							"&:focus-visible": {
+								color: "var(--color-link-hover)",
+								outline: "none",
+							},
+						},
+						h1: {
+							fontFamily: "var(--font-display)",
+							fontWeight: "650",
+							letterSpacing: "-0.03em",
+						},
+						"h2, h3, h4": {
+							fontFamily: "var(--font-display)",
+							fontWeight: "600",
+							letterSpacing: "-0.02em",
 						},
 						blockquote: {
 							borderLeftWidth: "0",
+							background: "color-mix(in oklab, var(--color-accent) 8%, transparent)",
+							borderRadius: "1rem",
+							padding: "1.25rem 1.5rem",
 						},
 						code: {
 							border: "1px dotted #666",
@@ -37,6 +57,9 @@ export default {
 						},
 						strong: {
 							fontWeight: "700",
+						},
+						table: {
+							fontSize: "0.9em",
 						},
 						sup: {
 							marginInlineStart: "calc(var(--spacing) * 0.5)",
@@ -95,6 +118,3 @@ export default {
 		},
 	},
 } satisfies Config;
-
-
-

@@ -1,17 +1,92 @@
 import * as fs from "node:fs";
 import { WEBMENTION_API_KEY } from "astro:env/server";
-import type { WebmentionsCache, WebmentionsChildren, WebmentionsFeed } from "@/types";
+import type {
+	WebmentionType,
+	WebmentionsCache,
+	WebmentionsChildren,
+	WebmentionsFeed,
+} from "@/types";
 
 const DOMAIN = import.meta.env.SITE;
 const CACHE_DIR = ".data";
 const filePath = `${CACHE_DIR}/webmentions.json`;
-const validWebmentionTypes = ["like-of", "mention-of", "in-reply-to"];
+const FETCH_TIMEOUT_MS = 5000;
+const validWebmentionTypes: readonly WebmentionType[] = ["like-of", "mention-of", "in-reply-to"];
 
-const hostName = new URL(DOMAIN).hostname;
+const emptyCache = {
+	lastFetched: null,
+	children: [],
+} satisfies WebmentionsCache;
+
+let webMentionsPromise: Promise<WebmentionsCache> | undefined;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
+}
+
+function isWebmentionEntry(value: unknown): value is WebmentionsChildren {
+	if (!isRecord(value)) {
+		return false;
+	}
+
+	return (
+		typeof value["wm-id"] === "number" &&
+		typeof value["wm-target"] === "string" &&
+		typeof value["wm-property"] === "string" &&
+		typeof value["wm-received"] === "string" &&
+		typeof value.url === "string"
+	);
+}
+
+function normalizeFeed(data: unknown): WebmentionsFeed | null {
+	if (!isRecord(data)) {
+		return null;
+	}
+
+	const children = Array.isArray(data.children) ? data.children.filter(isWebmentionEntry) : [];
+
+	if (typeof data.name !== "string" || typeof data.type !== "string") {
+		return null;
+	}
+
+	return {
+		name: data.name,
+		type: data.type,
+		children,
+	};
+}
+
+function normalizeCache(data: unknown): WebmentionsCache {
+	if (!isRecord(data)) {
+		return emptyCache;
+	}
+
+	return {
+		lastFetched: typeof data.lastFetched === "string" ? data.lastFetched : null,
+		children: Array.isArray(data.children) ? data.children.filter(isWebmentionEntry) : [],
+	};
+}
+
+function normalizeUrlForCompare(value: string) {
+	const url = new URL(value);
+	url.hash = "";
+	if (
+		(url.protocol === "https:" && url.port === "443") ||
+		(url.protocol === "http:" && url.port === "80")
+	) {
+		url.port = "";
+	}
+	if (url.pathname !== "/") {
+		url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+	}
+	return url.toString();
+}
+
+const hostName = DOMAIN ? new URL(DOMAIN).hostname : null;
 
 // Calls webmention.io api.
 async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
-	if (!DOMAIN) {
+	if (!hostName) {
 		console.warn("No domain specified. Please set in astro.config.ts");
 		return null;
 	}
@@ -21,24 +96,39 @@ async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
 		return null;
 	}
 
-	let url = `https://webmention.io/api/mentions.jf2?domain=${hostName}&token=${WEBMENTION_API_KEY}&sort-dir=up&per-page=${perPage}`;
+	const url = new URL("https://webmention.io/api/mentions.jf2");
+	url.searchParams.set("domain", hostName);
+	url.searchParams.set("token", WEBMENTION_API_KEY);
+	url.searchParams.set("sort-dir", "up");
+	url.searchParams.set("per-page", String(perPage));
 
-	if (timeFrom) url += `&since${timeFrom}`;
-
-	const res = await fetch(url);
-
-	if (res.ok) {
-		const data = (await res.json()) as WebmentionsFeed;
-		return data;
+	if (timeFrom) {
+		url.searchParams.set("since", timeFrom);
 	}
 
-	return null;
+	try {
+		const res = await fetch(url, {
+			signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+		});
+
+		if (!res.ok) {
+			console.warn(`Failed to fetch webmentions: ${res.status} ${res.statusText}`);
+			return null;
+		}
+
+		return normalizeFeed(await res.json());
+	} catch (error) {
+		console.warn(
+			`Failed to fetch webmentions: ${error instanceof Error ? error.message : "Unknown error"}`,
+		);
+		return null;
+	}
 }
 
 // Merge cached entries [a] with fresh webmentions [b], merge by wm-id
 function mergeWebmentions(a: WebmentionsCache, b: WebmentionsFeed): WebmentionsChildren[] {
 	return Array.from(
-		[...a.children, ...b.children]
+		[...a.children, ...(b.children ?? [])]
 			.reduce((map, obj) => map.set(obj["wm-id"], obj), new Map())
 			.values(),
 	);
@@ -61,30 +151,29 @@ export function filterWebmentions(webmentions: WebmentionsChildren[]) {
 
 // save combined webmentions in cache file
 function writeToCache(data: WebmentionsCache) {
-	const fileContent = JSON.stringify(data, null, 2);
-
-	// create cache folder if it doesn't exist already
-	if (!fs.existsSync(CACHE_DIR)) {
-		fs.mkdirSync(CACHE_DIR);
+	try {
+		fs.mkdirSync(CACHE_DIR, { recursive: true });
+		fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+	} catch (error) {
+		console.warn(
+			`Failed to write webmentions cache: ${error instanceof Error ? error.message : "Unknown error"}`,
+		);
 	}
-
-	// write data to cache json file
-	fs.writeFile(filePath, fileContent, (err) => {
-		if (err) throw err;
-		console.log(`Webmentions saved to ${filePath}`);
-	});
 }
 
 function getFromCache(): WebmentionsCache {
-	if (fs.existsSync(filePath)) {
-		const data = fs.readFileSync(filePath, "utf-8");
-		return JSON.parse(data);
+	try {
+		if (fs.existsSync(filePath)) {
+			const data = fs.readFileSync(filePath, "utf-8");
+			return normalizeCache(JSON.parse(data));
+		}
+	} catch (error) {
+		console.warn(
+			`Failed to read webmentions cache: ${error instanceof Error ? error.message : "Unknown error"}`,
+		);
 	}
-	// no cache found
-	return {
-		lastFetched: null,
-		children: [],
-	};
+
+	return emptyCache;
 }
 
 async function getAndCacheWebmentions() {
@@ -92,7 +181,7 @@ async function getAndCacheWebmentions() {
 	const mentions = await fetchWebmentions(cache.lastFetched);
 
 	if (mentions) {
-		mentions.children = filterWebmentions(mentions.children);
+		mentions.children = filterWebmentions(mentions.children ?? []);
 		const webmentions: WebmentionsCache = {
 			lastFetched: new Date().toISOString(),
 			// Make sure the first arg is the cache
@@ -109,7 +198,21 @@ async function getAndCacheWebmentions() {
 let webMentions: WebmentionsCache;
 
 export async function getWebmentionsForUrl(url: string) {
-	if (!webMentions) webMentions = await getAndCacheWebmentions();
+	if (!webMentionsPromise) {
+		webMentionsPromise = getAndCacheWebmentions();
+	}
 
-	return webMentions.children.filter((entry) => entry["wm-target"] === url);
+	if (!webMentions) {
+		webMentions = await webMentionsPromise;
+	}
+
+	const normalizedUrl = normalizeUrlForCompare(url);
+
+	return webMentions.children.filter((entry) => {
+		try {
+			return normalizeUrlForCompare(entry["wm-target"]) === normalizedUrl;
+		} catch {
+			return false;
+		}
+	});
 }

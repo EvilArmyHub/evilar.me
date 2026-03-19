@@ -31,20 +31,20 @@ interface Props {
 const { page, uniqueTags, pinnedPosts } = Astro.props;
 
 const meta = {
-	description: "Read my collection of posts and the things that interest me",
-	title: "Posts",
+	description: "Подборка статей и тем, которые мне интересны",
+	title: "Статьи",
 };
 
 const paginationProps = {
 	...(page.url.prev && {
 		prevUrl: {
-			text: "← Previous Page",
+			text: "← Предыдущая страница",
 			url: page.url.prev,
 		},
 	}),
 	...(page.url.next && {
 		nextUrl: {
-			text: "Next Page →",
+			text: "Следующая страница →",
 			url: page.url.next,
 		},
 	}),
@@ -56,9 +56,9 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 
 <PageLayout meta={meta}>
 	<div class="mb-12 flex items-center gap-3">
-		<h1 class="title">Posts</h1>
+		<h1 class="page-title">Статьи</h1>
 		<a class="text-accent" href="/rss.xml" target="_blank">
-			<span class="sr-only">RSS feed</span>
+			<span class="sr-only">RSS-лента</span>
 			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
 		</a>
 	</div>
@@ -67,7 +67,7 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 			{
 				pinnedPosts.length > 0 && (
 					<section class="mb-16">
-						<h2 class="title mb-6 text-xl">Pinned Posts</h2>
+					<h2 class="page-title mb-6 text-xl">Ключевое</h2>
 						<ul class="space-y-4" role="list">
 							{pinnedPosts.map((p) => (
 								<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
@@ -81,8 +81,8 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 			{
 				descYearKeys.map((yearKey) => (
 					<section class="mb-16">
-						<h2 id={`year-${yearKey}`} class="title text-lg">
-							<span class="sr-only">Posts in</span>
+						<h2 id={`year-${yearKey}`} class="page-title text-lg">
+							<span class="sr-only">Статьи за</span>
 							{yearKey}
 						</h2>
 						<ul class="mt-5 space-y-4 text-start">
@@ -100,8 +100,8 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 		{
 			!!uniqueTags.length && (
 				<aside>
-					<h2 class="title mb-4 flex items-center gap-2 text-lg">
-						Tags
+					<h2 class="page-title mb-4 flex items-center gap-2 text-lg">
+						Теги
 						<svg
 							aria-hidden="true"
 							class="h-6 w-6"
@@ -122,9 +122,9 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 					<ul class="flex flex-wrap gap-2">
 						{uniqueTags.map((tag) => (
 							<li>
-								<a class="cactus-link flex items-center justify-center" href={`/tags/${tag}/`}>
+							<a class="text-link flex items-center justify-center" href={`/tags/${tag}/`}>
 									<span aria-hidden="true">#</span>
-									<span class="sr-only">View all posts with the tag</span>
+									<span class="sr-only">Открыть все статьи с этим тегом</span>
 									{tag}
 								</a>
 							</li>
@@ -132,8 +132,8 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 					</ul>
 					<span class="mt-4 block sm:text-end">
 						<a class="hover:text-link" href="/tags/">
-							View all <span aria-hidden="true">→</span>
-							<span class="sr-only">blog tags</span>
+							Все теги <span aria-hidden="true">→</span>
+							<span class="sr-only">статей</span>
 						</a>
 					</span>
 				</aside>

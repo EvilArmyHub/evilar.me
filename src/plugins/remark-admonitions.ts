@@ -10,6 +10,13 @@ import { h, isNodeDirective } from "../utils/remark";
 
 // Supported admonition types
 const Admonitions = new Set<AdmonitionType>(["tip", "note", "important", "caution", "warning"]);
+const AdmonitionLabels: Record<AdmonitionType, string> = {
+	caution: "Осторожно",
+	important: "Важно",
+	note: "Заметка",
+	tip: "Совет",
+	warning: "Предупреждение",
+};
 
 /** Checks if a string is a supported admonition type. */
 function isAdmonition(s: string): s is AdmonitionType {
@@ -50,7 +57,7 @@ export const remarkAdmonitions: Plugin<[], Root> = () => (tree) => {
 		const admonitionType = node.name;
 		if (!isAdmonition(admonitionType)) return;
 
-		let title: string = admonitionType;
+		let title: string = AdmonitionLabels[admonitionType];
 		let titleNode: PhrasingContent[] = [{ type: "text", value: title }];
 
 		// Check if there's a custom title

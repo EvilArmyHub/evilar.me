@@ -1,36 +1,36 @@
 ---
-title: "Markdown Admonitions"
-description: "This post showcases using the markdown admonition feature in Astro Cactus"
-publishDate: "25 Aug 2024"
-updatedDate: "4 July 2025"
+title: "Admonitions в Markdown"
+description: "Материал показывает, как использовать admonitions в Astro Cactus"
+publishDate: "2024-08-25"
+updatedDate: "2025-07-04"
 tags: ["markdown", "admonitions"]
 ---
 
-## What are admonitions
+## Что такое admonitions
 
-Admonitions (also known as “asides”) are useful for providing supportive and/or supplementary information related to your content.
+Admonitions (иногда их называют asides) помогают выделять пояснения, подсказки и дополнительные замечания внутри текста.
 
-## How to use them
+## Как их использовать
 
-To use admonitions in Astro Cactus, wrap your Markdown content in a pair of triple colons `:::`. The first pair should also include the type of admonition you want to use.
+Чтобы использовать admonitions в Astro Cactus, оберните Markdown-контент в блок с тройными двоеточиями `:::`. В первой строке также нужно указать тип блока.
 
-For example, with the following Markdown:
+Например, вот такой Markdown:
 
 ```md
 :::note
-Highlights information that users should take into account, even when skimming.
+Подсвечивает информацию, на которую стоит обратить внимание даже при беглом чтении.
 :::
 ```
 
-Outputs:
+Результат:
 
 :::note
-Highlights information that users should take into account, even when skimming.
+Подсвечивает информацию, на которую стоит обратить внимание даже при беглом чтении.
 :::
 
-## Admonition Types
+## Типы admonitions
 
-The following admonitions are currently supported:
+Сейчас поддерживаются такие типы:
 
 - `note`
 - `tip`
@@ -42,88 +42,89 @@ The following admonitions are currently supported:
 
 ```md
 :::note
-Highlights information that users should take into account, even when skimming.
+Подсвечивает информацию, на которую стоит обратить внимание даже при беглом чтении.
 :::
 ```
 
 :::note
-Highlights information that users should take into account, even when skimming.
+Подсвечивает информацию, на которую стоит обратить внимание даже при беглом чтении.
 :::
 
 ### Tip
 
 ```md
 :::tip
-Optional information to help a user be more successful.
+Дополнительная информация, которая помогает лучше воспользоваться материалом.
 :::
 ```
 
 :::tip
-Optional information to help a user be more successful.
+Дополнительная информация, которая помогает лучше воспользоваться материалом.
 :::
 
 ### Important
 
 ```md
 :::important
-Crucial information necessary for users to succeed.
+Критически важная информация, без которой легко допустить ошибку.
 :::
 ```
 
 :::important
-Crucial information necessary for users to succeed.
+Критически важная информация, без которой легко допустить ошибку.
 :::
 
 ### Caution
 
 ```md
 :::caution
-Negative potential consequences of an action.
+Предупреждение о возможных нежелательных последствиях.
 :::
 ```
 
 :::caution
-Negative potential consequences of an action.
+Предупреждение о возможных нежелательных последствиях.
 :::
 
 ### Warning
 
 ```md
 :::warning
-Critical content demanding immediate user attention due to potential risks.
+Критически важная информация, требующая немедленного внимания из-за возможных рисков.
 :::
 ```
 
 :::warning
-Critical content demanding immediate user attention due to potential risks.
+Критически важная информация, требующая немедленного внимания из-за возможных рисков.
 :::
 
-## Customising the admonition title
+## Кастомный заголовок admonition-блока
 
-You can customise the admonition title using the following markup:
+Заголовок можно переопределить таким синтаксисом:
 
 ```md
 :::note[My custom title]
-This is a note with a custom title.
+Это заметка с пользовательским заголовком.
 :::
 ```
 
-Outputs:
+Результат:
 
 :::note[My custom title]
-This is a note with a custom title.
+Это заметка с пользовательским заголовком.
 :::
 
-## GitHub Repository Cards
-You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.
+## Карточки GitHub-репозиториев
+
+Можно добавлять динамические карточки со ссылками на GitHub-репозитории. При загрузке страницы информация подтягивается через GitHub API.
 
 ::github{repo="chrismwilliams/astro-theme-cactus"}
 
-You can also link a Github user:
+Можно также сослаться на профиль GitHub-пользователя:
 
 ::github{user="withastro"}
 
-To use this feature you just use the "Github" directive:
+Для этого используется директива `Github`:
 
 ```markdown title="Linking a repo"
 ::github{repo="chrismwilliams/astro-theme-cactus"}

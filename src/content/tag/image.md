@@ -1,7 +1,7 @@
 ---
-description: Learn about image handling in Astro Cactus
+description: Материалы о работе с изображениями в Astro Cactus
 ---
 
-This is an example of a custom intro on a tag page. Its markdown can be found in `src/content/tag/image.md`.
+Это пример пользовательского вступления на странице тега. Его markdown лежит в `src/content/tag/image.md`.
 
-Posts tagged with "image" demonstrate various image-related features including cover images, social media cards, and image optimization.
+Материалы с тегом `image` показывают работу с обложками, social cards и оптимизацией изображений.

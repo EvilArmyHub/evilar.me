@@ -1,8 +1,8 @@
 ---
-title: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id"
-description: "This post is purely for testing if the css is correct for the title on the page"
-publishDate: "01 Feb 2023"
+title: "Длинный заголовок для проверки типографики"
+description: "Материал для проверки того, как длинный заголовок ведет себя в интерфейсе"
+publishDate: "2023-02-01"
 tags: ["test"]
 ---
 
-## Testing the title tag
+## Проверка длинного заголовка

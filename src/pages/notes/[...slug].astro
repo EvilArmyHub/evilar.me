@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 
 import Note from "@/components/note/Note.astro";
 import PageLayout from "@/layouts/Base.astro";
+import { getFormattedDate } from "@/utils/date";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 // if you're using an adaptor in SSR mode, getStaticPaths wont work -> https://docs.astro.build/en/guides/routing/#modifying-the-slug-example-for-ssr
@@ -21,11 +22,11 @@ const { note } = Astro.props;
 const meta = {
 	description:
 		note.data.description ||
-		`Read about my note posted on: ${note.data.publishDate.toLocaleDateString()}`,
+		`Заметка от ${getFormattedDate(note.data.publishDate)}`,
 	title: note.data.title,
 };
 ---
 
-<PageLayout meta={meta}>
+<PageLayout isArticleLayout meta={meta}>
 	<Note as="h1" note={note} />
 </PageLayout>

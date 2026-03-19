@@ -1,26 +1,26 @@
 ---
-import { menuLinks, siteConfig } from "@/site.config";
-
-const year = new Date().getFullYear();
+import { menuLinks } from "@/site.config";
 ---
 
 <footer
 	class="mt-auto flex w-full flex-col items-center justify-center gap-y-2 pt-20 pb-4 text-center align-top font-semibold text-gray-600 sm:flex-row sm:justify-between sm:text-xs dark:text-gray-400"
 >
 	<div class="me-0 sm:me-4">
-		&copy; {siteConfig.author}
-		{year}.<span class="inline-block">&nbsp;🚀&nbsp;{siteConfig.title}</span>
+		<span class="inline-block">Больше чем чат</span>
 	</div>
 	<nav
 		aria-labelledby="footer_links"
-		class="flex gap-x-2 sm:gap-x-0 sm:divide-x sm:divide-gray-500"
+		class="flex flex-wrap items-center gap-x-2"
 	>
-		<p id="footer_links" class="sr-only">More on this site</p>
+		<p id="footer_links" class="sr-only">Навигация по сайту</p>
 		{
-			menuLinks.map((link) => (
-				<a class="hover:text-global-text px-4 py-2 hover:underline sm:py-0" href={link.path}>
-					{link.title}
-				</a>
+			menuLinks.map((link, index) => (
+				<>
+					{index > 0 && <span aria-hidden="true">·</span>}
+					<a class="nav-link py-2 sm:py-1" href={link.path}>
+						{link.title}
+					</a>
+				</>
 			))
 		}
 	</nav>
