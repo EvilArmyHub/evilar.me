@@ -28,7 +28,7 @@ Astro Cactus is a simple opinionated starter built with [Astro](https://astro.bu
 
 ## Key Features
 
-- Astro v5 Fast 🚀
+- Astro v6 Fast 🚀
 - Tailwind v4
 - Accessible, semantic HTML markup
 - Responsive & SEO-friendly
@@ -55,10 +55,6 @@ Check out the [Demo](https://astro-cactus.chriswilliams.dev/), hosted on Netlify
 [Create a new repo](https://github.com/chrismwilliams/astro-theme-cactus/generate) from this template.
 
 ```bash
-# npm 7+
-npm create astro@latest -- --template chrismwilliams/astro-theme-cactus
-
-# pnpm
 pnpm dlx create-astro --template chrismwilliams/astro-theme-cactus
 ```
 
@@ -72,16 +68,18 @@ pnpm dlx create-astro --template chrismwilliams/astro-theme-cactus
 
 ## Commands
 
-Replace pnpm with your choice of npm / yarn
+This repo is pnpm-first. Use `pnpm` for dependency management, scripts, and local tooling.
 
-| Command          | Action                                                         |
-| :--------------- | :------------------------------------------------------------- |
-| `pnpm install`   | Installs dependencies                                          |
-| `pnpm dev`       | Starts local dev server at `localhost:3000`                    |
-| `pnpm build`     | Build your production site to `./dist/`                        |
-| `pnpm postbuild` | Pagefind script to build the static search of your blog posts  |
-| `pnpm preview`   | Preview your build locally, before deploying                   |
-| `pnpm sync`      | Generate types based on your config in `src/content/config.ts` |
+| Command          | Action                                                        |
+| :--------------- | :------------------------------------------------------------ |
+| `pnpm install`   | Installs dependencies                                         |
+| `pnpm dev`       | Starts local dev server at `localhost:3000`                   |
+| `pnpm build`     | Build your production site to `./dist/`                       |
+| `pnpm postbuild` | Pagefind script to build the static search of your blog posts |
+| `pnpm preview`   | Preview your build locally, before deploying                  |
+| `pnpm check`     | Run Astro content and type checks                             |
+| `pnpm lint`      | Run Biome lint checks                                         |
+| `pnpm format`    | Format code and organize imports                              |
 
 ## Configure
 
@@ -127,7 +125,7 @@ The posts/notes/tags included with this template are there as an example of how 
 
 | Property (\* required) | Description                                                                                                                                                                                                                                                                                                  |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| title \*               | Self explanatory. Used as the text link to the post, the h1 on the posts' page, and the pages title property. Has a max length of 60 chars, set in `src/content/config.ts`                                                                                                                                   |
+| title \*               | Self explanatory. Used as the text link to the post, the h1 on the posts' page, and the pages title property. Has a max length of 60 chars, set in `src/content.config.ts`                                                                                                                                   |
 | description \*         | Similar to above, used as the seo description property. Has a min length of 50 and a max length of 160 chars, set in the post schema.                                                                                                                                                                        |
 | publishDate \*         | Again pretty simple. To change the date format/locale, currently **en-GB**, update the date option in `src/site.config.ts`. Note you can also pass additional options to the component `<FormattedDate>` if required.                                                                                        |
 | updatedDate            | This is an optional date representing when a post has been updated, in the same format as the publishDate.                                                                                                                                                                                                   |
