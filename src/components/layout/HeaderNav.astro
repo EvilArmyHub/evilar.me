@@ -1,0 +1,35 @@
+---
+import { menuLinks } from "@/site.config";
+
+interface Props {
+	isCompact?: boolean;
+	menuId: string;
+}
+
+const { isCompact = false, menuId } = Astro.props;
+---
+
+<nav
+	aria-label="Главное меню"
+	class:list={[
+		"bg-bg absolute -inset-x-4 hidden flex-col px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:flex sm:flex-row sm:items-center sm:bg-transparent sm:p-0",
+		isCompact ? "top-10 sm:mt-0" : "top-12 sm:mt-1",
+	]}
+	data-header-nav
+	id={menuId}
+>
+	{
+		menuLinks.map((link, index) => (
+			<>
+				<a
+					aria-current={Astro.url.pathname === link.path ? "page" : false}
+					class="nav-link py-4 text-lg sm:py-0 sm:text-base aria-[current=page]:text-text"
+					href={link.path}
+				>
+					{link.title}
+				</a>
+				{index < menuLinks.length - 1 && <span class="text-heading hidden px-2 sm:inline">·</span>}
+			</>
+		))
+	}
+</nav>

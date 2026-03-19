@@ -1,64 +1,12 @@
 /* would like to ignore ./src/pages/og-image/[slug].png.ts */
 @import "tailwindcss";
+@import "./tokens.css";
+@import "./components/admonition.css" layer(components);
+@import "./components/github-card.css" layer(components);
+@import "./utilities.css";
+@import "./prose.css";
 /* config for tailwindcss-typography plugin */
 @config "../../tailwind.config.ts";
-
-@font-face {
-	font-family: "Inter";
-	font-style: normal;
-	font-weight: 100 900;
-	font-display: swap;
-	src: url("/fonts/inter-cyrillic-ext.woff2") format("woff2");
-	unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-}
-
-@font-face {
-	font-family: "Inter";
-	font-style: normal;
-	font-weight: 100 900;
-	font-display: swap;
-	src: url("/fonts/inter-cyrillic.woff2") format("woff2");
-	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-
-@font-face {
-	font-family: "Inter";
-	font-style: normal;
-	font-weight: 100 900;
-	font-display: swap;
-	src: url("/fonts/inter-latin-ext.woff2") format("woff2");
-	unicode-range:
-		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-		U+A720-A7FF;
-}
-
-@font-face {
-	font-family: "Inter";
-	font-style: normal;
-	font-weight: 100 900;
-	font-display: swap;
-	src: url("/fonts/inter-latin.woff2") format("woff2");
-	unicode-range:
-		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* use a selector-based strategy for dark mode */
-@variant dark
-(
-&:where([data-theme="dark"], [data-theme="dark"] *));
-
-/* you could refactor below to use light-dark(), depending on your target audience */
-@theme {
-	--color-bg: oklch(98.48% 0 0);
-	--color-text: oklch(26.99% 0.0096 235.05);
-	--color-link: oklch(66% 0.11 155);
-	--color-link-hover: oklch(58% 0.13 155);
-	--color-accent: oklch(0.6492 0.0758 166.8);
-	--color-heading: oklch(18.15% 0 0);
-	--color-quote: oklch(55.27% 0.195 19.06);
-}
 
 @layer base {
 	html {
@@ -102,50 +50,4 @@
 	[data-astro-image="constrained"] {
 		max-width: 100%;
 	}
-}
-
-@layer components {
-	@import "./components/admonition.css";
-	@import "./components/github-card.css";
-
-	.text-link {
-		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
-	}
-
-	.text-link:hover,
-	.text-link:focus-visible {
-		color: var(--color-link-hover);
-	}
-
-	.nav-link {
-		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
-	}
-
-	.nav-link:hover,
-	.nav-link:focus-visible {
-		color: var(--color-link-hover);
-	}
-
-	.page-title {
-		@apply text-heading text-2xl font-semibold;
-	}
-
-	:where(.expressive-code),
-	:where(.expressive-code .frame),
-	:where(.expressive-code pre) {
-		border: 0 !important;
-		box-shadow: none !important;
-	}
-}
-
-@utility prose {
-	--tw-prose-body: var(--color-text);
-	--tw-prose-bold: var(--color-text);
-	--tw-prose-bullets: var(--color-text);
-	--tw-prose-code: var(--color-text);
-	--tw-prose-headings: var(--color-heading);
-	--tw-prose-hr: 0.5px dashed #666;
-	--tw-prose-links: var(--color-text);
-	--tw-prose-quotes: var(--color-quote);
-	--tw-prose-th-borders: #666;
 }

@@ -1,0 +1,26 @@
+---
+interface Props {
+	label: string;
+	href: string;
+	isPlaceholder?: boolean;
+}
+
+const { label, href, isPlaceholder = false } = Astro.props;
+const rel = "noreferrer";
+const target = "_blank";
+---
+
+<a
+	class="social-button inline-flex items-center gap-2.5 px-3.5 py-2 text-sm font-medium no-underline"
+	data-placeholder={isPlaceholder ? "true" : "false"}
+	href={href}
+	rel={rel}
+	target={target}
+>
+	<span class="social-button__icon flex h-5 w-5 items-center justify-center" aria-hidden="true">
+		<svg class="h-5 w-5" fill="currentColor" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+			<path d="M19.777 4.43c.264-.11.55-.14.83-.086c.28.053.545.188.768.39c.223.204.395.468.5.762c.103.295.134.61.09.918l-2.48 13.54c-.182.99-1.252 1.558-2.104 1.115l-4.178-2.174l-2.13 2.195a1.39 1.39 0 0 1-.503.348a1.36 1.36 0 0 1-.603.088a1.35 1.35 0 0 1-.573-.178a1.39 1.39 0 0 1-.446-.42a1.47 1.47 0 0 1-.224-.586a1.5 1.5 0 0 1 .014-.63l.83-4.256l8.085-7.976a.45.45 0 0 0-.533-.71L6.87 13.172l-3.45-1.112a1.47 1.47 0 0 1-.79-.59a1.53 1.53 0 0 1-.253-.962a1.52 1.52 0 0 1 .391-.91c.236-.262.546-.44.883-.507z" />
+		</svg>
+	</span>
+	<span>{label}</span>
+</a>

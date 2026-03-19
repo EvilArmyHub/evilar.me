@@ -5,11 +5,3 @@ export function toggleClass(element: HTMLElement, className: string) {
 export function elementHasClass(element: HTMLElement, className: string) {
 	return element.classList.contains(className);
 }
-
-export function getRootTheme() {
-	return document.documentElement.dataset.theme;
-}
-
-export function rootInDarkMode() {
-	return getRootTheme() === "dark";
-}

@@ -2,19 +2,19 @@
 import { render } from "astro:content";
 import Pagination from "@/components/Paginator.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
-import { getAllPosts, getTagMeta, getUniqueTags } from "@/data/post";
+import { getAllPosts, getPostsByTag, getSortedPosts, getTagMeta, getUniqueTags } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
-import { collectionDateSort } from "@/utils/date";
+import { getPaginationLinks } from "@/utils/pagination";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { Icon } from "astro-icon/components";
 
 export const getStaticPaths = (async ({ paginate }) => {
 	const allPosts = await getAllPosts();
-	const sortedPosts = allPosts.sort(collectionDateSort);
+	const sortedPosts = getSortedPosts(allPosts);
 	const uniqueTags = getUniqueTags(sortedPosts);
 
 	return uniqueTags.flatMap((tag) => {
-		const postsWithTag = sortedPosts.filter((post) => post.data.tags.includes(tag));
+		const postsWithTag = getPostsByTag(sortedPosts, tag);
 		return paginate(postsWithTag, {
 			pageSize: 10,
 			params: { tag },
@@ -35,20 +35,10 @@ const meta = {
 	title: tagMeta?.data.title ?? `Материалы о ${tag}`,
 };
 
-const paginationProps = {
-	...(page.url.prev && {
-		prevUrl: {
-			text: "← Предыдущие теги",
-			url: page.url.prev,
-		},
-	}),
-	...(page.url.next && {
-		nextUrl: {
-			text: "Следующие теги →",
-			url: page.url.next,
-		},
-	}),
-};
+const paginationProps = getPaginationLinks(page.url, {
+	next: "Следующие теги →",
+	prev: "← Предыдущие теги",
+});
 ---
 
 <PageLayout meta={meta}>

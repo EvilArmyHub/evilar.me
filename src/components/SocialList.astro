@@ -1,40 +1,25 @@
 ---
-import { Icon } from "astro-icon/components";
+import SocialButton from "@/components/SocialButton.astro";
 
-/** 
-	Uses https://www.astroicon.dev/getting-started/
-	Find icons via guide: https://www.astroicon.dev/guides/customization/#open-source-icon-sets
-	Only installed pack is: @iconify-json/mdi
-*/
 const socialLinks: {
 	friendlyName: string;
-	isWebmention?: boolean;
+	isPlaceholder: boolean;
 	link: string;
-	name: string;
 }[] = [
 	{
-		friendlyName: "Github",
-		link: "https://github.com/chrismwilliams/astro-cactus",
-		name: "mdi:github",
+		friendlyName: "Telegram",
+		isPlaceholder: false,
+		link: "https://t.me/",
 	},
 ];
 ---
 
-<div class="flex flex-wrap items-end gap-x-2">
-	<p>Я здесь</p>
-	<ul class="flex flex-1 items-center gap-x-2 sm:flex-initial">
+	<div class="flex flex-wrap items-center gap-3">
+	<ul class="flex flex-1 items-center gap-3 sm:flex-initial">
 		{
-			socialLinks.map(({ friendlyName, isWebmention, link, name }) => (
+			socialLinks.map(({ friendlyName, isPlaceholder, link }) => (
 				<li class="flex">
-					<a
-						class="hover:text-link inline-block"
-						href={link}
-						rel={`noreferrer ${isWebmention ? "me authn" : ""}`}
-						target="_blank"
-					>
-						<Icon aria-hidden="true" class="h-8 w-8" focusable="false" name={name} />
-						<span class="sr-only">{friendlyName}</span>
-					</a>
+					<SocialButton href={link} isPlaceholder={isPlaceholder} label={friendlyName} />
 				</li>
 			))
 		}

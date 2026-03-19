@@ -64,7 +64,12 @@ const { isCompact = false } = Astro.props;
 </theme-toggle>
 
 <script>
-	import { rootInDarkMode } from "@/utils/domElement";
+	import {
+		dispatchThemeChange,
+		rootInDarkMode,
+		THEME_APPLIED_EVENT,
+		type ThemePreference,
+	} from "@/utils/theme";
 
 	class ThemeToggle extends HTMLElement {
 		#button: HTMLButtonElement | null = null;
@@ -83,22 +88,17 @@ const { isCompact = false } = Astro.props;
 			this.#button.setAttribute("role", "switch");
 			this.#button.setAttribute("aria-checked", String(rootInDarkMode()));
 			this.#button.addEventListener("click", this.#onClick);
-			document.addEventListener("theme-applied", this.#onThemeApplied);
+			document.addEventListener(THEME_APPLIED_EVENT, this.#onThemeApplied);
 		}
 
 		disconnectedCallback() {
 			this.#button?.removeEventListener("click", this.#onClick);
-			document.removeEventListener("theme-applied", this.#onThemeApplied);
+			document.removeEventListener(THEME_APPLIED_EVENT, this.#onThemeApplied);
 		}
 
 		#onClick = () => {
-			document.dispatchEvent(
-				new CustomEvent("theme-change", {
-					detail: {
-						theme: rootInDarkMode() ? "light" : "dark",
-					},
-				}),
-			);
+			const nextTheme: ThemePreference = rootInDarkMode() ? "light" : "dark";
+			dispatchThemeChange({ theme: nextTheme });
 		};
 	}
 

@@ -1,0 +1,88 @@
+@layer components {
+	.text-link {
+		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
+	}
+
+	.text-link:hover,
+	.text-link:focus-visible {
+		color: var(--color-link-hover);
+	}
+
+	.nav-link {
+		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
+	}
+
+	.nav-link:hover,
+	.nav-link:focus-visible {
+		color: var(--color-link-hover);
+	}
+
+	.page-title {
+		@apply text-heading text-2xl font-semibold;
+	}
+
+	.social-button {
+		background: var(--social-button-bg);
+		border: 1px solid var(--social-button-border);
+		border-radius: 0.625rem;
+		box-shadow:
+			0 1px 0 rgb(255 255 255 / 0.32) inset,
+			0 10px 24px rgb(40 80 50 / 0.06);
+		color: var(--social-button-text);
+		transition:
+			background-color 180ms ease,
+			border-color 180ms ease,
+			box-shadow 180ms ease,
+			color 180ms ease;
+	}
+
+	.social-button:hover,
+	.social-button:focus-visible {
+		background: var(--social-button-bg-hover);
+		border-color: var(--social-button-border-hover);
+		box-shadow:
+			0 1px 0 rgb(255 255 255 / 0.36) inset,
+			0 14px 30px rgb(40 80 50 / 0.12);
+	}
+
+	.social-button:active {
+		background: var(--social-button-bg-active);
+		box-shadow:
+			0 1px 0 rgb(255 255 255 / 0.24) inset,
+			0 6px 16px rgb(40 80 50 / 0.08);
+	}
+
+	.social-button:focus-visible {
+		outline: 0;
+		box-shadow:
+			0 0 0 4px var(--social-button-ring),
+			0 1px 0 rgb(255 255 255 / 0.36) inset,
+			0 14px 30px rgb(40 80 50 / 0.1);
+	}
+
+	.social-button[data-placeholder="true"] {
+		opacity: 0.94;
+	}
+
+	.social-button[data-placeholder="true"]:hover,
+	.social-button[data-placeholder="true"]:active {
+		background: var(--social-button-bg);
+		border-color: var(--social-button-border);
+		box-shadow:
+			0 1px 0 rgb(255 255 255 / 0.32) inset,
+			0 10px 24px rgb(40 80 50 / 0.06);
+		transform: none;
+	}
+
+	.social-button__icon {
+		color: var(--social-button-icon);
+		transition: color 180ms ease;
+	}
+
+	:where(.expressive-code),
+	:where(.expressive-code .frame),
+	:where(.expressive-code pre) {
+		border: 0 !important;
+		box-shadow: none !important;
+	}
+}

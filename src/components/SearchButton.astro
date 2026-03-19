@@ -1,0 +1,36 @@
+---
+interface Props {
+	isCompact?: boolean;
+}
+
+const { isCompact = false } = Astro.props;
+---
+
+<button
+	aria-keyshortcuts="Control+K Meta+K"
+	class:list={[
+		"hover:text-accent flex cursor-pointer items-center justify-center rounded-md",
+		isCompact ? "h-8 w-8" : "h-9 w-9",
+	]}
+	data-open-modal
+	disabled
+	type="button"
+>
+	<svg
+		aria-hidden="true"
+		class:list={[isCompact ? "h-6 w-6" : "h-7 w-7"]}
+		fill="none"
+		height="16"
+		stroke="currentColor"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		stroke-width="1.5"
+		viewBox="0 0 24 24"
+		width="16"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path d="M0 0h24v24H0z" stroke="none"></path>
+		<path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6"></path>
+	</svg>
+	<span class="sr-only">Открыть поиск</span>
+</button>

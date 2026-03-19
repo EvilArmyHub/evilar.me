@@ -1,0 +1,29 @@
+---
+import { siteConfig } from "@/site.config";
+
+interface Props {
+	isCompact?: boolean;
+}
+
+const { isCompact = false } = Astro.props;
+---
+
+{
+	!isCompact && (
+		<a
+			aria-current={Astro.url.pathname === "/" ? "page" : false}
+			class="inline-flex items-center sm:relative sm:inline-block"
+			href="/"
+		>
+			<img
+				alt=""
+				class="me-3 h-10 w-6 transition-transform duration-200 ease-out hover:-rotate-3 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12"
+				decoding="async"
+				height="480"
+				src="/icon.svg"
+				width="515"
+			/>
+			<span class="text-xl font-bold sm:text-2xl">{siteConfig.title}</span>
+		</a>
+	)
+}

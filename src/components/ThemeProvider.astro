@@ -1,6 +1,16 @@
-<script is:inline>
-	const THEME_STORAGE_KEY = "theme";
-	const DARK_MODE_MEDIA_QUERY = "(prefers-color-scheme: dark)";
+---
+import {
+	DARK_MODE_MEDIA_QUERY,
+	THEME_APPLIED_EVENT,
+	THEME_CHANGE_EVENT,
+	THEME_STORAGE_KEY,
+} from "@/utils/theme";
+---
+
+<script
+	define:vars={{ DARK_MODE_MEDIA_QUERY, THEME_APPLIED_EVENT, THEME_CHANGE_EVENT, THEME_STORAGE_KEY }}
+	is:inline
+>
 	const darkModePreference = window.matchMedia(DARK_MODE_MEDIA_QUERY);
 
 	function isThemePreference(value) {
@@ -28,7 +38,7 @@
 		const root = document.documentElement;
 		root.dataset.theme = theme;
 		root.style.colorScheme = theme;
-		document.dispatchEvent(new CustomEvent("theme-applied", { detail: { theme } }));
+		document.dispatchEvent(new CustomEvent(THEME_APPLIED_EVENT, { detail: { theme } }));
 	}
 
 	function persistTheme(theme) {
@@ -50,7 +60,7 @@
 	syncTheme();
 
 	document.addEventListener("astro:after-swap", syncTheme);
-	document.addEventListener("theme-change", (event) => {
+	document.addEventListener(THEME_CHANGE_EVENT, (event) => {
 		const nextTheme = event.detail?.theme;
 		if (!isThemePreference(nextTheme)) {
 			return;

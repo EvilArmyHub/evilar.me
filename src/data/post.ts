@@ -1,10 +1,24 @@
 import { type CollectionEntry, getCollection } from "astro:content";
+import { collectionDateSort } from "@/utils/date";
 
 /** filter out draft posts based on the environment */
 export async function getAllPosts(): Promise<CollectionEntry<"post">[]> {
 	return await getCollection("post", ({ data }) => {
 		return import.meta.env.PROD ? !data.draft : true;
 	});
+}
+
+export function getSortedPosts(posts: CollectionEntry<"post">[]) {
+	return [...posts].sort(collectionDateSort);
+}
+
+export function getPinnedPosts(posts: CollectionEntry<"post">[], limit?: number) {
+	const pinnedPosts = posts.filter((post) => post.data.pinned);
+	return typeof limit === "number" ? pinnedPosts.slice(0, limit) : pinnedPosts;
+}
+
+export function getPostsByTag(posts: CollectionEntry<"post">[], tag: string) {
+	return posts.filter((post) => post.data.tags.includes(tag));
 }
 
 /** Get tag metadata by tag name */
