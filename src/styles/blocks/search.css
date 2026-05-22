@@ -1,100 +1,207 @@
-@import "@pagefind/default-ui/css/ui.css";
+@import "@pagefind/component-ui/css";
 
-:root {
-	--pagefind-ui-font: inherit;
+.site-search {
+	display: inline-flex;
+	--pf-font: inherit;
+	--pf-text: var(--color-text);
+	--pf-text-secondary: color-mix(in oklab, var(--color-text) 72%, transparent);
+	--pf-text-muted: color-mix(in oklab, var(--color-text) 58%, transparent);
+	--pf-background: var(--color-bg);
+	--pf-border: color-mix(in oklab, var(--color-text) 18%, transparent);
+	--pf-border-focus: var(--color-accent);
+	--pf-hover: color-mix(in oklab, var(--color-text) 8%, transparent);
+	--pf-mark: var(--color-quote);
+	--pf-outline-focus: var(--color-heading);
+	--pf-outline-width: 1px;
+	--pf-outline-offset: 2px;
+	--pf-input-height: 2.5rem;
+	--pf-input-font-size: 1rem;
+	--pf-summary-font-size: 0.75rem;
+	--pf-result-title-font-size: 0.95rem;
+	--pf-result-excerpt-font-size: 0.75rem;
+	--pf-results-gap: 1rem;
+	--pf-border-radius: 0.375rem;
+	--pf-modal-backdrop: color-mix(in oklab, var(--color-bg) 35%, transparent);
+	--pf-modal-max-width: 48rem;
+	--pf-modal-max-height: calc(100dvh - 8rem);
+	--pf-modal-top: 4rem;
+	--pf-skeleton: color-mix(in oklab, var(--color-text) 10%, transparent);
+	--pf-skeleton-shine: color-mix(in oklab, var(--color-text) 16%, transparent);
+	--pf-icon-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='black' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6'/%3E%3C/svg%3E");
 }
 
-#site-search-ui {
-	--pagefind-ui-primary: var(--color-accent);
-	--pagefind-ui-text: var(--color-text);
-	--pagefind-ui-background: transparent;
-	--pagefind-ui-border: color-mix(in oklab, var(--color-text) 18%, transparent);
-	--pagefind-ui-border-width: 1px;
-
-	[data-theme="dark"] & {
-		--pagefind-ui-background: transparent;
-		--pagefind-ui-border: color-mix(in oklab, var(--color-text) 24%, transparent);
-	}
+[data-theme="dark"] .site-search {
+	--pf-border: color-mix(in oklab, var(--color-text) 24%, transparent);
+	--pf-hover: color-mix(in oklab, var(--color-text) 12%, transparent);
+	--pf-modal-backdrop: color-mix(in oklab, var(--color-bg) 50%, transparent);
+	--pf-skeleton: color-mix(in oklab, var(--color-text) 14%, transparent);
+	--pf-skeleton-shine: color-mix(in oklab, var(--color-text) 20%, transparent);
 }
 
-#site-search-ui .pagefind-ui__form {
-	margin-bottom: 1rem;
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-trigger {
+	display: inline-flex;
+	width: 2.25rem;
+	height: 2.25rem;
 }
 
-#site-search-ui .pagefind-ui__search-input {
-	background-color: transparent;
-	border-radius: 0;
-	border-top: 0;
-	border-left: 0;
-	border-right: 0;
-	padding-inline: 0;
-	padding-top: 0;
-	padding-bottom: 0.85rem;
-	box-shadow: none;
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] pagefind-modal-trigger {
+	width: 2rem;
+	height: 2rem;
 }
 
-#site-search-ui .pagefind-ui__search-input:focus {
-	box-shadow: none;
-}
-
-#site-search-ui .pagefind-ui__drawer {
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn {
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 0;
 	background: transparent;
 	border: 0;
-	padding: 0;
+	border-radius: var(--pf-border-radius);
+	color: var(--color-text);
 }
 
-#site-search-ui .pagefind-ui__results {
-	display: grid;
-	gap: 1rem;
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn:hover {
+	background: transparent;
+	box-shadow: none;
 }
 
-#site-search-ui .pagefind-ui__search-clear {
-	width: calc(60px * var(--pagefind-ui-scale));
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-icon {
+	width: 1.75rem;
+	height: 1.75rem;
+	background: currentColor;
+	transition: background-color 0.15s ease;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] .pf-trigger-icon {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#)
+	.site-search
+	.pf-trigger-btn:is(:hover, :focus-visible)
+	.pf-trigger-icon {
+	background: var(--color-accent);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search dialog.pf-modal {
+	border-radius: var(--pf-border-radius);
+	color: var(--color-text);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search dialog.pf-modal::backdrop {
+	backdrop-filter: blur(4px);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-header,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-header {
+	padding: 1rem 1rem 0.75rem;
+	border-bottom: 0;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-close {
+	display: none;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-close:hover {
+	background: transparent;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-input-wrapper::before {
+	inset-inline-start: 0;
+	background-color: var(--pf-text-muted);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-header .pf-input,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-header .pf-input {
+	height: 2.75rem;
+	padding-inline-start: 2rem;
+	padding-inline-end: 2.5rem;
+	border: 1px solid var(--pf-border);
+	border-radius: var(--pf-border-radius);
+	box-shadow: none;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-header .pf-input:focus-visible,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-header .pf-input:focus-visible {
+	border-color: var(--color-accent);
+	box-shadow: none;
+	outline: 0;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-input-clear {
+	min-width: 2.5rem;
 	padding: 0;
-	background-color: transparent;
 	overflow: hidden;
+	font-size: 0;
+	background: transparent;
 }
 
-#site-search-ui .pagefind-ui__search-clear:focus {
-	outline: 1px solid var(--color-heading);
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-input-clear:hover {
+	background: transparent;
 }
 
-#site-search-ui .pagefind-ui__search-clear::before {
-	content: "";
-	-webkit-mask:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
-		center / 60% no-repeat;
-	mask:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
-		center / 60% no-repeat;
-	background-color: var(--color-accent);
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-input-clear::before {
 	display: block;
 	width: 100%;
 	height: 100%;
+	content: "";
+	background-color: var(--color-accent);
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
+		center / 60% no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
+		center / 60% no-repeat;
 }
 
-#site-search-ui .pagefind-ui__result {
-	border: 0;
-	padding: 0;
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-body,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-body {
+	padding: 0 1rem 1rem;
 }
 
-#site-search-ui .pagefind-ui__message {
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-summary {
 	padding-inline: 0;
+	margin-bottom: 1rem;
 }
 
-#site-search-ui .pagefind-ui__result-link {
-	background-size: 100% 6px;
-	background-position: bottom;
-	background-repeat: repeat-x;
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-card,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-chip {
+	padding: 0;
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-card:hover,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-chip:hover,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-card:has([data-pf-selected]) {
+	background: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-chips {
+	gap: 0.5rem;
+	padding-inline-start: 1rem;
+	margin-top: 0.5rem;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-link,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-link {
+	color: var(--color-text);
+	text-decoration: none;
 	background-image: linear-gradient(
 		transparent,
 		transparent 5px,
 		var(--color-text) 5px,
 		var(--color-text)
 	);
+	background-position: bottom;
+	background-size: 100% 6px;
+	background-repeat: repeat-x;
 }
 
-#site-search-ui .pagefind-ui__result-link:hover {
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-link:hover,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-link:hover {
 	text-decoration: none;
 	background-image: linear-gradient(
 		transparent,
@@ -104,8 +211,30 @@
 	);
 }
 
-#site-search-ui mark {
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-excerpt,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-excerpt {
+	white-space: normal;
+	color: var(--pf-text-secondary);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-result-excerpt mark,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-heading-excerpt mark {
 	color: var(--color-quote);
-	background-color: transparent;
 	font-weight: 600;
+	background: transparent;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-footer,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-footer {
+	border-top-color: var(--pf-border);
+}
+
+.site-search-dev-message {
+	padding-block: 1.5rem;
+	text-align: center;
+	color: var(--color-text);
+}
+
+.site-search-dev-message p {
+	margin: 0;
 }

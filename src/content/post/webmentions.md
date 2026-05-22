@@ -1,5 +1,5 @@
 ---
-title: "Adding Webmentions to Astro Cactus"
+title: "Adding Webmentions to evilarme"
 description: "This post describes the process of adding webmentions to your own site"
 publishDate: "2023-10-11"
 tags: ["webmentions", "astro", "social"]
@@ -35,7 +35,7 @@ Firstly, you need to add a link on your site to prove ownership. If you have a l
 
 ### Sign up to Webmention.io
 
-Next, head over to [Webmention.io](https://webmention.io/) and create an account by signing in with your domain name, e.g. `https://astro-cactus.chriswilliams.dev/`. Please note that .app TLDs don't function correctly. Once in, it will give you a couple of links for your domain to accept webmentions. Make a note of these and create a `.env` file (this template include an example `.env.example` which you could rename). Add the link feed and api key with the key/values of `WEBMENTION_URL` and `WEBMENTION_API_KEY` respectively, and the optional `WEBMENTION_PINGBACK` url if required. Please try not to publish this to a repository!
+Next, head over to [Webmention.io](https://webmention.io/) and create an account by signing in with your domain name, e.g. `https://evilar.me/`. Please note that .app TLDs don't function correctly. Once in, it will give you a couple of links for your domain to accept webmentions. Make a note of these and create a `.env` file (this template include an example `.env.example` which you could rename). Add the link feed and api key with the key/values of `WEBMENTION_URL` and `WEBMENTION_API_KEY` respectively, and the optional `WEBMENTION_PINGBACK` url if required. Please try not to publish this to a repository!
 
 :::note
 You don't have to include the pingback link. Maybe coincidentally, but after adding it I started to receive a higher frequency of spam in my mailbox, informing me that my website could be better. TBH they're not wrong. I've now removed it, but it's up to you.
@@ -49,7 +49,7 @@ You're now going to have to use [brid.gy](https://brid.gy/). As the name suggest
 
 With everything set, it's now time to build and publish your website. **REMEMBER** to set your environment variables `WEBMENTION_API_KEY` & `WEBMENTION_URL` with your host.
 
-You can check to see if everything is working by sending a test webmention via [webmentions.rocks](https://webmention.rocks/receive/1). Log in with your domain, enter the auth code, and then the url of the page you want to test. For example, to test this page I would add `https://astro-cactus.chriswilliams.dev/posts/webmentions/`. To view it on your website, rebuild or (re)start dev mode locally, and you should see the result at the bottom of your page.
+You can check to see if everything is working by sending a test webmention via [webmentions.rocks](https://webmention.rocks/receive/1). Log in with your domain, enter the auth code, and then the url of the page you want to test. For example, to test this page I would add `https://evilar.me/posts/webmentions/`. To view it on your website, rebuild or (re)start dev mode locally, and you should see the result at the bottom of your page.
 
 You can also view any test mentions in the browser via their [api](https://github.com/aaronpk/webmention.io#api).
 

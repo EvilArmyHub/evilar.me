@@ -1,7 +1,7 @@
 ---
-import SocialList from "@/components/SocialList.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
 import Note from "@/components/note/Note.astro";
+import SocialList from "@/components/SocialList.astro";
 import { getAllNotes, getLatestNotes } from "@/data/note";
 import { getAllPosts, getPinnedPosts, getSortedPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
@@ -25,8 +25,8 @@ const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
 <PageLayout meta={{ title: "Главная" }}>
 	<section>
 		<p class="mt-0 mb-4">
-			Это стартовый сайт на Astro для личного блога, заметок и спокойной публикации материалов.
-			Ниже можно перейти в репозиторий, посмотреть статьи и быстро понять, как устроен проект.
+			Это стартовый сайт на Astro для личного блога, заметок и спокойной публикации материалов. Ниже
+			можно перейти в репозиторий, посмотреть статьи и быстро понять, как устроен проект.
 		</p>
 		<SocialList />
 	</section>

@@ -1,7 +1,7 @@
 ---
 import { type CollectionEntry, render } from "astro:content";
-import FormattedDate from "@/components/FormattedDate.astro";
 import type { HTMLTag, Polymorphic } from "astro/types";
+import FormattedDate from "@/components/FormattedDate.astro";
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	note: CollectionEntry<"note">;
@@ -19,22 +19,20 @@ const { Content } = await render(note);
 	{
 		isPreview ? (
 			<a
-				class="block rounded-md bg-text/5 px-4 py-3 no-underline transition-colors duration-200 ease-out hover:bg-text/10 focus-visible:bg-text/10 focus-visible:outline-none"
+				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 block rounded-md px-4 py-3 no-underline transition-colors duration-200 ease-out focus-visible:outline-none"
 				href={`/notes/${note.id}/`}
 			>
-				<Tag class="page-title text-base text-link transition-colors duration-200 ease-out group-hover:text-link-hover group-focus-within:text-link-hover">
+				<Tag class="page-title text-link group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
 					{note.data.title}
 				</Tag>
 				<FormattedDate date={note.data.publishDate} />
-				<div class="prose prose-sm prose-content mt-4 max-w-none line-clamp-6 [&>p:last-of-type]:mb-0">
+				<div class="prose prose-sm prose-content mt-4 line-clamp-6 max-w-none [&>p:last-of-type]:mb-0">
 					<Content />
 				</div>
 			</a>
 		) : (
 			<>
-				<Tag class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">
-					{note.data.title}
-				</Tag>
+				<Tag class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">{note.data.title}</Tag>
 				<div class="mt-2 text-gray-600 dark:text-gray-400">
 					<FormattedDate date={note.data.publishDate} />
 				</div>

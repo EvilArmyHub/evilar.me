@@ -1,14 +1,20 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Pagination from "@/components/Paginator.astro";
+import type { GetStaticPaths, Page } from "astro";
+import { Icon } from "astro-icon/components";
 import PinnedPostsSection from "@/components/blog/archive/PinnedPostsSection.astro";
 import PostsSidebar from "@/components/blog/archive/PostsSidebar.astro";
 import PostsYearGroup from "@/components/blog/archive/PostsYearGroup.astro";
-import { getAllPosts, getPinnedPosts, getSortedPosts, getUniqueTags, groupPostsByYear } from "@/data/post";
+import Pagination from "@/components/Paginator.astro";
+import {
+	getAllPosts,
+	getPinnedPosts,
+	getSortedPosts,
+	getUniqueTags,
+	groupPostsByYear,
+} from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { getPaginationLinks } from "@/utils/pagination";
-import type { GetStaticPaths, Page } from "astro";
-import { Icon } from "astro-icon/components";
 
 export const getStaticPaths = (async ({ paginate }) => {
 	const MAX_POSTS_PER_PAGE = 10;

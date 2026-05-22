@@ -42,7 +42,9 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 		{
 			data.updatedDate && (
 				<>
-					<span class="px-2" aria-hidden="true">·</span>
+					<span class="px-2" aria-hidden="true">
+						·
+					</span>
 					<span>
 						Обновлён <FormattedDate date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
 					</span>
@@ -76,8 +78,15 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 			{data.tags.map((tag, i) => (
 				<>
 					<span class="contents">
-						<a class="text-link inline-block before:content-['#']" data-pagefind-filter={`tag:${tag}`} href={`/tags/${tag}/`}><span class="sr-only">Открыть больше материалов с тегом&nbsp;</span>{tag}
-						</a>{i < data.tags.length - 1 && ", "}
+						<a
+							class="text-link inline-block before:content-['#']"
+							data-pagefind-filter={`tag:${tag}`}
+							href={`/tags/${tag}/`}
+						>
+							<span class="sr-only">Открыть больше материалов с тегом&nbsp;</span>
+							{tag}
+						</a>
+						{i < data.tags.length - 1 && ", "}
 					</span>
 				</>
 			))}

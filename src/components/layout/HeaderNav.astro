@@ -23,7 +23,7 @@ const { isCompact = false, menuId } = Astro.props;
 			<>
 				<a
 					aria-current={Astro.url.pathname === link.path ? "page" : false}
-					class="nav-link py-4 text-lg sm:py-0 sm:text-base aria-[current=page]:text-text"
+					class="nav-link aria-[current=page]:text-text py-4 text-lg sm:py-0 sm:text-base"
 					href={link.path}
 				>
 					{link.title}

@@ -1,6 +1,6 @@
 ---
-import { generateToc } from "@/utils/generateToc";
 import type { MarkdownHeading } from "astro";
+import { generateToc } from "@/utils/generateToc";
 import TOCHeading from "./TOCHeading.astro";
 
 interface Props {
@@ -12,10 +12,13 @@ const { headings } = Astro.props;
 const toc = generateToc(headings);
 ---
 
-<aside class="group hidden lg:sticky lg:top-16 lg:order-2 lg:block lg:w-64 lg:self-start" aria-label="Table of contents">
+<aside
+	class="group hidden lg:sticky lg:top-16 lg:order-2 lg:block lg:w-64 lg:self-start"
+	aria-label="Table of contents"
+>
 	<div class="relative overflow-hidden">
 		<div
-			class="bg-bg absolute top-0 right-0 z-10 flex h-10 w-10 items-center justify-center text-text/45 transition-opacity duration-200 ease-out group-hover:opacity-0 group-focus-within:opacity-0"
+			class="bg-bg text-text/45 absolute top-0 right-0 z-10 flex h-10 w-10 items-center justify-center transition-opacity duration-200 ease-out group-focus-within:opacity-0 group-hover:opacity-0"
 			aria-hidden="true"
 		>
 			<svg
@@ -29,16 +32,16 @@ const toc = generateToc(headings);
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path d="M8 6h11" />
-				<path d="M8 12h11" />
-				<path d="M8 18h11" />
-				<path d="M3 6h.01" />
-				<path d="M3 12h.01" />
-				<path d="M3 18h.01" />
+				<path d="M8 6h11"></path>
+				<path d="M8 12h11"></path>
+				<path d="M8 18h11"></path>
+				<path d="M3 6h.01"></path>
+				<path d="M3 12h.01"></path>
+				<path d="M3 18h.01"></path>
 			</svg>
 		</div>
 		<nav
-			class="bg-bg min-h-[18rem] translate-x-[calc(100%-2.5rem)] ps-6 pe-3 py-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100"
+			class="bg-bg min-h-[18rem] translate-x-[calc(100%-2.5rem)] py-2 ps-6 pe-3 opacity-0 transition-all duration-300 ease-out group-focus-within:translate-x-0 group-focus-within:opacity-100 group-hover:translate-x-0 group-hover:opacity-100"
 		>
 			<p class="page-title text-base">Содержание</p>
 			<ol class="mt-4 max-h-[calc(100vh-12rem)] overflow-y-auto pe-1">

@@ -8,7 +8,12 @@ import {
 ---
 
 <script
-	define:vars={{ DARK_MODE_MEDIA_QUERY, THEME_APPLIED_EVENT, THEME_CHANGE_EVENT, THEME_STORAGE_KEY }}
+	define:vars={{
+		DARK_MODE_MEDIA_QUERY,
+		THEME_APPLIED_EVENT,
+		THEME_CHANGE_EVENT,
+		THEME_STORAGE_KEY,
+	}}
 	is:inline
 >
 	const darkModePreference = window.matchMedia(DARK_MODE_MEDIA_QUERY);

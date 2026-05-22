@@ -1,8 +1,4 @@
 ---
-// Heavy inspiration taken from Astro Starlight -> https://github.com/withastro/starlight/blob/main/packages/starlight/components/Search.astro
-
-import SearchButton from "@/components/SearchButton.astro";
-import SearchDialog from "@/components/SearchDialog.astro";
 import "@/styles/blocks/search.css";
 
 interface Props {
@@ -10,13 +6,32 @@ interface Props {
 }
 
 const { isCompact = false } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+const bundlePath = `${baseUrl.replace(/\/$/, "")}/pagefind/`;
 ---
 
-<site-search class="ms-auto" id="search">
-	<SearchButton isCompact={isCompact} />
-	<SearchDialog />
-</site-search>
+<div class="site-search ms-auto" data-compact={isCompact ? "true" : "false"} id="search">
+	<pagefind-config base-url={baseUrl} bundle-path={bundlePath} lang="ru-RU"></pagefind-config>
+	<pagefind-modal-trigger compact hide-shortcut placeholder="Открыть поиск"
+	></pagefind-modal-trigger>
+	{
+		import.meta.env.DEV ? (
+			<pagefind-modal id="site-search-modal">
+				<pagefind-modal-body>
+					<div class="site-search-dev-message">
+						<p>
+							Поиск доступен только в production-сборке. <br />
+							Соберите сайт и запустите preview, чтобы проверить его локально.
+						</p>
+					</div>
+				</pagefind-modal-body>
+			</pagefind-modal>
+		) : (
+			<pagefind-modal id="site-search-modal" />
+		)
+	}
+</div>
 
 <script>
-	import "@/scripts/site-search";
+	import "@pagefind/component-ui";
 </script>

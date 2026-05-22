@@ -1,10 +1,10 @@
-import * as fs from "node:fs";
 import { WEBMENTION_API_KEY } from "astro:env/server";
+import * as fs from "node:fs";
 import type {
-	WebmentionType,
 	WebmentionsCache,
 	WebmentionsChildren,
 	WebmentionsFeed,
+	WebmentionType,
 } from "@/types";
 
 const DOMAIN = import.meta.env.SITE;

@@ -27,12 +27,14 @@ const meta = {
 			allTags.map(([tag, val]) => (
 				<li>
 					<a
-						class="group flex items-center gap-x-2 rounded-md bg-text/5 px-4 py-3 text-link no-underline transition-colors duration-200 ease-out hover:bg-text/10 focus-visible:bg-text/10 focus-visible:outline-none"
+						class="group bg-text/5 text-link hover:bg-text/10 focus-visible:bg-text/10 flex items-center gap-x-2 rounded-md px-4 py-3 no-underline transition-colors duration-200 ease-out focus-visible:outline-none"
 						href={`/tags/${tag}/`}
 						title={`Открыть материалы с тегом: ${tag}`}
 					>
-						<span class="transition-colors duration-200 ease-out group-hover:text-link-hover group-focus-visible:text-link-hover">&#35;{tag}</span>
-						<span class="inline-block text-text/70">
+						<span class="group-hover:text-link-hover group-focus-visible:text-link-hover transition-colors duration-200 ease-out">
+							&#35;{tag}
+						</span>
+						<span class="text-text/70 inline-block">
 							- {val} {getMaterialsLabel(val)}
 						</span>
 					</a>

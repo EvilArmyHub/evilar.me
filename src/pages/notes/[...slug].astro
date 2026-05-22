@@ -1,9 +1,9 @@
 ---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import Note from "@/components/note/Note.astro";
 import { getAllNotes } from "@/data/note";
 import PageLayout from "@/layouts/Base.astro";
 import { getFormattedDate } from "@/utils/date";
-import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 // if you're using an adaptor in SSR mode, getStaticPaths wont work -> https://docs.astro.build/en/guides/routing/#modifying-the-slug-example-for-ssr
 export const getStaticPaths = (async () => {
@@ -19,9 +19,7 @@ export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { note } = Astro.props;
 
 const meta = {
-	description:
-		note.data.description ||
-		`Заметка от ${getFormattedDate(note.data.publishDate)}`,
+	description: note.data.description || `Заметка от ${getFormattedDate(note.data.publishDate)}`,
 	title: note.data.title,
 };
 ---
