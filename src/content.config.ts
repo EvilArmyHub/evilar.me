@@ -39,6 +39,7 @@ const post = defineCollection({
 			coverImage: z
 				.object({
 					alt: z.string(),
+					blurhash: z.string().optional(),
 					src: image(),
 				})
 				.optional(),

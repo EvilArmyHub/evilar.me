@@ -1,6 +1,6 @@
 # SEO, Microformats, and Media Optimization Guide
 
-This document outlines the architecture, standards, and automation scripts used to achieve search engine optimization (SEO), IndieWeb semantic microformats support, and optimized media compression within the project.
+This document outlines the implemented architecture, standards, and automation scripts used to achieve search engine optimization (SEO), IndieWeb semantic microformats support, and optimized media compression within the project.
 
 ---
 
@@ -10,7 +10,7 @@ Microformats2 is a standard for adding semantic markup to HTML, allowing feeds, 
 
 ### Semantic Schema for Articles
 
-Every article container (e.g., in `src/layouts/BlogPost.astro`) should be structured with the following microformats classes:
+Every article container in `src/layouts/BlogPost.astro` is structured with the following microformats classes:
 
 - **`h-entry`**: The root class applied to the main article element container.
 - **`p-name`**: Applied to the article title heading element (`<h1>`), denoting the post title.
@@ -21,7 +21,7 @@ Every article container (e.g., in `src/layouts/BlogPost.astro`) should be struct
 
 ### HTML Structure Example
 
-Below is the standard integration pattern for `src/layouts/BlogPost.astro`:
+The implemented integration pattern in `src/layouts/BlogPost.astro` and `src/components/blog/Masthead.astro` is:
 
 ```html
 <article class="h-entry grow break-words" data-pagefind-body>
@@ -42,8 +42,8 @@ Below is the standard integration pattern for `src/layouts/BlogPost.astro`:
 
   <!-- Hidden/Visible Author Card (IndieWeb requirement) -->
   <div class="p-author h-card hidden" aria-hidden="true">
-    <a class="u-url p-name" href="https://evilar.me">Chris Williams</a>
-    <img class="u-photo" src="/avatar.avif" alt="Chris Williams" />
+    <a class="u-url p-name" href="https://evilar.me/">Chris Williams</a>
+    <img class="u-photo" src="/icon.svg" alt="" />
   </div>
 
   <!-- Main Body Content -->
@@ -93,15 +93,25 @@ This ensures that:
 
 ## 3. Photographic Media & Blurhash Pipeline
 
-To keep photographic assets organized and ensure blazing-fast load times, photos undergo a specialized processing pipeline before publication.
+To keep photographic assets organized and ensure fast load times, photos can be normalized before publication with `pnpm media:photos`.
 
 ### The Pipeline Process
 
-1. **Date-Based Renaming**: Raw images are renamed based on their EXIF capture timestamp into the standardized format: `p-YYYY-MM-DD-HH-MM-SS.ext`.
+1. **Date-Based Renaming**: Raw images are renamed based on their EXIF capture timestamp into the standardized format: `p-YYYY-MM-DD-HH-MM-SS.ext`. If EXIF data is unavailable, filesystem modification time is used.
 2. **Dimension Constraints**: High-resolution photos are resized to a maximum width of `1440px`. This keeps files light while remaining razor-sharp on retina screens.
 3. **Blurhash Generation**: A lightweight 32x32 color-matrix representation (**Blurhash**) is extracted and saved as a JSON sidecar file alongside the photo:
    - Example: `p-2025-10-12-14-30-00.json` containing `{"blurhash": "L6PZ|~yD?.jc00Rj?aW-~qj[fQay"}`.
-4. **Progressive Rendering**: During server-side rendering in Astro, the Blurhash is converted to a ultra-light CSS background gradient or canvas background, giving readers a beautiful placeholder before the main image finishes lazy-loading.
+4. **Progressive Rendering Metadata**: Sidecar JSON includes `src`, `width`, `height`, and `blurhash`. Article cover images can opt into placeholders by copying the generated Blurhash value into `coverImage.blurhash`; `src/components/blog/Masthead.astro` converts it to a tiny SVG background with `src/utils/blurhash.ts`.
+
+### Photo Processing Script
+
+The implementation lives in `scripts/process-photos.ts` and can process one or more files or directories:
+
+```bash
+pnpm media:photos src/content/post/my-gallery
+```
+
+Without arguments, the script scans `src/content`.
 
 ---
 
@@ -121,17 +131,13 @@ AVIF is exceptionally efficient. To maintain visual fidelity without any noticea
 Here is the TypeScript implementation for the automated pre-commit hook script:
 
 ```typescript
-import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { parse } from "node:path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import sharp from "sharp";
 
-/**
- * Compresses any staged JPEG/PNG file into AVIF format
- * and removes the original file.
- */
 export async function compressToAvif(filePath: string) {
-  const { dir, name, ext } = parse(filePath);
+  const { dir, name, ext } = path.parse(filePath);
   const lowerExt = ext.toLowerCase();
 
   // If already an AVIF image, skip processing
@@ -161,7 +167,6 @@ export async function compressToAvif(filePath: string) {
       })
       .toFile(avifPath);
 
-    // Safely remove the original unoptimized file
     await fs.unlink(filePath);
     console.log(`[SUCCESS] Created ${name}.avif and removed source.`);
   } catch (error) {
@@ -172,16 +177,19 @@ export async function compressToAvif(filePath: string) {
 
 ### Git Hook Integration
 
-To register this compression step automatically before each commit, configure `simple-git-hooks` and `lint-staged` in `package.json`:
+To register this compression step automatically before each commit, `simple-git-hooks` and `lint-staged` are configured in `package.json`:
 
 ```json
 {
+  "scripts": {
+    "prepare": "simple-git-hooks"
+  },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "src/assets/**/*.{jpg,jpeg,png}": [
-      "tsx scripts/img-compress-precommit.ts"
+    "**/*.{jpg,jpeg,png}": [
+      "pnpm exec tsx scripts/img-compress-precommit.ts"
     ]
   }
 }

@@ -4,6 +4,7 @@ import { type CollectionEntry, render } from "astro:content";
 import Masthead from "@/components/blog/Masthead.astro";
 import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
+import { siteConfig } from "@/site.config";
 
 import BaseLayout from "./Base.astro";
 
@@ -17,6 +18,7 @@ const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 const { headings, remarkPluginFrontmatter } = await render(post);
 const readingTime: string = remarkPluginFrontmatter.readingTime;
+const authorUrl = new URL("/", siteConfig.url).href;
 ---
 
 <BaseLayout
@@ -28,12 +30,16 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
 		title,
 	}}
 >
-	<article class="grow break-words" data-pagefind-body>
+	<article class="h-entry grow break-words" data-pagefind-body>
 		<div class="mb-12" id="blog-hero"><Masthead content={post} readingTime={readingTime} /></div>
+		<div class="p-author h-card hidden" aria-hidden="true">
+			<a class="u-url p-name" href={authorUrl}>{siteConfig.author}</a>
+			<img class="u-photo" src="/icon.svg" alt="" />
+		</div>
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 			{!!headings.length && <TOC headings={headings} />}
 			<div
-				class="prose prose-sm prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
+				class="e-content prose prose-sm prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
 			>
 				<slot />
 				<WebMentions />

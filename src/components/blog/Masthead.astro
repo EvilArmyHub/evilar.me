@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
+import { getBlurhashDataUrl } from "@/utils/blurhash";
 
 interface Props {
 	content: CollectionEntry<"post">;
@@ -16,13 +17,17 @@ const {
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
 	month: "long",
 };
+const coverImageStyle = data.coverImage?.blurhash
+	? `background-image: url("${getBlurhashDataUrl(data.coverImage.blurhash)}"); background-size: cover; background-position: center;`
+	: undefined;
 ---
 
 {
 	data.coverImage && (
-		<div class="mb-6 aspect-video">
+		<div class="mb-6 aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-900" style={coverImageStyle}>
 			<Image
 				alt={data.coverImage.alt}
+				class="h-full w-full"
 				layout="constrained"
 				width={748}
 				height={420}
@@ -32,13 +37,11 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 		</div>
 	)
 }
-<h1 class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">
-	{data.title}
-	{data.draft && <span aria-hidden="true"> 🚧</span>}
-</h1>
+<h1 class="p-name page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">{data.title}</h1>
 <div class="flex flex-wrap items-center gap-y-2">
 	<p class="text-gray-600 dark:text-gray-400">
-		<FormattedDate date={data.publishDate} dateTimeOptions={dateTimeOptions} />
+		{data.draft && <span aria-hidden="true">🚧 </span>}
+		<FormattedDate class="dt-published" date={data.publishDate} dateTimeOptions={dateTimeOptions} />
 		{
 			data.updatedDate && (
 				<>
@@ -46,7 +49,12 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 						·
 					</span>
 					<span>
-						Обновлён <FormattedDate date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
+						Обновлён{" "}
+						<FormattedDate
+							class="dt-updated"
+							date={data.updatedDate}
+							dateTimeOptions={dateTimeOptions}
+						/>
 					</span>
 				</>
 			)
