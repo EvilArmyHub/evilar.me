@@ -4,7 +4,8 @@ This document provides a clear and concise overview of the website architecture,
 
 ## Project Overview
 
-- Stack: Astro 6, TypeScript, Tailwind CSS 4, MD/MDX content collections, Pagefind search, Biome linting.
+- Stack: Astro 6.3, TypeScript 6, Tailwind CSS 4.3, MD/MDX content collections, Pagefind search, Biome linting.
+- Runtime baseline: Astro 6 requires Node.js 22.12 or newer. Current dependency choices also require a modern Node release because cssnano 8 drops Node 20 support and Expressive Code 0.42 depends on Shiki 4, which requires Node 20 or newer.
 - Output: Statically built to the dist/ directory.
 - Core content: Blog posts, short notes, and tag metadata.
 
@@ -164,6 +165,18 @@ Astro Markdown processing is configured in astro.config.ts:
 - RSS: Powered by rss.xml endpoints using the site configuration variable.
 - Social Images: Generated on-demand via the og-image API endpoint using Satori (converting HTML/Tailwind to SVG) and Sharp (rendering SVG to PNG).
 - Webmentions: Links are injected into page headers, fetched via utility modules, and rendered by the webmention component architecture.
+
+## Dependency Maintenance Notes
+
+Latest versions were verified on 2026-05-22 with pnpm registry commands (`pnpm outdated --long --format json` and `pnpm view <package> version`), then applied with `pnpm add ...@latest`.
+
+- Astro core packages: `astro`, `@astrojs/mdx`, `@astrojs/rss`, `@astrojs/sitemap`, `@astrojs/check`, and `@astrojs/markdown-remark` are actively maintained by the Astro project. The upgrade remains within Astro 6, so the main compatibility rule is the Node.js 22.12+ runtime requirement introduced by Astro 6.
+- Tailwind packages: `tailwindcss`, `@tailwindcss/vite`, `@tailwindcss/typography`, and `prettier-plugin-tailwindcss` are actively maintained. Tailwind 4.3 is a minor update from the existing Tailwind 4 setup. The Prettier plugin requires Node.js 20.19+.
+- TypeScript is on 6.x. TypeScript 6 changes some defaults and deprecates older compiler settings, but this project does not use the deprecated legacy module or ES5 settings and `pnpm check` passes.
+- cssnano 8 is current and active, but it now expects PostCSS 8.5.14 or newer. `postcss` is therefore declared directly in devDependencies to satisfy the peer dependency instead of relying on a transitive version.
+- Unified, remark, rehype, mdast, hast, and unist packages are mature and mostly stable. Many are quiet because their APIs are settled, not because they are abandoned.
+- `astro-icon`, `astro-robots-txt`, `astro-webmanifest`, `satori-html`, and `reading-time` have slower release cadence. None are marked deprecated on npm. If they become blocking later, likely replacements are Astro's built-in route endpoints for robots/manifest output, direct Iconify data usage for icons, a small local reading-time helper, and direct Satori markup construction instead of `satori-html`.
+- `satori`, `sharp`, Pagefind, Biome, and Prettier are active and current. Satori remains used only for generated social images, and Sharp remains the rasterizer/image optimizer.
 
 ## Configuration Variables
 
