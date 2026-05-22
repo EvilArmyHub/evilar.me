@@ -9,12 +9,12 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<section class="mb-16">
-	<h2 class="page-title mb-6 text-xl">Ключевое</h2>
-	<ul class="space-y-4" role="list">
+<section class="mb-10">
+	<h2 class="page-title mb-3 text-xl">Ключевое</h2>
+	<ul class="space-y-1" role="list">
 		{
 			posts.map((post) => (
-				<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+				<li>
 					<PostPreview post={post} />
 				</li>
 			))

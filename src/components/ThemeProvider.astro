@@ -32,7 +32,7 @@ import {
 	}
 
 	function getResolvedTheme() {
-		return getStoredThemePreference() ?? (darkModePreference.matches ? "dark" : "light");
+		return getStoredThemePreference() ?? "dark";
 	}
 
 	function applyTheme(theme) {

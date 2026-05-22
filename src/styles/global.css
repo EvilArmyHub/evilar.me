@@ -28,6 +28,7 @@
 			--color-accent: oklch(0.7413 0.0818 148.89);
 			--color-heading: oklch(94.66% 0 0);
 			--color-quote: oklch(94.8% 0.106 136.49);
+			--header-button-hover: oklch(100% 0 0);
 		}
 	}
 

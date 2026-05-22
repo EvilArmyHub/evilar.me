@@ -12,12 +12,12 @@ const { isCompact = false } = Astro.props;
 	!isCompact && (
 		<a
 			aria-current={Astro.url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center sm:relative sm:inline-block"
+			class="group inline-flex items-center sm:relative sm:inline-block transition-transform duration-200 ease-out active:scale-[0.98] focus-visible:outline-none"
 			href="/"
 		>
 			<img
 				alt=""
-				class="me-3 h-10 w-6 transition-transform duration-200 ease-out hover:-rotate-3 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12"
+				class="me-3 h-10 w-6 transition-transform duration-200 ease-out group-hover:-rotate-3 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12"
 				decoding="async"
 				height="480"
 				src="/icon.svg"

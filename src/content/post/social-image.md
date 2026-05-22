@@ -1,6 +1,6 @@
 ---
-title: "Пример OG-изображения"
-publishDate: "2023-01-27"
+title: "Собственное OG-изображение"
+publishDate: "2025-07-22"
 description: "Пример того, как добавить собственную social card через frontmatter"
 tags: ["example", "blog", "image"]
 ogImage: "/social-card.png"

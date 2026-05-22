@@ -9,7 +9,7 @@ const { isCompact = false } = Astro.props;
 <theme-toggle class:list={["ms-2 inline-flex sm:ms-4", isCompact && "sm:ms-3"]}>
 	<button
 		class:list={[
-			"hover:text-accent relative cursor-pointer rounded-md p-2",
+			"hover:text-[var(--header-button-hover)] focus-visible:text-[var(--header-button-hover)] active:scale-95 relative cursor-pointer rounded-md p-2 transition-all duration-200 ease-out focus-visible:outline-none",
 			isCompact ? "h-8 w-8" : "h-9 w-9",
 		]}
 		type="button"

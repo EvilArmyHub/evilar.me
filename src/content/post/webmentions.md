@@ -1,9 +1,9 @@
 ---
-title: "Adding Webmentions to evilarme"
-description: "This post describes the process of adding webmentions to your own site"
-publishDate: "2023-10-11"
+title: "Как добавить веб-упоминания"
+description: "Материал описывает, как подключить веб-упоминания к своему сайту"
+publishDate: "2026-04-24"
 tags: ["webmentions", "astro", "social"]
-updatedDate: "2024-12-06"
+updatedDate: "2026-05-18"
 pinned: true
 ---
 

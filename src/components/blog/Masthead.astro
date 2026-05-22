@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
 import { getBlurhashDataUrl } from "@/utils/blurhash";
+import { isFreshDate } from "@/utils/date";
 
 interface Props {
 	content: CollectionEntry<"post">;
@@ -20,11 +21,15 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 const coverImageStyle = data.coverImage?.blurhash
 	? `background-image: url("${getBlurhashDataUrl(data.coverImage.blurhash)}"); background-size: cover; background-position: center;`
 	: undefined;
+const isFresh = isFreshDate(data.publishDate);
 ---
 
 {
 	data.coverImage && (
-		<div class="mb-6 aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-900" style={coverImageStyle}>
+		<div
+			class="mb-6 aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-900"
+			style={coverImageStyle}
+		>
 			<Image
 				alt={data.coverImage.alt}
 				class="h-full w-full"
@@ -38,9 +43,22 @@ const coverImageStyle = data.coverImage?.blurhash
 	)
 }
 <h1 class="p-name page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">{data.title}</h1>
-<div class="flex flex-wrap items-center gap-y-2">
+<div class="mt-3 flex flex-wrap items-center gap-y-2">
 	<p class="text-gray-600 dark:text-gray-400">
-		{data.draft && <span aria-hidden="true">🚧 </span>}
+		{
+			data.draft && (
+				<span aria-label="Черновик" title="Черновик">
+					🚧{" "}
+				</span>
+			)
+		}
+		{
+			isFresh && (
+				<span aria-label="Свежий материал" title="Свежий материал">
+					🌱{" "}
+				</span>
+			)
+		}
 		<FormattedDate class="dt-published" date={data.publishDate} dateTimeOptions={dateTimeOptions} />
 		{
 			data.updatedDate && (
@@ -49,7 +67,7 @@ const coverImageStyle = data.coverImage?.blurhash
 						·
 					</span>
 					<span>
-						Обновлён{" "}
+						обновлён{" "}
 						<FormattedDate
 							class="dt-updated"
 							date={data.updatedDate}
@@ -65,38 +83,16 @@ const coverImageStyle = data.coverImage?.blurhash
 </div>
 {
 	!!data.tags?.length && (
-		<div class="mt-2">
-			<svg
-				aria-hidden="true"
-				class="inline-block h-6 w-6"
-				fill="none"
-				focusable="false"
-				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M0 0h24v24H0z" fill="none" stroke="none" />
-				<path d="M7.859 6h-2.834a2.025 2.025 0 0 0 -2.025 2.025v2.834c0 .537 .213 1.052 .593 1.432l6.116 6.116a2.025 2.025 0 0 0 2.864 0l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-6.117 -6.116a2.025 2.025 0 0 0 -1.431 -.593z" />
-				<path d="M17.573 18.407l2.834 -2.834a2.025 2.025 0 0 0 0 -2.864l-7.117 -7.116" />
-				<path d="M6 9h-.01" />
-			</svg>
-			{data.tags.map((tag, i) => (
-				<>
-					<span class="contents">
-						<a
-							class="text-link inline-block before:content-['#']"
-							data-pagefind-filter={`tag:${tag}`}
-							href={`/tags/${tag}/`}
-						>
-							<span class="sr-only">Открыть больше материалов с тегом&nbsp;</span>
-							{tag}
-						</a>
-						{i < data.tags.length - 1 && ", "}
-					</span>
-				</>
+		<div class="mt-3 flex flex-wrap items-center gap-2">
+			{data.tags.map((tag) => (
+				<a
+					class="inline-flex items-center rounded-full bg-zinc-200 dark:bg-zinc-800 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-black dark:hover:text-white active:scale-95 transition-all duration-200 ease-out focus-visible:outline-none"
+					data-pagefind-filter={`tag:${tag}`}
+					href={`/tags/${tag}/`}
+				>
+					<span class="sr-only">Открыть больше материалов с тегом&nbsp;</span>
+					#{tag}
+				</a>
 			))}
 		</div>
 	)

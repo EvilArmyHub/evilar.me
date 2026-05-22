@@ -1,7 +1,7 @@
 ---
 title: "Черновик рабочей статьи"
 description: "Материал для проверки отображения черновиков"
-publishDate: "2024-03-10"
+publishDate: "2026-05-12"
 tags: ["test"]
 draft: true
 ---

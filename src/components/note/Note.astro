@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from "astro:content";
 import type { HTMLTag, Polymorphic } from "astro/types";
 import FormattedDate from "@/components/FormattedDate.astro";
+import { isFreshDate } from "@/utils/date";
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	note: CollectionEntry<"note">;
@@ -10,22 +11,32 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 
 const { as: Tag = "div", note, isPreview = false } = Astro.props;
 const { Content } = await render(note);
+const isFresh = isFreshDate(note.data.publishDate);
 ---
 
 <article
-	class:list={[isPreview && "group relative rounded-md transition-colors duration-200 ease-out"]}
+	class:list={[isPreview && "group relative rounded-[10px] transition-colors duration-200 ease-out"]}
 	data-pagefind-body={isPreview ? false : true}
 >
 	{
 		isPreview ? (
 			<a
-				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 block rounded-md px-4 py-3 no-underline transition-colors duration-200 ease-out focus-visible:outline-none"
+				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 active:scale-[0.99] block rounded-[10px] px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none"
 				href={`/notes/${note.id}/`}
 			>
-				<Tag class="page-title text-link group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
-					{note.data.title}
-				</Tag>
-				<FormattedDate date={note.data.publishDate} />
+				<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+					<Tag class="page-title text-text group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
+						{note.data.title}
+					</Tag>
+					<span class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400">
+						{isFresh && (
+							<span aria-label="Свежая заметка" title="Свежая заметка">
+								🌱
+							</span>
+						)}
+						<FormattedDate date={note.data.publishDate} />
+					</span>
+				</div>
 				<div class="prose prose-sm prose-content mt-4 line-clamp-6 max-w-none [&>p:last-of-type]:mb-0">
 					<Content />
 				</div>
@@ -34,6 +45,11 @@ const { Content } = await render(note);
 			<>
 				<Tag class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">{note.data.title}</Tag>
 				<div class="mt-2 text-gray-600 dark:text-gray-400">
+					{isFresh && (
+						<span aria-label="Свежая заметка" title="Свежая заметка">
+							🌱{" "}
+						</span>
+					)}
 					<FormattedDate date={note.data.publishDate} />
 				</div>
 				<div class="prose prose-sm prose-content mt-12 max-w-none [&>p:last-of-type]:mb-0">

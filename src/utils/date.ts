@@ -1,6 +1,8 @@
 import type { CollectionEntry } from "astro:content";
 import { siteConfig } from "@/site.config";
 
+const FRESH_CONTENT_WINDOW_DAYS = 15;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 const ISO_DATETIME_WITH_OFFSET_PATTERN =
 	/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
@@ -79,10 +81,17 @@ export function getFormattedDate(
 		return "Invalid Date";
 	}
 
-	const formattedDate = new Intl.DateTimeFormat(siteConfig.date.locale, {
+	const dateOptions: Intl.DateTimeFormatOptions = {
 		...(siteConfig.date.options as Intl.DateTimeFormatOptions),
 		...options,
-	}).format(date);
+		timeZone: "UTC",
+	};
+
+	if (date.getUTCFullYear() === new Date().getUTCFullYear()) {
+		delete dateOptions.year;
+	}
+
+	const formattedDate = new Intl.DateTimeFormat(siteConfig.date.locale, dateOptions).format(date);
 
 	if (siteConfig.date.locale === "ru-RU") {
 		return formattedDate.replace(/\sг\.?$/, "").replace(/\./g, "");
@@ -96,4 +105,9 @@ export function collectionDateSort(
 	b: CollectionEntry<"post" | "note">,
 ) {
 	return b.data.publishDate.getTime() - a.data.publishDate.getTime();
+}
+
+export function isFreshDate(date: Date, referenceDate = new Date()) {
+	const diff = referenceDate.getTime() - date.getTime();
+	return diff >= 0 && diff < FRESH_CONTENT_WINDOW_DAYS * MS_PER_DAY;
 }

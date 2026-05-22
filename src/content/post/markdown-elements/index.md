@@ -1,8 +1,8 @@
 ---
-title: "A post of Markdown elements"
-description: "This post is for testing and listing a number of different markdown elements"
-publishDate: "2023-02-22"
-updatedDate: "2024-01-22"
+title: "Элементы Markdown"
+description: "Материал для проверки и демонстрации разных элементов Markdown"
+publishDate: "2026-02-08"
+updatedDate: "2026-04-06"
 tags: ["test", "markdown"]
 pinned: true
 ---

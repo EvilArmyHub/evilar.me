@@ -1,8 +1,8 @@
 ---
-title: "Пример обложки для статьи"
+title: "Обложка статьи в Astro"
 description: "Небольшой пример того, как добавить cover/hero image"
-publishDate: "2023-07-04"
-updatedDate: "2023-08-14"
+publishDate: "2026-03-21"
+updatedDate: "2026-04-02"
 coverImage:
   src: "./cover.png"
   alt: "Иллюстрация Astro"

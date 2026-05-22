@@ -58,11 +58,19 @@
 	border: 0;
 	border-radius: var(--pf-border-radius);
 	color: var(--color-text);
+	transition: all 200ms ease-out;
 }
 
-:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn:hover {
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn:is(:hover, :focus-visible) {
 	background: transparent;
+	color: var(--header-button-hover);
 	box-shadow: none;
+	outline: none;
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn:active {
+	transform: scale(0.95);
+	background: transparent;
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-icon {
@@ -81,7 +89,7 @@
 	.site-search
 	.pf-trigger-btn:is(:hover, :focus-visible)
 	.pf-trigger-icon {
-	background: var(--color-accent);
+	background: var(--header-button-hover);
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#) .site-search dialog.pf-modal {

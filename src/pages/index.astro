@@ -20,6 +20,32 @@ const pinnedPosts = getPinnedPosts(allPostsByDate, MAX_PINNED_POSTS);
 const MAX_NOTES = 5;
 const allNotes = await getAllNotes();
 const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
+
+function pluralizeRu(count: number, one: string, few: string, many: string) {
+	const mod10 = count % 10;
+	const mod100 = count % 100;
+
+	if (mod10 === 1 && mod100 !== 11) {
+		return one;
+	}
+
+	if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+		return few;
+	}
+
+	return many;
+}
+
+const remainingPosts = Math.max(allPostsByDate.length - latestPosts.length, 0);
+const remainingNotes = Math.max(allNotes.length - latestNotes.length, 0);
+const postsLinkText =
+	remainingPosts > 0
+		? `еще ${remainingPosts} ${pluralizeRu(remainingPosts, "статья", "статьи", "статей")}`
+		: "все статьи";
+const notesLinkText =
+	remainingNotes > 0
+		? `еще ${remainingNotes} ${pluralizeRu(remainingNotes, "заметка", "заметки", "заметок")}`
+		: "все заметки";
 ---
 
 <PageLayout meta={{ title: "Главная" }}>
@@ -32,11 +58,11 @@ const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
 	</section>
 	{
 		pinnedPosts.length > 0 && (
-			<section class="mt-16">
-				<h2 class="page-title mb-6 text-xl">Ключевое</h2>
-				<ul class="space-y-4" role="list">
+			<section class="mt-10">
+				<h2 class="page-title mb-3 text-xl">Ключевое</h2>
+				<ul class="space-y-1" role="list">
 					{pinnedPosts.map((p) => (
-						<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+						<li>
 							<PostPreview post={p} />
 						</li>
 					))}
@@ -44,31 +70,33 @@ const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
 			</section>
 		)
 	}
-	<section class="mt-16">
-		<h2 class="page-title text-accent mb-6 text-xl"><a href="/posts/">Статьи</a></h2>
-		<ul class="space-y-4" role="list">
+	<section class="mt-10">
+		<h2 class="page-title mb-3 text-xl">Статьи</h2>
+		<ul class="space-y-1" role="list">
 			{
 				latestPosts.map((p) => (
-					<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+					<li>
 						<PostPreview post={p} />
 					</li>
 				))
 			}
 		</ul>
+		<a class="action-link mt-4" href="/posts/">{postsLinkText}</a>
 	</section>
 	{
 		latestNotes.length > 0 && (
-			<section class="mt-16">
-				<h2 class="page-title text-accent mb-6 text-xl">
-					<a href="/notes/">Заметки</a>
-				</h2>
-				<ul class="space-y-6" role="list">
+			<section class="mt-10">
+				<h2 class="page-title mb-3 text-xl">Заметки</h2>
+				<ul class="space-y-4" role="list">
 					{latestNotes.map((note) => (
 						<li>
 							<Note note={note} as="h3" isPreview />
 						</li>
 					))}
 				</ul>
+				<a class="action-link mt-4" href="/notes/">
+					{notesLinkText}
+				</a>
 			</section>
 		)
 	}

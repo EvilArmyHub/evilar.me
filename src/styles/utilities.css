@@ -1,20 +1,59 @@
 @layer components {
 	.text-link {
-		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
+		@apply text-link no-underline focus-visible:outline-none;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 4px;
+		text-decoration-thickness: 1px;
+		transition: text-decoration-color 400ms ease-out, color 400ms ease-out;
 	}
 
 	.text-link:hover,
 	.text-link:focus-visible {
 		color: var(--color-link-hover);
+		text-decoration-color: color-mix(in oklab, var(--color-link-hover) 30%, transparent);
 	}
 
 	.nav-link {
-		@apply text-link no-underline transition-colors duration-200 ease-out focus-visible:outline-none;
+		@apply text-link no-underline focus-visible:outline-none;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 4px;
+		text-decoration-thickness: 1px;
+		transition: text-decoration-color 400ms ease-out, color 400ms ease-out;
 	}
 
 	.nav-link:hover,
 	.nav-link:focus-visible {
 		color: var(--color-link-hover);
+		text-decoration-color: color-mix(in oklab, var(--color-link-hover) 30%, transparent);
+	}
+
+	.action-link {
+		@apply inline-flex items-center gap-1 text-base no-underline focus-visible:outline-none;
+		color: var(--color-link);
+		transition: color 400ms ease-out;
+	}
+
+	.action-link::after {
+		content: "→";
+		opacity: 0;
+		transform: translateX(-4px);
+		transition: opacity 400ms ease-out, transform 400ms ease-out;
+		display: inline-block;
+		margin-left: 2px;
+	}
+
+	.action-link:hover,
+	.action-link:focus-visible {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+
+	.action-link:hover::after,
+	.action-link:focus-visible::after {
+		opacity: 1;
+		transform: translateX(0);
 	}
 
 	.page-title {
@@ -33,6 +72,7 @@
 			background-color 180ms ease,
 			border-color 180ms ease,
 			box-shadow 180ms ease,
+			transform 180ms ease,
 			color 180ms ease;
 	}
 
@@ -50,6 +90,7 @@
 		box-shadow:
 			0 1px 0 rgb(255 255 255 / 0.24) inset,
 			0 6px 16px rgb(40 80 50 / 0.08);
+		transform: scale(0.97);
 	}
 
 	.social-button:focus-visible {

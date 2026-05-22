@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import type { HTMLTag, Polymorphic } from "astro/types";
 import FormattedDate from "@/components/FormattedDate.astro";
+import { isFreshDate } from "@/utils/date";
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	post: CollectionEntry<"post">;
@@ -9,16 +10,46 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 };
 
 const { as: Tag = "div", post, withDesc = false } = Astro.props;
+const isFresh = isFreshDate(post.data.publishDate);
 ---
 
-<FormattedDate
-	class="inline-block w-[8.5rem] flex-none text-gray-600 tabular-nums dark:text-gray-400"
-	date={post.data.publishDate}
-/>
-<Tag>
-	<a class="text-link" href={`/posts/${post.id}/`}>
-		{post.data.title}
-		{post.data.draft && <span aria-hidden="true"> 🚧</span>}
-	</a>
-</Tag>
-{withDesc && <q class="line-clamp-3 italic">{post.data.description}</q>}
+<a
+	class="group -mx-3 block rounded-md px-3 py-2 no-underline active:scale-[0.99] transition-transform duration-200 ease-out focus-visible:outline-none"
+	href={`/posts/${post.id}/`}
+>
+	<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+		<Tag class="min-w-0 text-base leading-snug font-normal">
+			<span
+				class="text-text underline decoration-transparent group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 underline-offset-4 decoration-1 transition-all duration-400 ease-out"
+			>
+				{post.data.title}
+			</span>
+		</Tag>
+		<span
+			class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400"
+		>
+			{
+				post.data.draft && (
+					<span aria-label="Черновик" title="Черновик">
+						🚧
+					</span>
+				)
+			}
+			{
+				isFresh && (
+					<span aria-label="Свежий материал" title="Свежий материал">
+						🌱
+					</span>
+				)
+			}
+			<FormattedDate date={post.data.publishDate} />
+		</span>
+	</div>
+	{
+		withDesc && (
+			<q class="mt-1 line-clamp-3 block text-gray-600 italic dark:text-gray-400">
+				{post.data.description}
+			</q>
+		)
+	}
+</a>

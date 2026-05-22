@@ -1,8 +1,8 @@
 ---
-title: "Admonitions в Markdown"
+title: "Блоки-примечания в Markdown"
 description: "Материал показывает, как использовать admonitions в evilarme"
-publishDate: "2024-08-25"
-updatedDate: "2025-07-04"
+publishDate: "2026-05-16"
+updatedDate: "2026-05-20"
 tags: ["markdown", "admonitions"]
 ---
 

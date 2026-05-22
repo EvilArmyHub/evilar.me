@@ -2,13 +2,11 @@
 import type { CollectionEntry } from "astro:content";
 import type { GetStaticPaths, Page } from "astro";
 import { Icon } from "astro-icon/components";
-import PinnedPostsSection from "@/components/blog/archive/PinnedPostsSection.astro";
 import PostsSidebar from "@/components/blog/archive/PostsSidebar.astro";
 import PostsYearGroup from "@/components/blog/archive/PostsYearGroup.astro";
 import Pagination from "@/components/Paginator.astro";
 import {
 	getAllPosts,
-	getPinnedPosts,
 	getSortedPosts,
 	getUniqueTags,
 	groupPostsByYear,
@@ -19,24 +17,21 @@ import { getPaginationLinks } from "@/utils/pagination";
 export const getStaticPaths = (async ({ paginate }) => {
 	const MAX_POSTS_PER_PAGE = 10;
 	const MAX_TAGS = 7;
-	const MAX_PINNED_POSTS = 3;
 	const allPosts = await getAllPosts();
 	const allPostsByDate = getSortedPosts(allPosts);
 	const uniqueTags = getUniqueTags(allPosts).slice(0, MAX_TAGS);
-	const pinnedPosts = getPinnedPosts(allPostsByDate, MAX_PINNED_POSTS);
 	return paginate(allPostsByDate, {
 		pageSize: MAX_POSTS_PER_PAGE,
-		props: { uniqueTags, pinnedPosts },
+		props: { uniqueTags },
 	});
 }) satisfies GetStaticPaths;
 
 interface Props {
 	page: Page<CollectionEntry<"post">>;
 	uniqueTags: string[];
-	pinnedPosts: CollectionEntry<"post">[];
 }
 
-const { page, uniqueTags, pinnedPosts } = Astro.props;
+const { page, uniqueTags } = Astro.props;
 
 const meta = {
 	description: "Подборка статей и тем, которые мне интересны",
@@ -53,7 +48,7 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 ---
 
 <PageLayout meta={meta}>
-	<div class="mb-12 flex items-center gap-3">
+	<div class="mb-6 flex items-center gap-3">
 		<h1 class="page-title">Статьи</h1>
 		<a class="text-accent" href="/rss.xml" target="_blank">
 			<span class="sr-only">RSS-лента</span>
@@ -62,7 +57,6 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 	</div>
 	<div class="grid sm:grid-cols-[3fr_1fr] sm:gap-x-8 sm:gap-y-16">
 		<div>
-			{pinnedPosts.length > 0 && <PinnedPostsSection posts={pinnedPosts} />}
 			{
 				descYearKeys.map((yearKey) => (
 					<PostsYearGroup posts={groupedByYear[yearKey] ?? []} year={yearKey} />
