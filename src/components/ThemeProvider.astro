@@ -59,6 +59,11 @@ import {
 
 	syncTheme();
 
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) {
+			syncTheme();
+		}
+	});
 	document.addEventListener("astro:after-swap", syncTheme);
 	document.addEventListener(THEME_CHANGE_EVENT, (event) => {
 		const nextTheme = event.detail?.theme;

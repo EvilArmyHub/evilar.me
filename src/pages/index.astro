@@ -9,7 +9,8 @@ import PageLayout from "@/layouts/Base.astro";
 // Posts
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
-const allPostsByDate = getSortedPosts(allPosts).slice(0, MAX_POSTS);
+const allPostsByDate = getSortedPosts(allPosts);
+const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
 
 // Pinned Posts, set to a max of 3;
 const MAX_PINNED_POSTS = 3;
@@ -47,7 +48,7 @@ const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
 		<h2 class="page-title text-accent mb-6 text-xl"><a href="/posts/">Статьи</a></h2>
 		<ul class="space-y-4" role="list">
 			{
-				allPostsByDate.map((p) => (
+				latestPosts.map((p) => (
 					<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
 						<PostPreview post={p} />
 					</li>

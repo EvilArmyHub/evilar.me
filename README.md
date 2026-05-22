@@ -35,7 +35,7 @@ Astro Cactus is a simple opinionated starter built with [Astro](https://astro.bu
 - Dark & Light mode
 - MD & [MDX](https://docs.astro.build/en/guides/markdown-content/#mdx-only-features) posts & notes
   - Includes [Admonitions](https://astro-cactus.chriswilliams.dev/posts/markdown-elements/admonitions/)
-- [Satori](https://github.com/vercel/satori) for creating open graph png images
+- [Satori](https://github.com/vercel/satori) and [Sharp](https://sharp.pixelplumbing.com/) for creating cached open graph png images
 - [Automatic RSS feeds](https://docs.astro.build/en/guides/rss)
 - [Webmentions](https://webmention.io/)
 - Auto-generated:
@@ -97,7 +97,8 @@ This repo is pnpm-first. Use `pnpm` for dependency management, scripts, and loca
   - Read [this post](http://astro-cactus.chriswilliams.dev/posts/webmentions/) for adding webmentions to your site.
   - Add any custom Tag pages for related blog posts in `/src/content/tag/`, ensuring that the file name is the same as the tag.
 - OG Image:
-  - If you would like to change the style of the generated image the Satori library creates, open up `src/pages/og-image/[slug].png.ts` to the markup function where you can edit the html/tailwind-classes as necessary. You can use this [playground](https://og-playground.vercel.app/) to aid your design.
+  - If you would like to change the style of the generated image the Satori library creates, edit `src/pages/og-image/_markup.ts`, where the html/tailwind-classes live. You can use this [playground](https://og-playground.vercel.app/) to aid your design.
+  - Generated images are rendered to PNG with Sharp and cached through `src/pages/og-image/_cache.ts` in Astro's cache directory. Bump the `CACHE_VERSION` value in that helper when changing the markup, fonts, or Satori options in a way that should invalidate existing cached images.
   - You can also create your own og images and skip satori generating it for you by adding an ogImage property in the frontmatter with a link to the asset, an example can be found in `src/content/post/social-image.md`. More info on frontmatter can be found [below](#post-frontmatter)
 - Optional:
   - Fonts: This theme sets the body element to the font family `font-mono`, in `src/layouts/Base.astro` on the `<body>`. You can change fonts by removing the variant `font-mono`, after which TailwindCSS will default to the `font-sans` [font family stack](https://tailwindcss.com/docs/font-family).
@@ -155,11 +156,13 @@ Astro Cactus includes a helpful VSCode snippet which creates a frontmatter 'stub
 
 ## Pagefind search
 
-This integration brings a static search feature for searching blog posts and notes. In its current form, pagefind only works once the site has been built. This theme adds a postbuild script that should be run after Astro has built the site. You can preview locally by running both build && postbuild.
+This integration brings a static search feature for searching blog posts and notes. In its current form, Pagefind only works once the site has been built. This theme adds a postbuild script that runs after Astro has built the site. You can preview locally by running `pnpm build` and `pnpm preview`.
 
 Search results only includes pages from posts and notes. If you would like to include other/all your pages, remove/re-locate the attribute `data-pagefind-body` to the article tag found in `src/layouts/BlogPost.astro` and `src/components/note/Note.astro`.
 
 It also allows you to filter posts by tags added in the frontmatter of blog posts. If you would rather remove this, remove the data attribute `data-pagefind-filter="tag"` from the link in `src/components/blog/Masthead.astro`.
+
+The current implementation uses `@pagefind/default-ui` inside a custom modal wrapper. A future migration to Pagefind Component UI is documented in `PAGEFIND_COMPONENT_UI_MIGRATION.md`; it should be handled as a dedicated search refactor because it changes the component, styling, and keyboard/focus behavior surface.
 
 If you would rather not include this integration, simply remove the component `src/components/Search.astro`, and uninstall both `@pagefind/default-ui` & `pagefind` from package.json. You will also need to remove the postbuild script from here as well.
 
