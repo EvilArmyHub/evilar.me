@@ -14,13 +14,13 @@ const isFresh = isFreshDate(post.data.publishDate);
 ---
 
 <a
-	class="group -mx-3 block rounded-md px-3 py-2 no-underline active:scale-[0.99] transition-transform duration-200 ease-out focus-visible:outline-none"
+	class="group -mx-3 block rounded-md px-3 py-2 no-underline transition-transform duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
 	href={`/posts/${post.id}/`}
 >
 	<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
 		<Tag class="min-w-0 text-base leading-snug font-normal">
 			<span
-				class="text-text underline decoration-transparent group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 underline-offset-4 decoration-1 transition-all duration-400 ease-out"
+				class="text-text group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 underline decoration-transparent decoration-1 underline-offset-4 transition-all duration-400 ease-out"
 			>
 				{post.data.title}
 			</span>

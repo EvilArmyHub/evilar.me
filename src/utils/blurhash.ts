@@ -18,7 +18,9 @@ export function getBlurhashDataUrl(
 	for (let y = 0; y < height; y += 1) {
 		for (let x = 0; x < width; x += 1) {
 			const index = 4 * (y * width + x);
-			rects.push(`<rect width="1" height="1" x="${x}" y="${y}" fill="${pixelToRgb(pixels, index)}"/>`);
+			rects.push(
+				`<rect width="1" height="1" x="${x}" y="${y}" fill="${pixelToRgb(pixels, index)}"/>`,
+			);
 		}
 	}
 

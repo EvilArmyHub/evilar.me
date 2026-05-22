@@ -1,5 +1,6 @@
 ---
 import PostPreview from "@/components/blog/PostPreview.astro";
+import EvilIllustration from "@/components/EvilIllustration.astro";
 import Note from "@/components/note/Note.astro";
 import SocialList from "@/components/SocialList.astro";
 import { getAllNotes, getLatestNotes } from "@/data/note";
@@ -49,12 +50,22 @@ const notesLinkText =
 ---
 
 <PageLayout meta={{ title: "Главная" }}>
-	<section>
-		<p class="mt-0 mb-4">
-			Это стартовый сайт на Astro для личного блога, заметок и спокойной публикации материалов. Ниже
-			можно перейти в репозиторий, посмотреть статьи и быстро понять, как устроен проект.
-		</p>
-		<SocialList />
+	<section class="grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8">
+		<div>
+			<h1 class="title mb-3 text-2xl font-semibold sm:text-3xl">Уникальный чат</h1>
+			<p class="mt-0 mb-3">
+				Разношёрстное и живое комьюнити с историей. Обсуждаем всё: нейросети, игры, науку, работу,
+				учёбу, религию и жизнь.
+			</p>
+			<p class="mb-4">
+				Пишем 1500+ сообщений в день, ценим ламповую атмосферу и наш постоянный состав. Студенты,
+				программисты, музыканты и много кто ещё.
+			</p>
+			<SocialList />
+		</div>
+		<div class="flex w-full flex-shrink-0 items-center justify-center sm:h-[20rem] sm:w-auto">
+			<EvilIllustration class="text-text h-auto w-full max-w-full sm:h-full sm:w-auto" />
+		</div>
 	</section>
 	{
 		pinnedPosts.length > 0 && (

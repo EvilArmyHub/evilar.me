@@ -15,13 +15,15 @@ const isFresh = isFreshDate(note.data.publishDate);
 ---
 
 <article
-	class:list={[isPreview && "group relative rounded-[10px] transition-colors duration-200 ease-out"]}
+	class:list={[
+		isPreview && "group relative rounded-[10px] transition-colors duration-200 ease-out",
+	]}
 	data-pagefind-body={isPreview ? false : true}
 >
 	{
 		isPreview ? (
 			<a
-				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 active:scale-[0.99] block rounded-[10px] px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none"
+				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 block rounded-[10px] px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
 				href={`/notes/${note.id}/`}
 			>
 				<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">

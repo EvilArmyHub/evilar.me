@@ -1,59 +1,78 @@
-# Evil Army community website
+# Evil Army Community Website
 
-This is the official portal and community site for Evil Army.
+Official portal and community website for Evil Army.
 
-## How the Site Works
+## Features
 
-This website is statically generated using Astro. It is built for performance, accessibility, and clean typography. The site consists of articles (posts) and short status updates (notes). It includes a static client-side search powered by Pagefind and syntax highlighting for code blocks via Expressive Code.
+- Fast static pages built with Astro.
+- Client-side search using Pagefind.
+- Code syntax highlighting via Expressive Code.
+- Blog posts and short notes.
 
-## Adding Content
+## Content Management
 
-Content is organized using Astro Content Collections. You can publish articles, notes, and customize tag descriptions by adding markdown or MDX files.
+Add markdown or MDX files to these directories:
+- Articles: `src/content/post/`
+- Notes: `src/content/note/`
+- Tag metadata: `src/content/tag/`
 
-- Posts: Place your markdown files in src/content/post/.
-- Notes: Place short status updates in src/content/note/.
-- Tags: Place custom tag page metadata in src/content/tag/.
+### Article Metadata (Frontmatter)
 
-### Post Frontmatter Options
+- title: Heading and search title (maximum 60 characters).
+- description: SEO description (50 to 160 characters).
+- publishDate: ISO publication date.
+- updatedDate: Optional update date.
+- tags: List of tags.
+- coverImage: Optional image path and alt text.
+- ogImage: Optional social share image path.
+- draft: Set to true to hide from production.
 
-- title: Used as the page heading and search index title. Max length 60 characters.
-- description: SEO metadata description. Length between 50 and 160 characters.
-- publishDate: ISO publication date, which controls chronological sorting.
-- updatedDate: Optional date representing when a post was last modified.
-- tags: Array of tags to group and organize posts on tag indices.
-- coverImage: Optional object defining cover picture source path and alt description text.
-- ogImage: Optional custom Open Graph sharing card image path.
-- draft: Boolean. Set to true to filter the post out of production deployments.
+### Note Metadata (Frontmatter)
 
-### Note Frontmatter Options
+- title: Title (maximum 60 characters).
+- description: Optional SEO description.
+- publishDate: ISO publication date.
 
-- title: Header name and title property. Max length 60 characters.
-- description: Optional SEO description metadata.
-- publishDate: ISO publication timestamp.
+### Tag Metadata (Frontmatter)
 
-### Tag Frontmatter Options
+- title: Optional header override.
+- description: Optional custom description.
 
-- title: Optional header override text.
-- description: Optional custom description display block.
+## Development
 
-## Development Workflow
+Install dependencies:
+```bash
+pnpm install
+```
 
-- pnpm install: Install project package dependencies.
-- pnpm dev: Spin up local environment listener.
-- pnpm build: Compile optimized static pages into the dist folder.
-- pnpm preview: Run a local static file server to inspect the generated bundle.
-- pnpm check: Validate TypeScript types and content collections schemas.
-- pnpm lint: Run Biome code quality checks.
-- pnpm format: Run formatting commands to maintain clean code layout.
+Start development server:
+```bash
+pnpm dev
+```
 
-## Credits
+Build static site:
+```bash
+pnpm build
+```
 
-This project is a fork of the excellent astro-theme-cactus template. You can explore the original implementation at github.com/chrismwilliams/astro-theme-cactus.
+Preview local build:
+```bash
+pnpm preview
+```
 
-Technical Specifications:
-- Astro v6.3
-- Tailwind CSS v4
-- Pagefind Search Integration
-- Expressive Code Syntax Highlighting
-- Satori and Sharp OG Image Generation
-- MDX support for flexible layouts
+Run checks and formatting:
+```bash
+pnpm check
+pnpm lint
+pnpm format
+```
+
+## Technical Stack
+
+- Astro 6.3
+- Tailwind CSS 4
+- TypeScript
+- Biome
+- Satori and Sharp (social image generation)
+
+This project is a fork of [astro-theme-cactus](https://github.com/chrismwilliams/astro-theme-cactus).
