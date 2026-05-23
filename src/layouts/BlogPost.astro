@@ -37,10 +37,10 @@ const authorUrl = new URL("/", siteConfig.url).href;
 			<a class="u-url p-name" href={authorUrl}>Злая редакция</a>
 			<img class="u-photo" src="/icon.svg" alt="" />
 		</div>
-		<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+		<div class="relative w-full">
 			{!!headings.length && <TOC headings={headings} />}
 			<div
-				class="e-content prose prose-sm prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
+				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
 			>
 				<slot />
 				<WebMentions />
@@ -49,7 +49,7 @@ const authorUrl = new URL("/", siteConfig.url).href;
 	</article>
 	<!-- Floating Action Buttons -->
 	<button
-		class="floating-action-btn floating-action-btn--scroll fixed end-4 bottom-8 z-90 h-10 w-10 sm:end-8 sm:h-12 sm:w-12"
+		class="floating-action-btn floating-action-btn--scroll fixed end-4 bottom-8 z-[90] h-10 w-10 sm:end-8 sm:h-12 sm:w-12"
 		data-show="false"
 		id="to-top-btn"
 		type="button"
@@ -70,7 +70,7 @@ const authorUrl = new URL("/", siteConfig.url).href;
 	</button>
 
 	<button
-		class="floating-action-btn floating-action-btn--scroll fixed end-16 bottom-8 z-90 h-10 sm:end-22 sm:h-12"
+		class="floating-action-btn floating-action-btn--scroll fixed end-16 bottom-8 z-[90] h-10 sm:end-22 sm:h-12"
 		data-show="false"
 		id="copy-link-btn"
 		type="button"

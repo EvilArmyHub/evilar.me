@@ -1,7 +1,5 @@
 ---
 import type { MarkdownHeading } from "astro";
-import { generateToc } from "@/utils/generateToc";
-import TOCHeading from "./TOCHeading.astro";
 
 interface Props {
 	headings: MarkdownHeading[];
@@ -9,44 +7,446 @@ interface Props {
 
 const { headings } = Astro.props;
 
-const toc = generateToc(headings);
+// Filter headings to h2 and h3
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+
+// Helper to clean heading text up to the ellipsis (literal "..." or Unicode "…")
+const cleanTitle = (text: string) => {
+	const ellipsisIndex = text.indexOf("...");
+	if (ellipsisIndex !== -1) {
+		return text.slice(0, ellipsisIndex).trim();
+	}
+	const singleEllipsisIndex = text.indexOf("…");
+	if (singleEllipsisIndex !== -1) {
+		return text.slice(0, singleEllipsisIndex).trim();
+	}
+	return text;
+};
 ---
 
-<aside
-	class="group hidden lg:sticky lg:top-16 lg:order-2 lg:block lg:w-64 lg:self-start"
-	aria-label="Table of contents"
->
-	<div class="relative overflow-hidden">
-		<div
-			class="bg-bg text-text/45 absolute top-0 right-0 z-10 flex h-10 w-10 items-center justify-center transition-opacity duration-200 ease-out group-focus-within:opacity-0 group-hover:opacity-0"
-			aria-hidden="true"
+{filteredHeadings.length > 1 && (
+	<scroll-toc class="scroll-toc-container group" data-headings={JSON.stringify(filteredHeadings)}>
+		{/* Desktop Left-aligned Floating ToC */}
+		<aside
+			class="scroll-toc-sidebar"
+			aria-label="Содержание"
 		>
+			<div class="scroll-toc-hint w-8 h-8 rounded-full bg-bg border border-text/10 flex items-center justify-center text-text/50 pointer-events-auto transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 shadow-xs" aria-hidden="true">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+				</svg>
+			</div>
+
+			<div class="scroll-toc-content flex-1 overflow-y-auto opacity-0 -translate-x-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto scrollbar-hide">
+				<h3 class="text-sm font-semibold text-text mb-4 pl-[15px]">Содержание</h3>
+				
+				<ul class="relative pl-3 border-l-2 border-text/10">
+					{filteredHeadings.map((heading) => (
+						<li class="relative mb-3 last:mb-0">
+							<div class="toc-dot absolute -left-[19px] top-[7px] w-[5px] h-[5px] rounded-full bg-text/30 transition-all duration-300"></div>
+							<a
+								href={`#${heading.slug}`}
+								data-slug={heading.slug}
+								class={`block text-[0.82rem] leading-tight text-text/60 hover:text-accent transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
+								title={cleanTitle(heading.text)}
+							>
+								{cleanTitle(heading.text)}
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
+		</aside>
+
+		{/* Mobile Floating Action Button (Matches existing theme exactly) */}
+		<button
+			class="floating-action-btn floating-action-btn--scroll fixed start-4 bottom-8 z-[90] h-10 w-10 sm:start-8 sm:h-12 sm:w-12 lg:hidden"
+			data-show="false"
+			id="open-toc-btn"
+			type="button"
+			title="Открыть оглавление"
+		>
+			<span class="sr-only">Table of contents</span>
 			<svg
 				aria-hidden="true"
-				class="h-5 w-5"
+				class="h-5 w-5 shrink-0"
 				fill="none"
 				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="1.5"
+				stroke-width="2"
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path d="M8 6h11"></path>
-				<path d="M8 12h11"></path>
-				<path d="M8 18h11"></path>
-				<path d="M3 6h.01"></path>
-				<path d="M3 12h.01"></path>
-				<path d="M3 18h.01"></path>
+				<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
 			</svg>
+		</button>
+
+		{/* Mobile Bottom Sheet Drawer */}
+		<div id="mobile-toc-backdrop" class="mobile-toc-backdrop fixed inset-0 z-[99] bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300" />
+		<div id="mobile-toc-sheet" class="mobile-toc-sheet fixed bottom-0 left-0 right-0 z-[100] max-h-[60vh] flex flex-col bg-bg border-t border-text/10 rounded-t-2xl shadow-2xl translate-y-full transition-transform duration-350 ease-[cubic-bezier(0.32,0.72,0,1)] pb-safe">
+			<div class="mobile-toc-sheet-header flex items-center justify-between p-4 border-b border-text/10">
+				<div class="mobile-toc-sheet-title text-sm font-semibold text-text ps-3">Содержание</div>
+				<button id="mobile-toc-close" class="mobile-toc-sheet-close w-8 h-8 rounded-full bg-text/5 flex items-center justify-center text-text/60 border-none cursor-pointer" aria-label="Закрыть">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+			<div class="mobile-toc-sheet-list flex-1 overflow-y-auto p-4 scrollbar-hide">
+				{filteredHeadings.map((heading) => (
+					<button
+						class={`mobile-toc-sheet-item block w-full text-left border-none bg-transparent text-text/60 text-[0.9rem] py-2.5 px-3 rounded-lg cursor-pointer transition-colors ${heading.depth === 3 ? "pl-6 text-[0.85rem]" : ""}`}
+						data-slug={heading.slug}
+					>
+						{cleanTitle(heading.text)}
+					</button>
+				))}
+			</div>
 		</div>
-		<nav
-			class="bg-bg min-h-[18rem] translate-x-[calc(100%-2.5rem)] py-2 ps-6 pe-3 opacity-0 transition-all duration-300 ease-out group-focus-within:translate-x-0 group-focus-within:opacity-100 group-hover:translate-x-0 group-hover:opacity-100"
-		>
-			<p class="page-title text-base">Содержание</p>
-			<ol class="mt-4 max-h-[calc(100vh-12rem)] overflow-y-auto pe-1">
-				{toc.map((heading) => <TOCHeading heading={heading} />)}
-			</ol>
-		</nav>
-	</div>
-</aside>
+	</scroll-toc>
+)}
+
+<script>
+	class ScrollToc extends HTMLElement {
+		private links: NodeListOf<HTMLAnchorElement> | null = null;
+		private dots: NodeListOf<HTMLElement> | null = null;
+		private mobileItems: NodeListOf<HTMLButtonElement> | null = null;
+		private headingsCache: { slug: string; target: HTMLElement | null; offsetTop: number }[] = [];
+		private activeIndex = -1;
+		private scrollWrapper: HTMLElement | null = null;
+		private heroObserver: IntersectionObserver | null = null;
+		private sidebar: HTMLElement | null = null;
+
+		private scrollHandler!: () => void;
+		private resizeHandler!: () => void;
+		private mouseMoveHandler!: (e: MouseEvent) => void;
+		private onScroll!: () => void;
+		private setActiveLink!: (index: number) => void;
+
+		connectedCallback() {
+			this.links = this.querySelectorAll("a[data-slug]");
+			this.dots = this.querySelectorAll(".toc-dot");
+			this.mobileItems = this.querySelectorAll(".mobile-toc-sheet-item");
+			this.scrollWrapper = this.querySelector(".scroll-toc-content");
+			this.sidebar = this.querySelector(".scroll-toc-sidebar");
+
+			let isNavigating = false;
+
+			// Helper to highlight a given index and dim others
+			this.setActiveLink = (newActiveIndex: number) => {
+				if (!this.links || !this.dots || !this.mobileItems) return;
+				if (newActiveIndex === this.activeIndex || newActiveIndex === -1) return;
+
+				if (this.activeIndex !== -1) {
+					const prevLink = this.links[this.activeIndex];
+					const prevDot = this.dots[this.activeIndex];
+					const prevMobileItem = this.mobileItems[this.activeIndex];
+
+					if (prevLink) {
+						prevLink.classList.remove("text-accent", "font-medium");
+						prevLink.classList.add("text-text/60");
+					}
+					if (prevDot) {
+						prevDot.classList.remove("bg-accent", "scale-150");
+						prevDot.classList.add("bg-text/30");
+					}
+					if (prevMobileItem) {
+						prevMobileItem.classList.remove("text-accent", "bg-accent/10", "font-medium");
+						prevMobileItem.classList.add("text-text/60");
+					}
+				}
+
+				this.activeIndex = newActiveIndex;
+
+				const activeLink = this.links[this.activeIndex];
+				const activeDot = this.dots[this.activeIndex];
+				const activeMobileItem = this.mobileItems[this.activeIndex];
+
+				if (activeLink) {
+					activeLink.classList.add("text-accent", "font-medium");
+					activeLink.classList.remove("text-text/60");
+				}
+				if (activeDot) {
+					activeDot.classList.add("bg-accent", "scale-150");
+					activeDot.classList.remove("bg-text/30");
+				}
+				if (activeMobileItem) {
+					activeMobileItem.classList.add("text-accent", "bg-accent/10", "font-medium");
+					activeMobileItem.classList.remove("text-text/60");
+				}
+
+				// Auto-scroll sidebar to keep active heading centered
+				if (this.scrollWrapper && activeLink) {
+					const wrapperCenter = this.scrollWrapper.clientHeight / 2;
+					const linkTop = activeLink.offsetTop;
+					this.scrollWrapper.scrollTo({ top: Math.max(0, linkTop - wrapperCenter), behavior: "smooth" });
+				}
+			};
+
+			// Dynamic left positioning and width calculation for pixel-perfect zoom/scale support
+			const updateSidebarWidth = () => {
+				if (!this.sidebar) return;
+
+				const isDesktop = window.innerWidth >= 1024;
+				if (!isDesktop) {
+					this.sidebar.style.display = "";
+					this.sidebar.style.left = "";
+					this.sidebar.style.width = "";
+					return;
+				}
+
+				const articleEl = document.querySelector("article");
+				if (!articleEl) return;
+
+				const rect = articleEl.getBoundingClientRect();
+				const articleLeft = rect.left;
+
+				const isXl = window.innerWidth >= 1280;
+				const leftOffset = isXl ? 28 : 18;
+				// Accounts for -ms-6 (24px negative margin) on prose headings markers + safety gap
+				const gap = isXl ? 40 : 32;
+
+				const dynamicWidth = articleLeft - leftOffset - gap;
+
+				const minWidth = 180;
+				const maxWidth = 400;
+
+				if (dynamicWidth < minWidth) {
+					this.sidebar.style.display = "none";
+				} else {
+					const clampedWidth = Math.min(maxWidth, dynamicWidth);
+					this.sidebar.style.display = "flex";
+					this.sidebar.style.left = `${leftOffset}px`;
+					this.sidebar.style.width = `${clampedWidth}px`;
+				}
+			};
+
+			// Cache offsetTop positions for high performance scrolling (walking parent chain)
+			const updateHeadingsCache = () => {
+				if (!this.links) return;
+				this.headingsCache = Array.from(this.links).map(link => {
+					const slug = link.getAttribute("data-slug") || "";
+					const target = document.getElementById(slug);
+					
+					let absoluteTop = 0;
+					if (target) {
+						let current: HTMLElement | null = target;
+						while (current) {
+							absoluteTop += current.offsetTop;
+							current = current.offsetParent as HTMLElement | null;
+						}
+					}
+					
+					return {
+						slug,
+						target,
+						offsetTop: absoluteTop
+					};
+				});
+				this.onScroll();
+			};
+
+			this.onScroll = () => {
+				if (isNavigating) return;
+				if (!this.headingsCache.length || !this.links || !this.dots || !this.mobileItems) return;
+				
+				const scrollY = window.scrollY;
+				const threshold = scrollY + 45;
+				
+				let newActiveIndex = -1;
+				for (let i = 0; i < this.headingsCache.length; i++) {
+					const item = this.headingsCache[i];
+					if (item && item.target && item.offsetTop <= threshold) {
+						newActiveIndex = i;
+					}
+				}
+
+				if (newActiveIndex !== -1) {
+					this.setActiveLink(newActiveIndex);
+				}
+			};
+
+			// Add click navigation
+			const handleNavigation = (slug: string) => {
+				const el = document.getElementById(slug);
+				if (el) {
+					isNavigating = true;
+					const y = el.getBoundingClientRect().top + window.scrollY - 40;
+					window.scrollTo({ top: y, behavior: "smooth" });
+
+					// Immediately highlight target item
+					const targetIndex = Array.from(this.links || []).findIndex(link => link.getAttribute("data-slug") === slug);
+					if (targetIndex !== -1) {
+						this.setActiveLink(targetIndex);
+					}
+
+					// Release lock after smooth scroll settles
+					setTimeout(() => {
+						isNavigating = false;
+					}, 800);
+				}
+			};
+
+			if (this.links) {
+				this.links.forEach(link => {
+					link.addEventListener("click", (e) => {
+						e.preventDefault();
+						const slug = link.getAttribute("data-slug");
+						if (slug) handleNavigation(slug);
+					});
+				});
+			}
+
+			// Setup event handlers with passive listeners for max fps
+			this.scrollHandler = this.onScroll.bind(this);
+			this.resizeHandler = () => {
+				updateHeadingsCache();
+				updateSidebarWidth();
+			};
+			
+			setTimeout(() => {
+				updateHeadingsCache();
+				updateSidebarWidth();
+			}, 300);
+
+			window.addEventListener("scroll", this.scrollHandler, { passive: true });
+			window.addEventListener("resize", this.resizeHandler, { passive: true });
+
+			// Reveal desktop ToC when mouse is near left edge
+			const LEFT_REVEAL_ZONE_PX = 240;
+			this.mouseMoveHandler = (e: MouseEvent) => {
+				if (e.clientX <= LEFT_REVEAL_ZONE_PX) {
+					this.classList.add("is-awake");
+				} else if (!this.matches(':hover')) {
+					this.classList.remove("is-awake");
+				}
+			};
+			window.addEventListener("mousemove", this.mouseMoveHandler, { passive: true });
+
+			// Scroll-triggered floating button observer
+			const hero = document.getElementById("blog-hero");
+			const openTocBtn = this.querySelector("#open-toc-btn");
+			if (hero && openTocBtn) {
+				this.heroObserver = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						openTocBtn.setAttribute("data-show", (!entry.isIntersecting).toString());
+					});
+				});
+				this.heroObserver.observe(hero);
+			}
+
+			// Mobile Sheet Drawer Actions
+			const mobileSheet = this.querySelector("#mobile-toc-sheet");
+			const backdrop = this.querySelector("#mobile-toc-backdrop");
+			const closeBtn = this.querySelector("#mobile-toc-close");
+
+			const openMobileSheet = () => {
+				if (mobileSheet && backdrop) {
+					mobileSheet.classList.add("open");
+					mobileSheet.classList.remove("translate-y-full");
+					mobileSheet.classList.add("translate-y-0");
+
+					backdrop.classList.add("open");
+					backdrop.classList.remove("opacity-0", "pointer-events-none");
+					backdrop.classList.add("opacity-100", "pointer-events-auto");
+
+					document.body.style.overflow = "hidden";
+				}
+			};
+
+			const closeMobileSheet = () => {
+				if (mobileSheet && backdrop) {
+					mobileSheet.classList.remove("open");
+					mobileSheet.classList.add("translate-y-full");
+					mobileSheet.classList.remove("translate-y-0");
+
+					backdrop.classList.remove("open");
+					backdrop.classList.add("opacity-0", "pointer-events-none");
+					backdrop.classList.remove("opacity-100", "pointer-events-auto");
+
+					document.body.style.overflow = "";
+				}
+			};
+
+			if (openTocBtn) openTocBtn.addEventListener("click", openMobileSheet);
+			if (backdrop) backdrop.addEventListener("click", closeMobileSheet);
+			if (closeBtn) closeBtn.addEventListener("click", closeMobileSheet);
+
+			if (this.mobileItems) {
+				this.mobileItems.forEach(item => {
+					item.addEventListener("click", () => {
+						const slug = item.getAttribute("data-slug");
+						if (slug) {
+							closeMobileSheet();
+							setTimeout(() => {
+								handleNavigation(slug);
+							}, 350);
+						}
+					});
+				});
+			}
+		}
+
+		disconnectedCallback() {
+			window.removeEventListener("scroll", this.scrollHandler);
+			window.removeEventListener("resize", this.resizeHandler);
+			window.removeEventListener("mousemove", this.mouseMoveHandler);
+			if (this.heroObserver) {
+				this.heroObserver.disconnect();
+			}
+			document.body.style.overflow = "";
+		}
+	}
+
+	customElements.define("scroll-toc", ScrollToc);
+</script>
+
+<style>
+	/* Desktop fixed layout base styles (dynamic coordinates are injected in JS) */
+	.scroll-toc-sidebar {
+		position: fixed;
+		top: 7rem;
+		bottom: 5rem;
+		z-index: 50;
+		display: none;
+		flex-direction: column;
+		pointer-events: none;
+		transition: opacity 0.3s ease, transform 0.3s ease;
+	}
+
+	/* Hide scrollbar but allow functional scrolling */
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	/* Awake triggers for hover / proximity */
+	.scroll-toc-container.is-awake .scroll-toc-hint {
+		opacity: 0;
+		transform: translateX(-8px);
+		pointer-events: none;
+	}
+	.scroll-toc-container.is-awake .scroll-toc-content {
+		opacity: 1;
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	/* Mobile sheet styles and transition classes */
+	.mobile-toc-backdrop.open {
+		opacity: 1 !important;
+		pointer-events: auto !important;
+	}
+
+	.mobile-toc-sheet.open {
+		transform: translateY(0) !important;
+	}
+
+	/* Safe area layout for new iOS devices */
+	.pb-safe {
+		padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+	}
+</style>

@@ -31,11 +31,25 @@ export default {
 							fontFamily: "var(--font-display)",
 							fontWeight: "650",
 							letterSpacing: "-0.03em",
+							fontSize: "2.5em",
 						},
-						"h2, h3, h4": {
+						h2: {
 							fontFamily: "var(--font-display)",
 							fontWeight: "600",
 							letterSpacing: "-0.02em",
+							fontSize: "1.75em",
+						},
+						h3: {
+							fontFamily: "var(--font-display)",
+							fontWeight: "600",
+							letterSpacing: "-0.02em",
+							fontSize: "1.5em",
+						},
+						h4: {
+							fontFamily: "var(--font-display)",
+							fontWeight: "600",
+							letterSpacing: "-0.02em",
+							fontSize: "1.25em",
 						},
 						blockquote: {
 							borderLeftWidth: "0",
@@ -111,6 +125,18 @@ export default {
 						code: {
 							fontSize: "var(--text-sm)",
 							fontWeight: "400",
+						},
+						h1: {
+							fontSize: "2.125em",
+						},
+						h2: {
+							fontSize: "1.75em",
+						},
+						h3: {
+							fontSize: "1.5em",
+						},
+						h4: {
+							fontSize: "1.375em",
 						},
 					},
 				},
