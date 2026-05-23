@@ -111,43 +111,49 @@ const authorUrl = new URL("/", siteConfig.url).href;
 </BaseLayout>
 
 <script>
-	const scrollBtn = document.getElementById("to-top-btn") as HTMLButtonElement;
-	const copyBtn = document.getElementById("copy-link-btn") as HTMLButtonElement;
-	const targetHeader = document.getElementById("blog-hero") as HTMLDivElement;
+	function initBlogPost() {
+		const scrollBtn = document.getElementById("to-top-btn") as HTMLButtonElement;
+		const copyBtn = document.getElementById("copy-link-btn") as HTMLButtonElement;
+		const targetHeader = document.getElementById("blog-hero") as HTMLDivElement;
 
-	function callback(entries: IntersectionObserverEntry[]) {
-		entries.forEach((entry) => {
-			const show = (!entry.isIntersecting).toString();
-			scrollBtn.dataset.show = show;
-			copyBtn.dataset.show = show;
+		if (!scrollBtn || !copyBtn || !targetHeader) return;
+
+		function callback(entries: IntersectionObserverEntry[]) {
+			entries.forEach((entry) => {
+				const show = (!entry.isIntersecting).toString();
+				scrollBtn.dataset.show = show;
+				copyBtn.dataset.show = show;
+			});
+		}
+
+		scrollBtn.addEventListener("click", () => {
+			document.documentElement.scrollTo({ behavior: "smooth", top: 0 });
+		});
+
+		const observer = new IntersectionObserver(callback);
+		observer.observe(targetHeader);
+
+		const copyIconUrl = document.getElementById("copy-link-icon-url") as HTMLElement;
+		const copyIconCheck = document.getElementById("copy-link-icon-check") as HTMLElement;
+
+		let copyTimeout: ReturnType<typeof setTimeout> | undefined;
+
+		copyBtn.addEventListener("click", () => {
+			const url = window.location.origin + window.location.pathname;
+			navigator.clipboard.writeText(url).then(() => {
+				copyIconUrl.classList.add("hidden");
+				copyIconCheck.classList.remove("hidden");
+				copyBtn.classList.add("is-copied");
+
+				if (copyTimeout) clearTimeout(copyTimeout);
+				copyTimeout = setTimeout(() => {
+					copyIconUrl.classList.remove("hidden");
+					copyIconCheck.classList.add("hidden");
+					copyBtn.classList.remove("is-copied");
+				}, 2000);
+			});
 		});
 	}
 
-	scrollBtn.addEventListener("click", () => {
-		document.documentElement.scrollTo({ behavior: "smooth", top: 0 });
-	});
-
-	const observer = new IntersectionObserver(callback);
-	observer.observe(targetHeader);
-
-	const copyIconUrl = document.getElementById("copy-link-icon-url") as HTMLElement;
-	const copyIconCheck = document.getElementById("copy-link-icon-check") as HTMLElement;
-
-	let copyTimeout: ReturnType<typeof setTimeout> | undefined;
-
-	copyBtn.addEventListener("click", () => {
-		const url = window.location.origin + window.location.pathname;
-		navigator.clipboard.writeText(url).then(() => {
-			copyIconUrl.classList.add("hidden");
-			copyIconCheck.classList.remove("hidden");
-			copyBtn.classList.add("is-copied");
-
-			if (copyTimeout) clearTimeout(copyTimeout);
-			copyTimeout = setTimeout(() => {
-				copyIconUrl.classList.remove("hidden");
-				copyIconCheck.classList.add("hidden");
-				copyBtn.classList.remove("is-copied");
-			}, 2000);
-		});
-	});
+	document.addEventListener("astro:page-load", initBlogPost);
 </script>

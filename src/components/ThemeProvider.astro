@@ -77,7 +77,13 @@ import {
 		}
 
 		persistTheme(event.detail?.persist === false ? null : nextTheme);
-		applyTheme(nextTheme);
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				applyTheme(nextTheme);
+			});
+		} else {
+			applyTheme(nextTheme);
+		}
 	});
 
 	darkModePreference.addEventListener("change", () => {

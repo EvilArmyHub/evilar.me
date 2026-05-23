@@ -10,7 +10,7 @@ const baseUrl = import.meta.env.BASE_URL;
 const bundlePath = `${baseUrl.replace(/\/$/, "")}/pagefind/`;
 ---
 
-<div class="site-search ms-auto" data-compact={isCompact ? "true" : "false"} id="search">
+<div class="site-search ms-auto" data-compact={isCompact ? "true" : "false"} id="search" transition:persist>
 	<pagefind-config base-url={baseUrl} bundle-path={bundlePath} lang="ru-RU"></pagefind-config>
 	<pagefind-modal-trigger compact hide-shortcut placeholder="Открыть поиск"
 	></pagefind-modal-trigger>

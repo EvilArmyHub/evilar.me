@@ -6,6 +6,7 @@ import SkipLink from "@/components/SkipLink.astro";
 import ThemeProvider from "@/components/ThemeProvider.astro";
 import { siteConfig } from "@/site.config";
 import type { SiteMeta } from "@/types";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
 	meta: SiteMeta;
@@ -28,6 +29,7 @@ const {
 			title={title}
 			author={author}
 		/>
+		<ClientRouter />
 	</head>
 	<body
 		class="bg-bg text-text mx-auto flex min-h-screen max-w-3xl flex-col px-4 pt-6 font-sans text-base font-normal antialiased sm:px-8 sm:pt-8"
