@@ -2,9 +2,9 @@ import type { AstroExpressiveCodeOptions } from "astro-expressive-code";
 import type { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-	// Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
-	author: "Chris Williams",
-	// Date.prototype.toLocaleDateString() parameters, found in src/utils/date.ts.
+	// Default attribution value for posts, SEO metadata, and dynamic social preview images when no explicit author is defined.
+	author: "Evil Army Community",
+	// Consistent locale formatting rules for timestamps across all articles, notes, and search index metadata.
 	date: {
 		locale: "ru-RU",
 		options: {
@@ -13,20 +13,15 @@ export const siteConfig: SiteConfig = {
 			year: "numeric",
 		},
 	},
-	// Used as the default description meta property and webmanifest description
+	// Default fallback snippet to satisfy search engine indexing requirements and web app manifest description constraints.
 	description: "Лаконичный персональный сайт на Astro для заметок и статей",
-	// HTML lang property, found in src/layouts/Base.astro L:18 & astro.config.ts L:48
+	// Global document language identifier to assist web browsers, crawlers, and accessibility tools in text synthesis.
 	lang: "ru-RU",
-	// Meta property, found in src/components/BaseHead.astro L:42
+	// Social media meta tag property used by crawlers (e.g., Open Graph) to deliver properly localized preview cards.
 	ogLocale: "ru_RU",
-	/* 
-		- Used to construct the meta title property found in src/components/BaseHead.astro L:11 
-		- The webmanifest name found in astro.config.ts L:42
-		- The link value found in src/components/layout/Header.astro L:35
-		- In the footer found in src/components/layout/Footer.astro L:12
-	*/
+	// Primary brand name displayed in browser tabs and used as a prefix for global search indexes.
 	title: "Evil Army",
-	// ! Please remember to replace the following site property with your own domain, used in astro.config.ts
+	// Absolute base URL required to correctly construct fully qualified canonical links, sitemaps, and RSS feed paths.
 	url: "https://evilar.me/",
 };
 

@@ -13,7 +13,7 @@ interface Props {
 }
 
 const {
-	meta: { articleDate, description = siteConfig.description, ogImage, title },
+	meta: { articleDate, description = siteConfig.description, ogImage, title, author },
 	isArticleLayout = false,
 } = Astro.props;
 ---
@@ -21,7 +21,13 @@ const {
 <html class="scroll-smooth" lang={siteConfig.lang}>
 	<head>
 		<ThemeProvider />
-		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
+		<BaseHead
+			articleDate={articleDate}
+			description={description}
+			ogImage={ogImage}
+			title={title}
+			author={author}
+		/>
 	</head>
 	<body
 		class="bg-bg text-text mx-auto flex min-h-screen max-w-3xl flex-col px-4 pt-6 font-sans text-base font-normal antialiased sm:px-8 sm:pt-8"

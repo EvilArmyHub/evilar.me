@@ -6,7 +6,7 @@ import "@/styles/global.css";
 
 type Props = SiteMeta;
 
-const { articleDate, description, ogImage, title } = Astro.props;
+const { articleDate, description, ogImage, title, author = siteConfig.author } = Astro.props;
 
 const titleSeparator = "·";
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`;
@@ -38,7 +38,7 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 {/* Primary Meta Tags */}
 <meta content={siteTitle} name="title" />
 <meta content={description} name="description" />
-<meta content={siteConfig.author} name="author" />
+<meta content={author} name="author" />
 
 {/* Open Graph / Facebook */}
 <meta content={articleDate ? "article" : "website"} property="og:type" />
@@ -53,7 +53,7 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 {
 	articleDate && (
 		<>
-			<meta content={siteConfig.author} property="article:author" />
+			<meta content={author} property="article:author" />
 			<meta content={articleDate} property="article:published_time" />
 		</>
 	)

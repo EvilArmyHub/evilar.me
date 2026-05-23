@@ -28,12 +28,13 @@ const authorUrl = new URL("/", siteConfig.url).href;
 		description,
 		ogImage: socialImage,
 		title,
+		author: "Злая редакция",
 	}}
 >
 	<article class="h-entry grow break-words" data-pagefind-body>
 		<div class="mb-12" id="blog-hero"><Masthead content={post} readingTime={readingTime} /></div>
 		<div class="p-author h-card hidden" aria-hidden="true">
-			<a class="u-url p-name" href={authorUrl}>{siteConfig.author}</a>
+			<a class="u-url p-name" href={authorUrl}>Злая редакция</a>
 			<img class="u-photo" src="/icon.svg" alt="" />
 		</div>
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
@@ -46,8 +47,9 @@ const authorUrl = new URL("/", siteConfig.url).href;
 			</div>
 		</div>
 	</article>
+	<!-- Floating Action Buttons -->
 	<button
-		class="hover:border-link hover:text-accent fixed end-4 bottom-8 z-90 flex h-10 w-10 translate-y-28 cursor-pointer items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all transition-discrete duration-300 hover:bg-zinc-300 active:scale-90 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+		class="floating-action-btn floating-action-btn--scroll fixed end-4 bottom-8 z-90 h-10 w-10 sm:end-8 sm:h-12 sm:w-12"
 		data-show="false"
 		id="to-top-btn"
 		type="button"
@@ -66,16 +68,58 @@ const authorUrl = new URL("/", siteConfig.url).href;
 			<path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
 		</svg>
 	</button>
+
+	<button
+		class="floating-action-btn floating-action-btn--scroll fixed end-16 bottom-8 z-90 h-10 sm:end-22 sm:h-12"
+		data-show="false"
+		id="copy-link-btn"
+		type="button"
+		title="Copy link"
+	>
+		<span class="sr-only">Copy link to clipboard</span>
+		<svg
+			id="copy-link-icon-url"
+			aria-hidden="true"
+			class="h-5 w-5 shrink-0"
+			fill="none"
+			focusable="false"
+			stroke="currentColor"
+			stroke-width="2"
+			viewBox="0 0 24 24"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+				stroke-linecap="round"
+				stroke-linejoin="round"></path>
+		</svg>
+		<svg
+			id="copy-link-icon-check"
+			aria-hidden="true"
+			class="floating-action-icon--check hidden h-5 w-5 shrink-0"
+			fill="none"
+			focusable="false"
+			stroke="currentColor"
+			stroke-width="2"
+			viewBox="0 0 24 24"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+		</svg>
+		<span class="floating-action-copied-text text-sm font-medium">Скопировано</span>
+	</button>
 </BaseLayout>
 
 <script>
 	const scrollBtn = document.getElementById("to-top-btn") as HTMLButtonElement;
+	const copyBtn = document.getElementById("copy-link-btn") as HTMLButtonElement;
 	const targetHeader = document.getElementById("blog-hero") as HTMLDivElement;
 
 	function callback(entries: IntersectionObserverEntry[]) {
 		entries.forEach((entry) => {
-			// only show the scroll to top button when the heading is out of view
-			scrollBtn.dataset.show = (!entry.isIntersecting).toString();
+			const show = (!entry.isIntersecting).toString();
+			scrollBtn.dataset.show = show;
+			copyBtn.dataset.show = show;
 		});
 	}
 
@@ -85,4 +129,25 @@ const authorUrl = new URL("/", siteConfig.url).href;
 
 	const observer = new IntersectionObserver(callback);
 	observer.observe(targetHeader);
+
+	const copyIconUrl = document.getElementById("copy-link-icon-url") as HTMLElement;
+	const copyIconCheck = document.getElementById("copy-link-icon-check") as HTMLElement;
+
+	let copyTimeout: ReturnType<typeof setTimeout> | undefined;
+
+	copyBtn.addEventListener("click", () => {
+		const url = window.location.origin + window.location.pathname;
+		navigator.clipboard.writeText(url).then(() => {
+			copyIconUrl.classList.add("hidden");
+			copyIconCheck.classList.remove("hidden");
+			copyBtn.classList.add("is-copied");
+
+			if (copyTimeout) clearTimeout(copyTimeout);
+			copyTimeout = setTimeout(() => {
+				copyIconUrl.classList.remove("hidden");
+				copyIconCheck.classList.add("hidden");
+				copyBtn.classList.remove("is-copied");
+			}, 2000);
+		});
+	});
 </script>

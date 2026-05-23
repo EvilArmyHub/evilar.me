@@ -1,27 +1,32 @@
 ---
-import SocialButton from "@/components/SocialButton.astro";
+import Button from "@/components/Button.astro";
 
 const socialLinks: {
 	friendlyName: string;
 	isPlaceholder: boolean;
 	link: string;
+	name: string;
 }[] = [
 	{
 		friendlyName: "Telegram",
 		isPlaceholder: false,
 		link: "https://t.me/",
+		name: "mingcute:telegram-fill",
 	},
 ];
 ---
 
-<div class="flex flex-wrap items-center gap-3">
-	<ul class="flex flex-1 items-center gap-3 sm:flex-initial">
+<div class="flex flex-wrap items-center gap-x-2 gap-y-3">
+	<ul class="flex items-center gap-3">
 		{
-			socialLinks.map(({ friendlyName, isPlaceholder, link }) => (
+			socialLinks.map(({ friendlyName, isPlaceholder, link, name }) => (
 				<li class="flex">
-					<SocialButton href={link} isPlaceholder={isPlaceholder} label={friendlyName} />
+					<Button href={link} isPlaceholder={isPlaceholder} label={friendlyName} name={name} />
 				</li>
 			))
 		}
 	</ul>
+	<span class="-translate-y-[1px] text-sm text-gray-600 select-none dark:text-gray-400">
+		+ Signal + Discord
+	</span>
 </div>

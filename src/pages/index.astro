@@ -7,17 +7,17 @@ import { getAllNotes, getLatestNotes } from "@/data/note";
 import { getAllPosts, getPinnedPosts, getSortedPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 
-// Posts
+// Restrict displayed posts to maintain optimal page loading speed.
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
 const allPostsByDate = getSortedPosts(allPosts);
 const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
 
-// Pinned Posts, set to a max of 3;
+// Pin a small curated subset of posts to keep critical announcement or key items visible above the fold.
 const MAX_PINNED_POSTS = 3;
 const pinnedPosts = getPinnedPosts(allPostsByDate, MAX_PINNED_POSTS);
 
-// Notes
+// Cap notes to avoid cluttering the home dashboard layout with micro-blogging content.
 const MAX_NOTES = 5;
 const allNotes = await getAllNotes();
 const latestNotes = getLatestNotes(allNotes, MAX_NOTES);
@@ -54,12 +54,12 @@ const notesLinkText =
 		<div>
 			<h1 class="title mb-3 text-2xl font-semibold sm:text-3xl">Уникальный чат</h1>
 			<p class="mt-0 mb-3">
-				Разношёрстное и живое комьюнити с историей. Обсуждаем всё: нейросети, игры, науку, работу,
-				учёбу, религию и жизнь.
+				Разношёрстное и живое комьюнити с 2018. Обсуждаем всё: нейросети, игры, науку, работу,
+				учёбу, религию и жизнь
 			</p>
 			<p class="mb-4">
-				Пишем 1500+ сообщений в день, ценим ламповую атмосферу и наш постоянный состав. Студенты,
-				программисты, музыканты и много кто ещё.
+				Пишем 1500+ сообщений в день, ламповая атмосфера и постоянный состав. Студенты,
+				программисты, музыканты и кого только нет
 			</p>
 			<SocialList />
 		</div>

@@ -1,0 +1,52 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	label?: string;
+	href?: string;
+	name?: string;
+	isPlaceholder?: boolean;
+	target?: string;
+	rel?: string;
+	class?: string;
+	[key: string]: any;
+}
+
+const {
+	label,
+	href,
+	name,
+	isPlaceholder = false,
+	target,
+	rel,
+	class: className = "",
+	...rest
+} = Astro.props;
+
+const Tag = href ? "a" : "button";
+const isLink = Tag === "a";
+const defaultTarget = isLink && href?.startsWith("http") ? "_blank" : undefined;
+const defaultRel = defaultTarget === "_blank" ? "noreferrer" : undefined;
+---
+
+<Tag
+	class:list={[
+		"glass-button inline-flex cursor-pointer items-center gap-2.5 no-underline select-none",
+		name && "glass-button--has-icon",
+		className,
+	]}
+	data-placeholder={isPlaceholder ? "true" : "false"}
+	href={href}
+	target={target ?? defaultTarget}
+	rel={rel ?? defaultRel}
+	{...rest}
+>
+	{
+		name && (
+			<span class="glass-button__icon flex h-5 w-5 items-center justify-center" aria-hidden="true">
+				<Icon class="h-5 w-5" name={name} focusable="false" />
+			</span>
+		)
+	}
+	{label && <span>{label}</span>}
+</Tag>

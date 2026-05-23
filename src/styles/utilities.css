@@ -6,8 +6,9 @@
 		text-underline-offset: 4px;
 		text-decoration-thickness: 1px;
 		transition:
-			text-decoration-color 400ms ease-out,
-			color 400ms ease-out;
+			text-decoration-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.text-link:hover,
@@ -16,27 +17,35 @@
 		text-decoration-color: color-mix(in oklab, var(--color-link-hover) 30%, transparent);
 	}
 
+	.text-link:active {
+		opacity: 0.7;
+	}
+
 	.nav-link {
-		@apply text-link no-underline focus-visible:outline-none;
-		text-decoration: underline;
-		text-decoration-color: transparent;
-		text-underline-offset: 4px;
-		text-decoration-thickness: 1px;
+		@apply no-underline focus-visible:outline-none;
+		color: var(--color-link);
+		text-decoration: none;
 		transition:
-			text-decoration-color 400ms ease-out,
-			color 400ms ease-out;
+			color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.nav-link:hover,
 	.nav-link:focus-visible {
 		color: var(--color-link-hover);
-		text-decoration-color: color-mix(in oklab, var(--color-link-hover) 30%, transparent);
+		text-decoration: none;
+	}
+
+	.nav-link:active {
+		opacity: 0.7;
 	}
 
 	.action-link {
 		@apply inline-flex items-center gap-1 text-base no-underline focus-visible:outline-none;
 		color: var(--color-link);
-		transition: color 400ms ease-out;
+		transition:
+			color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.action-link::after {
@@ -44,16 +53,20 @@
 		opacity: 0;
 		transform: translateX(-4px);
 		transition:
-			opacity 400ms ease-out,
-			transform 400ms ease-out;
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 		display: inline-block;
 		margin-left: 2px;
 	}
 
 	.action-link:hover,
 	.action-link:focus-visible {
-		color: var(--color-accent);
+		color: var(--color-link-hover);
 		text-decoration: none;
+	}
+
+	.action-link:active {
+		opacity: 0.7;
 	}
 
 	.action-link:hover::after,
@@ -66,64 +79,236 @@
 		@apply text-heading text-2xl font-semibold;
 	}
 
-	.social-button {
-		background: var(--social-button-bg);
-		border: 1px solid var(--social-button-border);
+	.glass-button {
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		font-size: 0.875rem;
+		font-weight: 600;
+		padding: 0.5rem 1.125rem;
+		cursor: pointer;
+		user-select: none;
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		overflow: hidden;
+		box-sizing: border-box;
 		border-radius: 0.625rem;
+		backdrop-filter: blur(0.5rem);
+		z-index: 1;
+
+		/* Light */
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0.98) 0%,
+			rgba(228, 232, 238, 0.92) 100%
+		);
+		border: 0.0625rem solid rgba(0, 0, 0, 0.07);
+		color: oklch(26.99% 0.0096 235.05);
 		box-shadow:
-			0 1px 0 rgb(255 255 255 / 0.32) inset,
-			0 10px 24px rgb(40 80 50 / 0.06);
-		color: var(--social-button-text);
-		transition:
-			background-color 180ms ease,
-			border-color 180ms ease,
-			box-shadow 180ms ease,
-			transform 180ms ease,
-			color 180ms ease;
+			inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 1),
+			0 0.25rem 0.75rem rgba(0, 0, 0, 0.06);
 	}
 
-	.social-button:hover,
-	.social-button:focus-visible {
-		background: var(--social-button-bg-hover);
-		border-color: var(--social-button-border-hover);
-		box-shadow:
-			0 1px 0 rgb(255 255 255 / 0.36) inset,
-			0 14px 30px rgb(40 80 50 / 0.12);
+	.glass-button--has-icon {
+		padding-left: 0.875rem;
 	}
 
-	.social-button:active {
-		background: var(--social-button-bg-active);
+	.glass-button::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(215, 220, 228, 0.96) 100%);
+		opacity: 0;
+		transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		z-index: -1;
+	}
+
+	.glass-button:hover::before,
+	.glass-button:focus-visible::before {
+		opacity: 1;
+	}
+
+	.glass-button:hover,
+	.glass-button:focus-visible {
+		/* Hover */
+		border-color: rgba(0, 0, 0, 0.25);
 		box-shadow:
-			0 1px 0 rgb(255 255 255 / 0.24) inset,
-			0 6px 16px rgb(40 80 50 / 0.08);
+			inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 1),
+			0 0.375rem 1rem rgba(0, 0, 0, 0.12);
+		outline: none;
+	}
+
+	.glass-button:active {
 		transform: scale(0.97);
 	}
 
-	.social-button:focus-visible {
-		outline: 0;
+	/* Dark */
+	html[data-theme="dark"] .glass-button {
+		background: linear-gradient(
+			180deg,
+			rgba(245, 255, 248, 0.08) 0%,
+			rgba(220, 250, 230, 0.02) 100%
+		);
+		border: 0.0625rem solid rgba(245, 255, 248, 0.03);
+		color: oklch(92% 0.01 160);
 		box-shadow:
-			0 0 0 4px var(--social-button-ring),
-			0 1px 0 rgb(255 255 255 / 0.36) inset,
-			0 14px 30px rgb(40 80 50 / 0.1);
+			inset 0 0.0625rem 0.0625rem rgba(255, 255, 255, 0.08),
+			inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.3),
+			0 0.25rem 0.9375rem rgba(46, 204, 113, 0.02);
 	}
 
-	.social-button[data-placeholder="true"] {
+	html[data-theme="dark"] .glass-button::before {
+		background: linear-gradient(
+			180deg,
+			rgba(245, 255, 248, 0.12) 0%,
+			rgba(220, 250, 230, 0.04) 100%
+		);
+	}
+
+	html[data-theme="dark"] .glass-button:hover,
+	html[data-theme="dark"] .glass-button:focus-visible {
+		border-color: rgba(245, 255, 248, 0.12);
+		box-shadow:
+			inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.15),
+			0 0.375rem 1.25rem rgba(46, 204, 113, 0.04);
+	}
+
+	.glass-button[data-placeholder="true"] {
 		opacity: 0.94;
 	}
 
-	.social-button[data-placeholder="true"]:hover,
-	.social-button[data-placeholder="true"]:active {
-		background: var(--social-button-bg);
-		border-color: var(--social-button-border);
-		box-shadow:
-			0 1px 0 rgb(255 255 255 / 0.32) inset,
-			0 10px 24px rgb(40 80 50 / 0.06);
+	.glass-button[data-placeholder="true"]:hover,
+	.glass-button[data-placeholder="true"]:active {
 		transform: none;
 	}
 
-	.social-button__icon {
-		color: var(--social-button-icon);
-		transition: color 180ms ease;
+	.glass-button__icon {
+		color: inherit;
+		transition: color 0.5s ease;
+	}
+
+	.floating-action-btn {
+		cursor: pointer;
+		user-select: none;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		border: none;
+		outline: none;
+		background-color: var(--color-bg);
+		color: var(--color-text);
+		opacity: 0.6;
+		box-shadow: none;
+		transition:
+			transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+			background 0.3s ease,
+			box-shadow 0.3s ease,
+			padding 0.3s ease;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.floating-action-btn:hover,
+	.floating-action-btn:focus-visible {
+		opacity: 1;
+		color: var(--color-heading);
+		background: linear-gradient(
+			180deg,
+			rgba(240, 243, 246, 0.95) 0%,
+			rgba(220, 225, 232, 0.9) 100%
+		);
+		box-shadow:
+			0 4px 12px rgba(0, 0, 0, 0.05),
+			inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	}
+
+	html[data-theme="dark"] .floating-action-btn:hover,
+	html[data-theme="dark"] .floating-action-btn:focus-visible {
+		color: var(--color-heading);
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0.12) 0%,
+			rgba(255, 255, 255, 0.04) 100%
+		);
+		box-shadow:
+			0 4px 16px rgba(0, 0, 0, 0.25),
+			inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	}
+
+	.floating-action-btn:active {
+		transform: scale(0.95);
+	}
+
+	/* Scroll-triggered visibility for both action buttons */
+	.floating-action-btn--scroll {
+		opacity: 0;
+		transform: translateY(7rem);
+		pointer-events: none;
+	}
+
+	.floating-action-btn--scroll[data-show="true"] {
+		opacity: 0.6;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+
+	.floating-action-btn--scroll[data-show="true"]:hover,
+	.floating-action-btn--scroll[data-show="true"]:focus-visible {
+		opacity: 1;
+	}
+
+	.floating-action-btn--scroll[data-show="true"]:active {
+		transform: scale(0.95);
+	}
+
+	/* Copy button uses min-width to guarantee a circle, flex content drives actual width */
+	#copy-link-btn {
+		min-width: 2.5rem;
+	}
+
+	@media (min-width: 640px) {
+		#copy-link-btn {
+			min-width: 3rem;
+		}
+	}
+
+	/* Expand padding when in copied state to frame the text pill */
+	#copy-link-btn.is-copied {
+		padding-left: 0.75rem;
+		padding-right: 1rem;
+	}
+
+	/* Accent color scoped to the check icon only so text stays neutral */
+	.floating-action-btn.is-copied .floating-action-icon--check {
+		color: var(--color-accent);
+	}
+
+	/* Text is collapsed by default; overflow + nowrap prevent layout jumps */
+	.floating-action-copied-text {
+		display: inline-block;
+		overflow: hidden;
+		white-space: nowrap;
+		max-width: 0;
+		opacity: 0;
+		margin-left: 0;
+		transition:
+			max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s ease 0.05s,
+			margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Stagger opacity slightly later on expand so text fades in after space opens */
+	.floating-action-btn.is-copied .floating-action-copied-text {
+		max-width: 8rem;
+		opacity: 1;
+		margin-left: 0.5rem;
+		transition:
+			max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.2s ease 0.1s,
+			margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	:where(.expressive-code),

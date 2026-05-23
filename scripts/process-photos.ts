@@ -213,9 +213,7 @@ async function processInBatches(items: string[], concurrency: number) {
 
 	for (let i = 0; i < items.length; i += concurrency) {
 		const batch = items.slice(i, i + concurrency);
-		const batchResults = await Promise.allSettled(
-			batch.map((filePath) => processPhoto(filePath)),
-		);
+		const batchResults = await Promise.allSettled(batch.map((filePath) => processPhoto(filePath)));
 		results.push(...batchResults);
 	}
 

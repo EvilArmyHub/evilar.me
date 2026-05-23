@@ -45,7 +45,7 @@ const isFresh = isFreshDate(note.data.publishDate);
 			</a>
 		) : (
 			<>
-				<Tag class="page-title text-[2.7rem] leading-tight sm:text-[3.2rem]">{note.data.title}</Tag>
+				<Tag class="page-title text-[2.7rem] leading-[1.1] sm:text-[3.2rem]">{note.data.title}</Tag>
 				<div class="mt-2 text-gray-600 dark:text-gray-400">
 					{isFresh && (
 						<span aria-label="Свежая заметка" title="Свежая заметка">
