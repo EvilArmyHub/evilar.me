@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	// Default fallback snippet to satisfy search engine indexing requirements and web app manifest description constraints.
-	description: "Лаконичный персональный сайт на Astro для заметок и статей",
+	description: "Evil Army — хроники, статьи, заметки и архив нашей истории с 2018 года",
 	// Global document language identifier to assist web browsers, crawlers, and accessibility tools in text synthesis.
 	lang: "ru-RU",
 	// Social media meta tag property used by crawlers (e.g., Open Graph) to deliver properly localized preview cards.
