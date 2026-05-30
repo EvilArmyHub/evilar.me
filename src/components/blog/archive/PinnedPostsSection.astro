@@ -9,15 +9,17 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<section class="mb-10">
-	<h2 class="page-title mb-3 text-xl">Ключевое</h2>
-	<ul class="space-y-1" role="list">
-		{
-			posts.map((post) => (
-				<li>
-					<PostPreview post={post} />
-				</li>
-			))
-		}
-	</ul>
-</section>
+{
+	posts.length > 0 && (
+		<section class="mb-10">
+			<h2 class="page-title mb-3 text-xl">Ключевое</h2>
+			<ul class="space-y-1" role="list">
+				{posts.map((post) => (
+					<li>
+						<PostPreview post={post} />
+					</li>
+				))}
+			</ul>
+		</section>
+	)
+}
