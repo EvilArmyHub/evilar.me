@@ -18,6 +18,11 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <title>{siteTitle}</title>
 
+{/* Google Fonts Preconnect and Roboto Flex Variable Font */}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght,GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,slnt@8..144,25..151,100..1000,-200..150,27..175,323..603,25..135,649..854,-305..-98,560..788,416..570,528..760,-10..0&display=swap" rel="stylesheet" />
+
 {/* Icons */}
 <link href="/icon.svg" rel="icon" type="image/svg+xml" />
 {
@@ -82,5 +87,10 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 		</>
 	)
 }
+
+{/* IndieAuth Verification / rel="me" */}
+<link href="https://t.me/+o-QQtDMYJ4VlN2Iy" rel="me" />
+<link href="https://github.com/EvilArmyHub" rel="me" />
+<link href="https://www.youtube.com/@ResEvilTube" rel="me" />
 
 <meta content={Astro.generator} name="generator" />

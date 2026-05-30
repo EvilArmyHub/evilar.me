@@ -9,8 +9,8 @@ const { isCompact = false } = Astro.props;
 <theme-toggle class:list={["ms-2 inline-flex sm:ms-4", isCompact && "sm:ms-3"]}>
 	<button
 		class:list={[
-			"relative cursor-pointer rounded-md p-2 transition-all duration-200 ease-out hover:text-[var(--header-button-hover)] focus-visible:text-[var(--header-button-hover)] focus-visible:outline-none active:scale-95",
-			isCompact ? "h-8 w-8" : "h-9 w-9",
+			"relative cursor-pointer rounded-md transition-all duration-200 ease-out hover:text-[var(--header-button-hover)] focus-visible:text-[var(--header-button-hover)] focus-visible:outline-none active:scale-95 h-9 w-9 p-2",
+			isCompact && "sm:h-8 sm:w-8 sm:p-1",
 		]}
 		type="button"
 	>
@@ -19,7 +19,7 @@ const { isCompact = false } = Astro.props;
 			aria-hidden="true"
 			class:list={[
 				"absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100 transition-all dark:scale-0 dark:opacity-0",
-				isCompact ? "h-6 w-6" : "h-7 w-7",
+				isCompact ? "h-7 w-7 sm:h-6 sm:w-6" : "h-7 w-7",
 			]}
 			fill="none"
 			focusable="false"
@@ -52,7 +52,7 @@ const { isCompact = false } = Astro.props;
 			aria-hidden="true"
 			class:list={[
 				"absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all dark:scale-100 dark:opacity-100",
-				isCompact ? "h-6 w-6" : "h-7 w-7",
+				isCompact ? "h-7 w-7 sm:h-6 sm:w-6" : "h-7 w-7",
 			]}
 			fill="none"
 			focusable="false"

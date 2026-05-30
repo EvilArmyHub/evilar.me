@@ -79,6 +79,31 @@
 		@apply text-heading text-2xl font-semibold;
 	}
 
+	.post-hero-title {
+		font-family: 'Roboto Flex', sans-serif;
+		font-style: normal;
+		font-weight: 780;
+		line-height: 110%;
+		text-transform: uppercase;
+		color: var(--color-heading);
+		font-stretch: 120%;
+		font-variation-settings: 'GRAD' -200, 'XOPQ' 96, 'XTRA' 468, 'YOPQ' 106, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'slnt' 0;
+		font-size: clamp(1.35rem, 5vw, 67px);
+		text-align: left;
+		display: block;
+		width: 100%;
+	}
+
+	.brand-title {
+		font-family: 'Roboto Flex', sans-serif;
+		font-style: normal;
+		font-weight: 880;
+		text-transform: uppercase;
+		font-stretch: 120%;
+		font-variation-settings: 'GRAD' -200, 'XOPQ' 96, 'XTRA' 468, 'YOPQ' 106, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'slnt' 0;
+	}
+
+
 	.glass-button {
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 		font-size: 0.875rem;

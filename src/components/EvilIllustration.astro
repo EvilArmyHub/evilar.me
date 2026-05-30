@@ -7,12 +7,18 @@ const { class: className, ...props } = Astro.props;
 ---
 
 <svg
-	class={className}
+	class:list={[className, "evil-illustration"]}
 	viewBox="0 0 1632 2048"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
 	{...props}
 >
+	<defs>
+		<radialGradient id="evil-glow" cx="0" cy="0" r="400" gradientUnits="userSpaceOnUse">
+			<stop offset="0%" stop-color="var(--evil-glow-color, #4ade80)"></stop>
+			<stop offset="100%" stop-color="currentColor"></stop>
+		</radialGradient>
+	</defs>
 	<path
 		d="M677.69 894.536C686.775 890.563 714.202 887.116 720.952 894.642L720.964 898.087C716.752 898.234 714.139 898.736 710.152 897.709L709.652 896.346C701.767 894.573 690.402 898.508 682.062 898.225C679.613 898.141 680.119 897.468 677.69 894.536Z"
 		fill="currentColor"></path>
@@ -709,3 +715,54 @@ const { class: className, ...props } = Astro.props;
 		d="M1093.73 1022.25C1096.27 1024.33 1095.48 1023.28 1097.04 1026.27C1098.98 1030.01 1095.62 1035.77 1094.25 1039.75L1091.38 1037.71C1092.05 1032.53 1092.84 1027.38 1093.73 1022.25Z"
 		fill="currentColor"></path>
 </svg>
+
+<style>
+	.evil-illustration {
+		--evil-glow-color: #4ade80;
+	}
+
+	:global(html[data-theme="dark"]) .evil-illustration {
+		--evil-glow-color: #d0d480;
+	}
+
+	.evil-illustration path {
+		transition: fill 0.35s ease;
+	}
+
+	.evil-illustration.is-hovering path {
+		fill: url(#evil-glow);
+	}
+</style>
+
+<script>
+	function initEvilGlow() {
+		const svg = document.querySelector<SVGSVGElement>(".evil-illustration");
+		if (!svg) return;
+
+		const gradient = svg.querySelector<SVGRadialGradientElement>("#evil-glow");
+		if (!gradient) return;
+
+		svg.addEventListener("mousemove", (e) => {
+			const rect = svg.getBoundingClientRect();
+
+			// Map screen coords to SVG viewBox coords (0 0 1632 2048)
+			const x = ((e.clientX - rect.left) / rect.width) * 1632;
+			const y = ((e.clientY - rect.top) / rect.height) * 2048;
+
+			gradient.setAttribute("cx", String(x));
+			gradient.setAttribute("cy", String(y));
+		});
+
+		svg.addEventListener("mouseenter", () => {
+			svg.classList.add("is-hovering");
+		});
+
+		svg.addEventListener("mouseleave", () => {
+			svg.classList.remove("is-hovering");
+		});
+	}
+
+	// Run on initial load and after Astro page transitions
+	initEvilGlow();
+	document.addEventListener("astro:after-swap", initEvilGlow);
+</script>

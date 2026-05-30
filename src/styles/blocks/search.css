@@ -44,9 +44,11 @@
 	height: 2.25rem;
 }
 
-:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] pagefind-modal-trigger {
-	width: 2rem;
-	height: 2rem;
+@media (min-width: 640px) {
+	:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] pagefind-modal-trigger {
+		width: 2rem;
+		height: 2rem;
+	}
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-trigger-btn {
@@ -80,9 +82,11 @@
 	transition: background-color 0.15s ease;
 }
 
-:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] .pf-trigger-icon {
-	width: 1.5rem;
-	height: 1.5rem;
+@media (min-width: 640px) {
+	:is(*, #\#):is(*, #\#):is(*, #\#) .site-search[data-compact="true"] .pf-trigger-icon {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#)

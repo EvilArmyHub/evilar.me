@@ -13,7 +13,7 @@ const { isCompact = false, menuId } = Astro.props;
 	aria-label="Главное меню"
 	class:list={[
 		"bg-bg absolute -inset-x-4 hidden flex-col px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:flex sm:flex-row sm:items-center sm:bg-transparent sm:p-0",
-		isCompact ? "top-10 sm:mt-0" : "top-12 sm:mt-1",
+		isCompact ? "top-10 sm:mt-0" : "top-12 sm:mt-1 sm:ms-[1px]",
 	]}
 	data-header-nav
 	id={menuId}

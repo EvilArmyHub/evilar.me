@@ -6,11 +6,12 @@ const socialLinks: {
 	isPlaceholder: boolean;
 	link: string;
 	name: string;
+	rel?: string;
 }[] = [
 	{
 		friendlyName: "Telegram",
 		isPlaceholder: false,
-		link: "https://t.me/",
+		link: "https://t.me/+o-QQtDMYJ4VlN2Iy",
 		name: "mingcute:telegram-fill",
 	},
 ];
@@ -19,9 +20,15 @@ const socialLinks: {
 <div class="flex flex-wrap items-center gap-x-2 gap-y-3">
 	<ul class="flex items-center gap-3">
 		{
-			socialLinks.map(({ friendlyName, isPlaceholder, link, name }) => (
+			socialLinks.map(({ friendlyName, isPlaceholder, link, name, rel }) => (
 				<li class="flex">
-					<Button href={link} isPlaceholder={isPlaceholder} label={friendlyName} name={name} />
+					<Button
+						href={link}
+						isPlaceholder={isPlaceholder}
+						label={friendlyName}
+						name={name}
+						{...(rel ? { rel } : {})}
+					/>
 				</li>
 			))
 		}

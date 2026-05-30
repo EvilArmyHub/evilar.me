@@ -8,7 +8,7 @@ interface Props {
 const { headings } = Astro.props;
 
 // Filter headings to h2 and h3
-const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 // Helper to clean heading text up to the ellipsis (literal "..." or Unicode "…")
 const cleanTitle = (text: string) => {
@@ -24,87 +24,115 @@ const cleanTitle = (text: string) => {
 };
 ---
 
-{filteredHeadings.length > 1 && (
-	<scroll-toc class="scroll-toc-container group" data-headings={JSON.stringify(filteredHeadings)}>
-		{/* Desktop Left-aligned Floating ToC */}
-		<aside
-			class="scroll-toc-sidebar"
-			aria-label="Содержание"
-		>
-			<div class="scroll-toc-hint w-8 h-8 rounded-full bg-bg border border-text/10 flex items-center justify-center text-text/50 pointer-events-auto transition-all duration-300 group-hover:opacity-0 group-hover:-translate-x-2 shadow-xs" aria-hidden="true">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-				</svg>
-			</div>
-
-			<div class="scroll-toc-content flex-1 overflow-y-auto opacity-0 -translate-x-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto scrollbar-hide">
-				<h3 class="text-sm font-semibold text-text mb-4 pl-[15px]">Содержание</h3>
-				
-				<ul class="relative pl-3 border-l-2 border-text/10">
-					{filteredHeadings.map((heading) => (
-						<li class="relative mb-3 last:mb-0">
-							<div class="toc-dot absolute -left-[19px] top-[7px] w-[5px] h-[5px] rounded-full bg-text/30 transition-all duration-300"></div>
-							<a
-								href={`#${heading.slug}`}
-								data-slug={heading.slug}
-								class={`block text-[0.82rem] leading-tight text-text/60 hover:text-accent transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
-								title={cleanTitle(heading.text)}
-							>
-								{cleanTitle(heading.text)}
-							</a>
-						</li>
-					))}
-				</ul>
-			</div>
-		</aside>
-
-		{/* Mobile Floating Action Button (Matches existing theme exactly) */}
-		<button
-			class="floating-action-btn floating-action-btn--scroll fixed start-4 bottom-8 z-[90] h-10 w-10 sm:start-8 sm:h-12 sm:w-12 lg:hidden"
-			data-show="false"
-			id="open-toc-btn"
-			type="button"
-			title="Открыть оглавление"
-		>
-			<span class="sr-only">Table of contents</span>
-			<svg
-				aria-hidden="true"
-				class="h-5 w-5 shrink-0"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
-			</svg>
-		</button>
-
-		{/* Mobile Bottom Sheet Drawer */}
-		<div id="mobile-toc-backdrop" class="mobile-toc-backdrop fixed inset-0 z-[99] bg-black/40 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-300" />
-		<div id="mobile-toc-sheet" class="mobile-toc-sheet fixed bottom-0 left-0 right-0 z-[100] max-h-[60vh] flex flex-col bg-bg border-t border-text/10 rounded-t-2xl shadow-2xl translate-y-full transition-transform duration-350 ease-[cubic-bezier(0.32,0.72,0,1)] pb-safe">
-			<div class="mobile-toc-sheet-header flex items-center justify-between p-4 border-b border-text/10">
-				<div class="mobile-toc-sheet-title text-sm font-semibold text-text ps-3">Содержание</div>
-				<button id="mobile-toc-close" class="mobile-toc-sheet-close w-8 h-8 rounded-full bg-text/5 flex items-center justify-center text-text/60 border-none cursor-pointer" aria-label="Закрыть">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<line x1="18" y1="6" x2="6" y2="18"></line>
-						<line x1="6" y1="6" x2="18" y2="18"></line>
-					</svg>
-				</button>
-			</div>
-			<div class="mobile-toc-sheet-list flex-1 overflow-y-auto p-4 scrollbar-hide">
-				{filteredHeadings.map((heading) => (
-					<button
-						class={`mobile-toc-sheet-item block w-full text-left border-none bg-transparent text-text/60 text-[0.9rem] py-2.5 px-3 rounded-lg cursor-pointer transition-colors ${heading.depth === 3 ? "pl-6 text-[0.85rem]" : ""}`}
-						data-slug={heading.slug}
+{
+	filteredHeadings.length > 1 && (
+		<scroll-toc class="scroll-toc-container group" data-headings={JSON.stringify(filteredHeadings)}>
+			{/* Desktop Left-aligned Floating ToC */}
+			<aside class="scroll-toc-sidebar" aria-label="Содержание">
+				<div
+					class="scroll-toc-hint bg-bg border-text/10 text-text/50 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:-translate-x-2 group-hover:opacity-0"
+					aria-hidden="true"
+				>
+					<svg
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						viewBox="0 0 24 24"
 					>
-						{cleanTitle(heading.text)}
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</div>
+
+				<div class="scroll-toc-content scrollbar-hide pointer-events-none flex-1 -translate-x-2 overflow-y-auto opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100">
+					<h3 class="text-text mb-4 pl-[15px] text-sm font-semibold">Содержание</h3>
+
+					<ul class="border-text/10 relative border-l-2 pl-3">
+						{filteredHeadings.map((heading) => (
+							<li class="relative mb-3 last:mb-0">
+								<div class="toc-dot bg-text/30 absolute top-[7px] -left-[19px] h-[5px] w-[5px] rounded-full transition-all duration-300" />
+								<a
+									href={`#${heading.slug}`}
+									data-slug={heading.slug}
+									class={`text-text/60 hover:text-accent block overflow-hidden text-[0.82rem] leading-tight text-ellipsis whitespace-nowrap transition-colors ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
+									title={cleanTitle(heading.text)}
+								>
+									{cleanTitle(heading.text)}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</aside>
+
+			{/* Mobile Floating Action Button (Matches existing theme exactly) */}
+			<button
+				class="floating-action-btn floating-action-btn--scroll fixed start-4 bottom-8 z-[90] h-10 w-10 sm:start-8 sm:h-12 sm:w-12 lg:hidden"
+				data-show="false"
+				id="open-toc-btn"
+				type="button"
+				title="Открыть оглавление"
+			>
+				<span class="sr-only">Table of contents</span>
+				<svg
+					aria-hidden="true"
+					class="h-5 w-5 shrink-0"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</button>
+
+			{/* Mobile Bottom Sheet Drawer */}
+			<div
+				id="mobile-toc-backdrop"
+				class="mobile-toc-backdrop pointer-events-none fixed inset-0 z-[99] bg-black/40 opacity-0 backdrop-blur-xs transition-opacity duration-300"
+			/>
+			<div
+				id="mobile-toc-sheet"
+				class="mobile-toc-sheet bg-bg border-text/10 pb-safe fixed right-0 bottom-0 left-0 z-[100] flex max-h-[60vh] translate-y-full flex-col rounded-t-2xl border-t shadow-2xl transition-transform duration-350 ease-[cubic-bezier(0.32,0.72,0,1)]"
+			>
+				<div class="mobile-toc-sheet-header border-text/10 flex items-center justify-between border-b p-4">
+					<div class="mobile-toc-sheet-title text-text ps-3 text-sm font-semibold">Содержание</div>
+					<button
+						id="mobile-toc-close"
+						class="mobile-toc-sheet-close bg-text/5 text-text/60 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none"
+						aria-label="Закрыть"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<line x1="18" y1="6" x2="6" y2="18" />
+							<line x1="6" y1="6" x2="18" y2="18" />
+						</svg>
 					</button>
-				))}
+				</div>
+				<div class="mobile-toc-sheet-list scrollbar-hide flex-1 overflow-y-auto p-4">
+					{filteredHeadings.map((heading) => (
+						<button
+							class={`mobile-toc-sheet-item text-text/60 block w-full cursor-pointer rounded-lg border-none bg-transparent px-3 py-2.5 text-left text-[0.9rem] transition-colors ${heading.depth === 3 ? "pl-6 text-[0.85rem]" : ""}`}
+							data-slug={heading.slug}
+						>
+							{cleanTitle(heading.text)}
+						</button>
+					))}
+				</div>
 			</div>
-		</div>
-	</scroll-toc>
-)}
+		</scroll-toc>
+	)
+}
 
 <script>
 	class ScrollToc extends HTMLElement {
@@ -179,7 +207,10 @@ const cleanTitle = (text: string) => {
 				if (this.scrollWrapper && activeLink) {
 					const wrapperCenter = this.scrollWrapper.clientHeight / 2;
 					const linkTop = activeLink.offsetTop;
-					this.scrollWrapper.scrollTo({ top: Math.max(0, linkTop - wrapperCenter), behavior: "smooth" });
+					this.scrollWrapper.scrollTo({
+						top: Math.max(0, linkTop - wrapperCenter),
+						behavior: "smooth",
+					});
 				}
 			};
 
@@ -224,10 +255,10 @@ const cleanTitle = (text: string) => {
 			// Cache offsetTop positions for high performance scrolling (walking parent chain)
 			const updateHeadingsCache = () => {
 				if (!this.links) return;
-				this.headingsCache = Array.from(this.links).map(link => {
+				this.headingsCache = Array.from(this.links).map((link) => {
 					const slug = link.getAttribute("data-slug") || "";
 					const target = document.getElementById(slug);
-					
+
 					let absoluteTop = 0;
 					if (target) {
 						let current: HTMLElement | null = target;
@@ -236,11 +267,11 @@ const cleanTitle = (text: string) => {
 							current = current.offsetParent as HTMLElement | null;
 						}
 					}
-					
+
 					return {
 						slug,
 						target,
-						offsetTop: absoluteTop
+						offsetTop: absoluteTop,
 					};
 				});
 				this.onScroll();
@@ -249,10 +280,10 @@ const cleanTitle = (text: string) => {
 			this.onScroll = () => {
 				if (isNavigating) return;
 				if (!this.headingsCache.length || !this.links || !this.dots || !this.mobileItems) return;
-				
+
 				const scrollY = window.scrollY;
 				const threshold = scrollY + 45;
-				
+
 				let newActiveIndex = -1;
 				for (let i = 0; i < this.headingsCache.length; i++) {
 					const item = this.headingsCache[i];
@@ -275,7 +306,9 @@ const cleanTitle = (text: string) => {
 					window.scrollTo({ top: y, behavior: "smooth" });
 
 					// Immediately highlight target item
-					const targetIndex = Array.from(this.links || []).findIndex(link => link.getAttribute("data-slug") === slug);
+					const targetIndex = Array.from(this.links || []).findIndex(
+						(link) => link.getAttribute("data-slug") === slug,
+					);
 					if (targetIndex !== -1) {
 						this.setActiveLink(targetIndex);
 					}
@@ -288,7 +321,7 @@ const cleanTitle = (text: string) => {
 			};
 
 			if (this.links) {
-				this.links.forEach(link => {
+				this.links.forEach((link) => {
 					link.addEventListener("click", (e) => {
 						e.preventDefault();
 						const slug = link.getAttribute("data-slug");
@@ -303,7 +336,7 @@ const cleanTitle = (text: string) => {
 				updateHeadingsCache();
 				updateSidebarWidth();
 			};
-			
+
 			setTimeout(() => {
 				updateHeadingsCache();
 				updateSidebarWidth();
@@ -317,7 +350,7 @@ const cleanTitle = (text: string) => {
 			this.mouseMoveHandler = (e: MouseEvent) => {
 				if (e.clientX <= LEFT_REVEAL_ZONE_PX) {
 					this.classList.add("is-awake");
-				} else if (!this.matches(':hover')) {
+				} else if (!this.matches(":hover")) {
 					this.classList.remove("is-awake");
 				}
 			};
@@ -373,7 +406,7 @@ const cleanTitle = (text: string) => {
 			if (closeBtn) closeBtn.addEventListener("click", closeMobileSheet);
 
 			if (this.mobileItems) {
-				this.mobileItems.forEach(item => {
+				this.mobileItems.forEach((item) => {
 					item.addEventListener("click", () => {
 						const slug = item.getAttribute("data-slug");
 						if (slug) {
@@ -411,7 +444,9 @@ const cleanTitle = (text: string) => {
 		display: none;
 		flex-direction: column;
 		pointer-events: none;
-		transition: opacity 0.3s ease, transform 0.3s ease;
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s ease;
 	}
 
 	/* Hide scrollbar but allow functional scrolling */
