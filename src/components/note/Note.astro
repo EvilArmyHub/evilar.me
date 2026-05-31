@@ -18,7 +18,7 @@ const isFresh = isFreshDate(note.data.publishDate);
 	class:list={[
 		isPreview && "group relative rounded-[10px] transition-colors duration-200 ease-out",
 	]}
-	data-pagefind-body={isPreview ? false : true}
+	{...isPreview ? {} : { "data-pagefind-body": true }}
 >
 	{
 		isPreview ? (
@@ -45,8 +45,14 @@ const isFresh = isFreshDate(note.data.publishDate);
 			</a>
 		) : (
 			<>
-				<Tag class="page-title text-[2.7rem] leading-[1.1] sm:text-[3.2rem]">{note.data.title}</Tag>
-				<div class="mt-2 text-gray-600 dark:text-gray-400">
+				<Tag
+					class="page-title text-[2.7rem] leading-[1.1] sm:text-[3.2rem]"
+					data-pagefind-meta="title"
+					data-pagefind-ignore
+				>
+					{note.data.title}
+				</Tag>
+				<div class="mt-2 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
 					{isFresh && (
 						<span aria-label="Свежая заметка" title="Свежая заметка">
 							🌱{" "}

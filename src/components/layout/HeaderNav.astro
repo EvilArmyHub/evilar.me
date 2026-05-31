@@ -12,8 +12,8 @@ const { isCompact = false, menuId } = Astro.props;
 <nav
 	aria-label="Главное меню"
 	class:list={[
-		"bg-bg absolute -inset-x-4 hidden flex-col px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:flex sm:flex-row sm:items-center sm:bg-transparent sm:p-0",
-		isCompact ? "top-10 sm:mt-0" : "top-12 sm:mt-1 sm:ms-[1px]",
+		"mobile-nav-dropdown hidden group-[.menu-open]:flex sm:static sm:z-auto sm:flex sm:w-auto sm:translate-y-0 sm:flex-row sm:items-center sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:opacity-100 sm:shadow-none sm:backdrop-blur-none",
+		isCompact ? "sm:mt-0" : "sm:ms-[1px] sm:mt-1",
 	]}
 	data-header-nav
 	id={menuId}
@@ -23,7 +23,7 @@ const { isCompact = false, menuId } = Astro.props;
 			<>
 				<a
 					aria-current={Astro.url.pathname === link.path ? "page" : false}
-					class="nav-link aria-[current=page]:text-text py-4 text-lg sm:py-0 sm:text-base"
+					class="mobile-nav-link nav-link aria-[current=page]:text-text sm:rounded-none sm:px-0 sm:py-0 sm:text-base sm:hover:bg-transparent"
 					href={link.path}
 				>
 					{link.title}

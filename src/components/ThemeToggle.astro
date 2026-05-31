@@ -7,13 +7,7 @@ const { isCompact = false } = Astro.props;
 ---
 
 <theme-toggle class:list={["ms-2 inline-flex sm:ms-4", isCompact && "sm:ms-3"]}>
-	<button
-		class:list={[
-			"relative cursor-pointer rounded-md transition-all duration-200 ease-out hover:text-[var(--header-button-hover)] focus-visible:text-[var(--header-button-hover)] focus-visible:outline-none active:scale-95 h-9 w-9 p-2",
-			isCompact && "sm:h-8 sm:w-8 sm:p-1",
-		]}
-		type="button"
-	>
+	<button class="header-action-btn" type="button">
 		<span class="sr-only">Переключить тему</span>
 		<svg
 			aria-hidden="true"

@@ -17,13 +17,13 @@ const { isCompact = false, menuId } = Astro.props;
 		aria-controls={menuId}
 		aria-expanded="false"
 		aria-haspopup="menu"
-		class:list={["group relative ms-4 sm:invisible sm:hidden h-7 w-7"]}
+		class:list={["header-action-btn group ms-4 sm:invisible sm:hidden"]}
 		type="button"
 	>
 		<span class="sr-only">Открыть главное меню</span>
 		<svg
 			aria-hidden="true"
-			class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
+			class="absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
 			fill="none"
 			focusable="false"
 			stroke="currentColor"
@@ -35,7 +35,7 @@ const { isCompact = false, menuId } = Astro.props;
 		</svg>
 		<svg
 			aria-hidden="true"
-			class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+			class="text-accent absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
 			fill="none"
 			focusable="false"
 			stroke="currentColor"

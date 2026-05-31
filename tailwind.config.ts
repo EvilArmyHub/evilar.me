@@ -54,8 +54,18 @@ export default {
 						blockquote: {
 							borderLeftWidth: "0",
 							background: "color-mix(in oklab, var(--color-accent) 8%, transparent)",
-							borderRadius: "1rem",
-							padding: "1.25rem 1.5rem",
+							borderRadius: "10px",
+							padding: "0.625rem 0.75rem",
+						},
+						"blockquote p:first-of-type::before": {
+							content: "none",
+						},
+						"blockquote p:last-of-type::after": {
+							content: "none",
+						},
+						"blockquote p": {
+							marginTop: "0.5em",
+							marginBottom: "0.5em",
 						},
 						code: {
 							border: "1px dotted #666",

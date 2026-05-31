@@ -11,15 +11,21 @@ import type { SiteMeta } from "@/types";
 interface Props {
 	meta: SiteMeta;
 	isArticleLayout?: boolean;
+	doNotIndex?: boolean;
 }
 
 const {
 	meta: { articleDate, description = siteConfig.description, ogImage, title, author },
 	isArticleLayout = false,
+	doNotIndex = false,
 } = Astro.props;
 ---
 
-<html class="scroll-smooth" lang={siteConfig.lang}>
+<html
+	class="scroll-smooth"
+	lang={siteConfig.lang}
+	{...doNotIndex ? { "data-pagefind-ignore": "all" } : {}}
+>
 	<head>
 		<ThemeProvider />
 		<BaseHead

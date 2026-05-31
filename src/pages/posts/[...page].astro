@@ -42,7 +42,7 @@ const groupedByYear = groupPostsByYear(page.data);
 const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 ---
 
-<PageLayout meta={meta}>
+<PageLayout meta={meta} doNotIndex>
 	<div class="mb-6 flex items-center gap-3">
 		<h1 class="page-title">Статьи</h1>
 		<a class="text-accent" href="/rss.xml" target="_blank">

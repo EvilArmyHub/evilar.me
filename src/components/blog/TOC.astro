@@ -26,7 +26,11 @@ const cleanTitle = (text: string) => {
 
 {
 	filteredHeadings.length > 1 && (
-		<scroll-toc class="scroll-toc-container group" data-headings={JSON.stringify(filteredHeadings)}>
+		<scroll-toc
+			class="scroll-toc-container group"
+			data-headings={JSON.stringify(filteredHeadings)}
+			data-pagefind-ignore
+		>
 			{/* Desktop Left-aligned Floating ToC */}
 			<aside class="scroll-toc-sidebar" aria-label="Содержание">
 				<div

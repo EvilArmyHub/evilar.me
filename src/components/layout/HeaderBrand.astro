@@ -21,7 +21,7 @@ const { isCompact = false } = Astro.props;
 		class:list={[
 			"transition-transform duration-200 ease-out group-hover:-rotate-3",
 			isCompact
-				? "h-10 w-6 sm:h-7 sm:w-4 me-3 sm:me-6 inline-block align-middle"
+				? "me-3 inline-block h-10 w-6 align-middle sm:me-6 sm:h-7 sm:w-4"
 				: "me-3 h-10 w-6 sm:absolute sm:-start-18 sm:me-0 sm:h-15 sm:w-12",
 		]}
 		decoding="async"
@@ -29,9 +29,5 @@ const { isCompact = false } = Astro.props;
 		src="/icon.svg"
 		width="515"
 	/>
-	{
-		!isCompact && (
-			<span class="brand-title text-xl sm:text-2xl">{siteConfig.title}</span>
-		)
-	}
+	{!isCompact && <span class="brand-title text-xl sm:text-2xl">{siteConfig.title}</span>}
 </a>

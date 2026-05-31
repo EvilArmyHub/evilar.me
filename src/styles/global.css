@@ -2,6 +2,7 @@
 @import "./tokens.css";
 @import "./components/admonition.css" layer(components);
 @import "./components/github-card.css" layer(components);
+@import "./components/header-action.css" layer(components);
 @import "./utilities.css";
 @import "./prose.css";
 /* config for tailwindcss-typography plugin */

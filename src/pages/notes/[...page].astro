@@ -1,38 +1,34 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import type { GetStaticPaths, Page } from "astro";
+import type { GetStaticPaths } from "astro";
 import { Icon } from "astro-icon/components";
 import Note from "@/components/note/Note.astro";
-import Pagination from "@/components/Paginator.astro";
 import { getAllNotes, getSortedNotes } from "@/data/note";
 import PageLayout from "@/layouts/Base.astro";
-import { getPaginationLinks } from "@/utils/pagination";
 
-export const getStaticPaths = (async ({ paginate }) => {
-	const MAX_NOTES_PER_PAGE = 10;
+export const getStaticPaths = (async () => {
 	const allNotes = await getAllNotes();
-	return paginate(getSortedNotes(allNotes), { pageSize: MAX_NOTES_PER_PAGE });
+	return [
+		{
+			params: { page: undefined },
+			props: { notes: getSortedNotes(allNotes) },
+		},
+	];
 }) satisfies GetStaticPaths;
 
 interface Props {
-	page: Page<CollectionEntry<"note">>;
-	uniqueTags: string[];
+	notes: CollectionEntry<"note">[];
 }
 
-const { page } = Astro.props;
+const { notes } = Astro.props;
 
 const meta = {
 	description: "Короткие заметки и быстрые мысли",
 	title: "Заметки",
 };
-
-const paginationProps = getPaginationLinks(page.url, {
-	next: "Следующая страница →",
-	prev: "← Предыдущая страница",
-});
 ---
 
-<PageLayout meta={meta}>
+<PageLayout meta={meta} doNotIndex>
 	<section>
 		<h1 class="page-title mb-6 flex items-center gap-3">
 			Заметки <a class="text-accent" href="/notes/rss.xml" target="_blank">
@@ -42,13 +38,12 @@ const paginationProps = getPaginationLinks(page.url, {
 		</h1>
 		<ul class="space-y-4 text-start">
 			{
-				page.data.map((note) => (
+				notes.map((note) => (
 					<li class="">
 						<Note note={note} as="h2" isPreview />
 					</li>
 				))
 			}
 		</ul>
-		<Pagination {...paginationProps} />
 	</section>
 </PageLayout>

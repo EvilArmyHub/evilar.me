@@ -33,9 +33,11 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 	}}
 >
 	<article class="h-entry grow break-words" data-pagefind-body>
-		<a class="u-url hidden" href={postUrl} aria-hidden="true">{title}</a>
-		<div class="mb-12" id="blog-hero"><Masthead content={post} readingTime={readingTime} /></div>
-		<div class="p-author h-card hidden" aria-hidden="true">
+		<a class="u-url hidden" href={postUrl} aria-hidden="true" data-pagefind-ignore>{title}</a>
+		<div class="mb-12" id="blog-hero" data-pagefind-ignore>
+			<Masthead content={post} readingTime={readingTime} />
+		</div>
+		<div class="p-author h-card hidden" aria-hidden="true" data-pagefind-ignore>
 			<a class="u-url p-name" href={authorUrl}>Злая редакция</a>
 			<img class="u-photo" src="/icon.svg" alt="" />
 		</div>
@@ -45,7 +47,9 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
 			>
 				<slot />
-				<WebMentions />
+				<div data-pagefind-ignore>
+					<WebMentions />
+				</div>
 			</div>
 		</div>
 	</article>
@@ -157,5 +161,38 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 		});
 	}
 
+	function initProseImages() {
+		const proseImages = document.querySelectorAll(".prose img") as NodeListOf<HTMLImageElement>;
+		proseImages.forEach((img) => {
+			const adjustImageStyle = () => {
+				if (img.naturalWidth === 0 || img.naturalHeight === 0) return;
+
+				// Keep pixel-art and small images crisp by disabling smoothing
+				if (img.naturalWidth < 500) {
+					img.style.imageRendering = "pixelated";
+				}
+
+				const ratio = img.naturalWidth / img.naturalHeight;
+				// Wide images (>= 16:10 ≈ 1.6, with margin down to 1.5) → full width
+				// Narrower images → 2/3 width, left-aligned (handled by CSS default)
+				if (ratio >= 1.5) {
+					img.style.width = "100%";
+				}
+			};
+
+			if (img.complete && img.naturalWidth > 0) {
+				adjustImageStyle();
+			} else {
+				// Use decode() for reliable dimension access (especially AVIF)
+				img.decode().then(adjustImageStyle).catch(() => {
+					// Fallback to load event if decode fails
+					img.addEventListener("load", adjustImageStyle, { once: true });
+				});
+			}
+		});
+	}
+
 	document.addEventListener("astro:page-load", initBlogPost);
+	document.addEventListener("astro:page-load", initProseImages);
 </script>
+

@@ -39,18 +39,20 @@ function pluralizeRu(count: number, one: string, few: string, many: string) {
 
 const remainingPosts = Math.max(allPostsByDate.length - latestPosts.length, 0);
 const remainingNotes = Math.max(allNotes.length - latestNotes.length, 0);
-const postsLinkText =
-	remainingPosts > 0
-		? `еще ${remainingPosts} ${pluralizeRu(remainingPosts, "статья", "статьи", "статей")}`
-		: "все статьи";
+const showPostsLink = remainingPosts > 0;
+const postsLinkText = showPostsLink
+	? `еще ${remainingPosts} ${pluralizeRu(remainingPosts, "статья", "статьи", "статей")}`
+	: "";
 const notesLinkText =
 	remainingNotes > 0
 		? `еще ${remainingNotes} ${pluralizeRu(remainingNotes, "заметка", "заметки", "заметок")}`
 		: "все заметки";
 ---
 
-<PageLayout meta={{ title: "Главная" }}>
-	<section class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8">
+<PageLayout meta={{ title: "Главная" }} doNotIndex>
+	<section
+		class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8"
+	>
 		<a class="u-url hidden" href="/">Evil Army</a>
 		<img class="u-photo u-logo hidden" src="/icon.svg" alt="Evil Army Logo" />
 		<div>
@@ -94,7 +96,13 @@ const notesLinkText =
 				))
 			}
 		</ul>
-		<a class="action-link mt-4" href="/posts/">{postsLinkText}</a>
+		{
+			showPostsLink && (
+				<a class="action-link mt-4" href="/posts/">
+					{postsLinkText}
+				</a>
+			)
+		}
 	</section>
 	{
 		latestNotes.length > 0 && (

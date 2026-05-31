@@ -1,4 +1,6 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
 import "@/styles/blocks/search.css";
 
 interface Props {
@@ -8,25 +10,24 @@ interface Props {
 const { isCompact = false } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 const bundlePath = `${baseUrl.replace(/\/$/, "")}/pagefind/`;
+
+const hasIndex = fs.existsSync(path.join(process.cwd(), "dist", "pagefind"));
+const showDevWarning = import.meta.env.DEV && !hasIndex;
 ---
 
-<div
-	class="site-search ms-auto"
-	data-compact={isCompact ? "true" : "false"}
-	id="search"
-	transition:persist
->
+<div class="site-search ms-auto" data-compact={isCompact ? "true" : "false"} id="search">
 	<pagefind-config base-url={baseUrl} bundle-path={bundlePath} lang="ru-RU"></pagefind-config>
 	<pagefind-modal-trigger compact hide-shortcut placeholder="Открыть поиск"
 	></pagefind-modal-trigger>
 	{
-		import.meta.env.DEV ? (
+		showDevWarning ? (
 			<pagefind-modal id="site-search-modal">
 				<pagefind-modal-body>
 					<div class="site-search-dev-message">
 						<p>
-							Поиск доступен только в production-сборке. <br />
-							Соберите сайт и запустите preview, чтобы проверить его локально.
+							Индекс поиска не найден.
+							<br />
+							Запустите <code>pnpm build</code> для его сборки.
 						</p>
 					</div>
 				</pagefind-modal-body>
@@ -39,4 +40,12 @@ const bundlePath = `${baseUrl.replace(/\/$/, "")}/pagefind/`;
 
 <script>
 	import "@pagefind/component-ui";
+
+	document.addEventListener("astro:before-swap", () => {
+		const trigger = document.querySelector("pagefind-modal-trigger") as any;
+		if (trigger?.instance) {
+			trigger.instance.components = [];
+			trigger.instance.componentsByType = {};
+		}
+	});
 </script>

@@ -1,6 +1,8 @@
 import fs from "node:fs";
+import type { IncomingMessage, ServerResponse } from "node:http";
+import path from "node:path";
 // Rehype plugins
-import { rehypeHeadingIds } from "@astrojs/markdown-remark";
+import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@tailwindcss/vite";
@@ -77,27 +79,29 @@ export default defineConfig({
 		}),
 	],
 	markdown: {
-		rehypePlugins: [
-			rehypeHeadingIds,
-			[rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
-			[
-				rehypeExternalLinks,
-				{
-					rel: ["noreferrer", "noopener"],
-					target: "_blank",
-				},
+		processor: unified({
+			rehypePlugins: [
+				rehypeHeadingIds,
+				[rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
+				[
+					rehypeExternalLinks,
+					{
+						rel: ["noreferrer", "noopener"],
+						target: "_blank",
+					},
+				],
+				rehypeUnwrapImages,
 			],
-			rehypeUnwrapImages,
-		],
-		remarkPlugins: [remarkReadingTime, remarkDirective, remarkGithubCard, remarkAdmonitions],
-		remarkRehype: {
-			footnoteLabelProperties: {
-				className: [""],
+			remarkPlugins: [remarkReadingTime, remarkDirective, remarkGithubCard, remarkAdmonitions],
+			remarkRehype: {
+				footnoteLabelProperties: {
+					className: [""],
+				},
 			},
-		},
+		}),
 	},
 	vite: {
-		plugins: [tailwind(), rawFonts([".ttf", ".woff"])],
+		plugins: [tailwind(), rawFonts([".ttf", ".woff"]), servePagefindDev()],
 	},
 	env: {
 		schema: {
@@ -107,6 +111,42 @@ export default defineConfig({
 		},
 	},
 });
+
+type NextFunction = (err?: unknown) => void;
+
+interface DevServer {
+	middlewares: {
+		use(handler: (req: IncomingMessage, res: ServerResponse, next: NextFunction) => void): unknown;
+	};
+}
+
+function servePagefindDev() {
+	const CONTENT_TYPES: Record<string, string> = {
+		".js": "application/javascript",
+		".css": "text/css",
+		".json": "application/json",
+		".wasm": "application/wasm",
+	};
+
+	return {
+		name: "serve-pagefind-dev",
+		configureServer(server: DevServer) {
+			server.middlewares.use((req, res, next) => {
+				if (req.url?.startsWith("/pagefind/")) {
+					const filePath = path.join(process.cwd(), "dist", req.url.split("?")[0]!);
+					if (fs.existsSync(filePath) && !fs.statSync(filePath).isDirectory()) {
+						const ext = path.extname(filePath);
+						res.setHeader("Content-Type", CONTENT_TYPES[ext] ?? "application/octet-stream");
+						res.writeHead(200);
+						res.end(fs.readFileSync(filePath));
+						return;
+					}
+				}
+				next();
+			});
+		},
+	};
+}
 
 function rawFonts(ext: string[]) {
 	return {
