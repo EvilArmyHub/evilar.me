@@ -8,6 +8,13 @@ const SOURCE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png"]);
 const AVIF_QUALITY = 70;
 const AVIF_EFFORT = 4;
 
+const IGNORED_FILES = new Set([
+	"lore.jpg",
+	"covid.png",
+	"planet.png",
+	"cute.jpg",
+]);
+
 function isConvertibleImage(filePath: string) {
 	return SOURCE_EXTENSIONS.has(path.extname(filePath).toLowerCase());
 }
@@ -19,6 +26,11 @@ function stageReplacement(sourcePath: string, avifPath: string) {
 
 export async function compressToAvif(filePath: string) {
 	if (!isConvertibleImage(filePath) || !existsSync(filePath)) {
+		return;
+	}
+
+	if (IGNORED_FILES.has(path.basename(filePath).toLowerCase())) {
+		console.log(`Skipping compression for ignored file: ${filePath}`);
 		return;
 	}
 
@@ -43,5 +55,5 @@ const filePaths = process.argv.slice(2);
 if (filePaths.length === 0) {
 	console.log("No staged JPEG or PNG files to optimize.");
 } else {
-	await Promise.all(filePaths.map((filePath) => compressToAvif(filePath)));
+	// await Promise.all(filePaths.map((filePath) => compressToAvif(filePath)));
 }
