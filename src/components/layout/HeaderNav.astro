@@ -1,5 +1,6 @@
 ---
 import { menuLinks } from "@/site.config";
+import ThemeToggle from "@/components/ThemeToggle.astro";
 
 interface Props {
 	isCompact?: boolean;
@@ -32,4 +33,6 @@ const { isCompact = false, menuId } = Astro.props;
 			</>
 		))
 	}
+	<div class="border-t border-text/10 my-1 sm:hidden"></div>
+	<ThemeToggle showText={true} class="block sm:hidden w-full ms-0! sm:ms-0!" />
 </nav>

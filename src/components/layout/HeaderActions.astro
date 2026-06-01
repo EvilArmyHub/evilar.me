@@ -11,7 +11,7 @@ const { isCompact = false, menuId } = Astro.props;
 ---
 
 <Search isCompact={isCompact} />
-<ThemeToggle isCompact={isCompact} />
+<ThemeToggle isCompact={isCompact} class="hidden sm:inline-flex" />
 <mobile-nav-toggle class="inline-flex sm:hidden">
 	<button
 		aria-controls={menuId}

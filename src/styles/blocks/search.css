@@ -162,6 +162,12 @@
 	border: 1px solid var(--pf-border);
 	border-radius: var(--pf-border-radius);
 	box-shadow: none;
+	transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-header .pf-input:hover,
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-modal-header .pf-input:hover {
+	border-color: color-mix(in oklab, var(--pf-border) 70%, var(--color-accent));
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-header .pf-input:focus-visible,
@@ -189,10 +195,19 @@
 	height: 100%;
 	content: "";
 	background-color: var(--color-accent);
+	opacity: 0.6;
 	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
 		center / 60% no-repeat;
 	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'%3E%3C/path%3E%3C/svg%3E")
 		center / 60% no-repeat;
+	transition:
+		opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+		transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:is(*, #\#):is(*, #\#):is(*, #\#) .site-search .pf-input-clear:hover::before {
+	opacity: 1;
+	transform: scale(1.15);
 }
 
 :is(*, #\#):is(*, #\#):is(*, #\#) .site-search pagefind-modal-body,

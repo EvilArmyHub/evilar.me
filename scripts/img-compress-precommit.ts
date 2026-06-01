@@ -8,12 +8,7 @@ const SOURCE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png"]);
 const AVIF_QUALITY = 70;
 const AVIF_EFFORT = 4;
 
-const IGNORED_FILES = new Set([
-	"lore.jpg",
-	"covid.png",
-	"planet.png",
-	"cute.jpg",
-]);
+const IGNORED_FILES = new Set(["lore.jpg", "covid.png", "planet.png", "cute.jpg"]);
 
 function isConvertibleImage(filePath: string) {
 	return SOURCE_EXTENSIONS.has(path.extname(filePath).toLowerCase());

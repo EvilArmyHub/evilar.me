@@ -184,10 +184,13 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 				adjustImageStyle();
 			} else {
 				// Use decode() for reliable dimension access (especially AVIF)
-				img.decode().then(adjustImageStyle).catch(() => {
-					// Fallback to load event if decode fails
-					img.addEventListener("load", adjustImageStyle, { once: true });
-				});
+				img
+					.decode()
+					.then(adjustImageStyle)
+					.catch(() => {
+						// Fallback to load event if decode fails
+						img.addEventListener("load", adjustImageStyle, { once: true });
+					});
 			}
 		});
 	}
@@ -195,4 +198,3 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 	document.addEventListener("astro:page-load", initBlogPost);
 	document.addEventListener("astro:page-load", initProseImages);
 </script>
-
