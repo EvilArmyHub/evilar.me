@@ -20,7 +20,8 @@
 		opacity: 0.75;
 	}
 
-	.prose img {
+	.prose img,
+	.prose video {
 		width: 100%;
 		height: auto;
 		display: block;
@@ -34,7 +35,8 @@
 	}
 
 	@media (min-width: 640px) {
-		.prose img {
+		.prose img,
+		.prose video {
 			width: 66.666667%;
 		}
 	}

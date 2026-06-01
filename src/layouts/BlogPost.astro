@@ -195,6 +195,27 @@ const postUrl = new URL(Astro.url.pathname, siteConfig.url).href;
 		});
 	}
 
+	function initProseVideos() {
+		const proseVideos = document.querySelectorAll(".prose video") as NodeListOf<HTMLVideoElement>;
+		proseVideos.forEach((video) => {
+			const adjustVideoStyle = () => {
+				if (video.videoWidth === 0 || video.videoHeight === 0) return;
+
+				const ratio = video.videoWidth / video.videoHeight;
+				if (ratio >= 1.5) {
+					video.style.width = "100%";
+				}
+			};
+
+			if (video.readyState >= 1) {
+				adjustVideoStyle();
+			} else {
+				video.addEventListener("loadedmetadata", adjustVideoStyle, { once: true });
+			}
+		});
+	}
+
 	document.addEventListener("astro:page-load", initBlogPost);
 	document.addEventListener("astro:page-load", initProseImages);
+	document.addEventListener("astro:page-load", initProseVideos);
 </script>
