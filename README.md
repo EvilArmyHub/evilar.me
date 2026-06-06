@@ -73,6 +73,6 @@ pnpm format
 - Tailwind CSS 4
 - TypeScript
 - Biome
-- Satori and Sharp (social image generation)
+- Sharp (image processing and social image validation)
 
 This project is a fork of [astro-theme-cactus](https://github.com/chrismwilliams/astro-theme-cactus).

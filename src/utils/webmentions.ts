@@ -216,3 +216,17 @@ export async function getWebmentionsForUrl(url: string) {
 		}
 	});
 }
+
+export async function getWebmentionsForUrls(urls: string[]) {
+	const mentions = await Promise.all(urls.map((url) => getWebmentionsForUrl(url)));
+
+	return Array.from(
+		mentions
+			.flat()
+			.reduce(
+				(entries, entry) => entries.set(entry["wm-id"], entry),
+				new Map<number, WebmentionsChildren>(),
+			)
+			.values(),
+	);
+}

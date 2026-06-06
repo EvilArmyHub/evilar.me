@@ -12,7 +12,7 @@
 
 ## Key Directories
 
-- `src/pages/` - Astro routes, RSS feeds, dynamic content pages, and OG image endpoints.
+- `src/pages/` - Astro routes, RSS feeds, and dynamic content pages.
 - `src/content/` - Post, note, and tag content collections.
 - `src/components/` - Reusable UI components.
 - `src/layouts/` - Page and post layouts.
@@ -33,11 +33,12 @@
 ## Routing and Generated Output
 
 - Routes live in `src/pages/`.
-- Post pages are handled by `src/pages/posts/[...slug].astro` and `src/pages/posts/[...page].astro`.
-- Note pages are handled by `src/pages/notes/[...slug].astro` and `src/pages/notes/[...page].astro`.
+- Individual post and note pages are handled by `src/pages/[...slug].astro`.
+- Post and note archives are handled by `src/pages/posts/[...page].astro` and `src/pages/notes/[...page].astro`.
 - Tag pages are handled by `src/pages/tags/[tag]/[...page].astro`.
 - RSS routes live under `src/pages/rss.xml.ts` and `src/pages/notes/rss.xml.ts`.
-- OG image routes live in `src/pages/og-image/`.
+- The default OG image is `public/social-card.png`; posts can override it with `ogImage`.
+- Legacy content redirects and canonical content paths are defined in `src/utils/content-routes.ts`.
 - Do not edit generated output such as `dist`, `.astro`, or `node_modules`.
 
 ## Development Workflow
@@ -54,6 +55,8 @@
 - Content-only or docs-only edits usually need no command.
 - Astro, TypeScript, component, layout, plugin, or schema changes should use `pnpm check`.
 - Routing, config, Pagefind, RSS, OG image, or build pipeline changes should use `pnpm build`.
+- Built OG image metadata and files can be checked separately with `pnpm check:og`.
+- Content route changes should pass `pnpm check:routes`; this also runs before builds and commits.
 - Use `pnpm lint` or `pnpm format` only when linting or formatting is relevant.
 
 ## Don't

@@ -58,9 +58,11 @@ Use functions in `src/data/` to query content collections instead of querying th
 - Homepage: `src/pages/index.astro`
 - Info Page: `src/pages/about.astro`
 - Error Page: `src/pages/404.astro`
-- Articles: `src/pages/posts/[...page].astro` (list), `[...slug].astro` (article), `rss.xml.ts` (feed)
-- Notes: `src/pages/notes/[...page].astro` (list), `[...slug].astro` (note), `rss.xml.ts` (feed)
+- Content pages: `src/pages/[...slug].astro` renders articles and notes at `/<slug>/`
+- Article archive: `src/pages/posts/[...page].astro`; feed: `src/pages/rss.xml.ts`
+- Note archive: `src/pages/notes/[...page].astro`; feed: `src/pages/notes/rss.xml.ts`
 - Tags: `src/pages/tags/index.astro` (all tags), `[tag]/[...page].astro` (tagged articles)
+- Legacy `/posts/<slug>/` and `/notes/<slug>/` redirects are defined in `src/utils/content-routes.ts`.
 
 ## Layouts
 
@@ -104,7 +106,7 @@ Plugins configured in `astro.config.ts`:
 
 - SEO: Managed in `src/components/BaseHead.astro`.
 - RSS Feeds: Built automatically from post and note collections.
-- Social Images: Generated dynamically at the `/og-image` route using Satori and Sharp.
+- Social Images: `public/social-card.png` is the default; articles can override it with the `ogImage` frontmatter field.
 - Webmentions: Integrated using standard headers, automated feed fetching, and layout widgets.
 
 ## Dependency Strategy
@@ -112,7 +114,7 @@ Plugins configured in `astro.config.ts`:
 Dependencies are updated using `pnpm`. Current constraints:
 - Node.js: Requires Node.js 22.12+ (Astro 6 minimum).
 - Styles: cssnano 8 requires declaring `postcss` explicitly as a devDependency.
-- Search & Formatters: Sharp (image generation), Pagefind (static indexer), and Biome (linter and formatter) must match current build target capabilities.
+- Search & Formatters: Sharp (image processing and OG validation), Pagefind (static indexer), and Biome (linter and formatter) must match current build target capabilities.
 
 ## Configuration Variables
 
@@ -151,7 +153,7 @@ Recommended files to read in order:
 4. `src/content.config.ts`
 5. `src/layouts/Base.astro`
 6. `src/pages/index.astro`
-7. `src/pages/posts/[...page].astro` and `[...slug].astro`
+7. `src/pages/[...slug].astro` and the archive routes under `src/pages/posts/` and `src/pages/notes/`
 8. `src/layouts/BlogPost.astro`
 9. `src/components/Search.astro`
 10. `src/styles/global.css`

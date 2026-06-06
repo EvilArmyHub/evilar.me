@@ -1,0 +1,51 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Note from "@/components/note/Note.astro";
+import { getAllNotes } from "@/data/note";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import PostLayout from "@/layouts/BlogPost.astro";
+import { getFormattedDate } from "@/utils/date";
+
+export const getStaticPaths = (async () => {
+	const [posts, notes] = await Promise.all([getAllPosts(), getAllNotes()]);
+
+	return [
+		...posts.map((post) => ({
+			params: { slug: post.id },
+			props: { post },
+		})),
+		...notes.map((note) => ({
+			params: { slug: note.id },
+			props: { note },
+		})),
+	];
+}) satisfies GetStaticPaths;
+
+interface Props {
+	note?: CollectionEntry<"note">;
+	post?: CollectionEntry<"post">;
+}
+
+const { note, post } = Astro.props as Props;
+const PostContent = post ? (await render(post)).Content : null;
+const noteMeta = note
+	? {
+			description: note.data.description || `Заметка от ${getFormattedDate(note.data.publishDate)}`,
+			title: note.data.title,
+		}
+	: null;
+---
+
+{
+	post && PostContent ? (
+		<PostLayout post={post}>
+			<PostContent />
+		</PostLayout>
+	) : note && noteMeta ? (
+		<PageLayout isArticleLayout meta={noteMeta}>
+			<Note as="h1" note={note} />
+		</PageLayout>
+	) : null
+}

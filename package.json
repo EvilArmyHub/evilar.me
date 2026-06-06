@@ -7,14 +7,17 @@
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
+		"prebuild": "pnpm check:routes",
 		"build": "astro build",
-		"postbuild": "pagefind --site dist",
+		"postbuild": "pnpm check:og && pagefind --site dist --root-selector \"[data-pagefind-body]\"",
 		"preview": "astro preview",
 		"lint": "biome lint .",
 		"format": "pnpm run format:code && pnpm run format:imports",
 		"format:code": "biome format . --write && prettier -w \"**/*\" \"!**/*.{md,mdx}\" --ignore-unknown --cache",
 		"format:imports": "biome check --formatter-enabled=false --write",
 		"check": "astro check",
+		"check:og": "node --import tsx scripts/check-social-images.ts",
+		"check:routes": "node --import tsx scripts/check-content-routes.ts",
 		"media:photos": "tsx scripts/process-photos.ts",
 		"prepare": "simple-git-hooks"
 	},
@@ -38,8 +41,6 @@
 		"rehype-external-links": "^3.0.0",
 		"rehype-unwrap-images": "^1.0.0",
 		"remark-directive": "^4.0.0",
-		"satori": "^0.26.0",
-		"satori-html": "^0.3.2",
 		"sharp": "^0.34.5",
 		"unified": "^11.0.5",
 		"unist-util-visit": "^5.1.0"
@@ -78,11 +79,9 @@
 		]
 	},
 	"simple-git-hooks": {
-		"pre-commit": "pnpm exec lint-staged"
+		"pre-commit": "pnpm check:routes && pnpm exec lint-staged"
 	},
 	"lint-staged": {
-		"**/*.{jpg,jpeg,png}": [
-			"pnpm exec tsx scripts/img-compress-precommit.ts"
-		]
+		"**/*.{jpg,jpeg,png}": ["pnpm exec tsx scripts/img-compress-precommit.ts"]
 	}
 }

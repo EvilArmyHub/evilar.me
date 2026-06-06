@@ -21,10 +21,19 @@ import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add adm
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
+import {
+	getAstroLegacyRedirects,
+	legacyContentRoutes,
+} from "./src/utils/content-routes";
+
+const legacyContentPaths = new Set(
+	legacyContentRoutes.map(({ source }) => source.replace(/\/$/, "")),
+);
 
 // https://astro.build/config
 export default defineConfig({
 	site: siteConfig.url,
+	redirects: getAstroLegacyRedirects(),
 	server: {
 		port: 1337,
 	},
@@ -34,7 +43,12 @@ export default defineConfig({
 	integrations: [
 		expressiveCode(expressiveCodeOptions),
 		icon(),
-		sitemap(),
+		sitemap({
+			filter: (page) => {
+				const pathname = new URL(page).pathname.replace(/\/$/, "");
+				return !legacyContentPaths.has(pathname);
+			},
+		}),
 		mdx(),
 		robotsTxt({
 			policy: [

@@ -7,7 +7,6 @@
 @import "./prose.css";
 /* config for tailwindcss-typography plugin */
 @config "../../tailwind.config.ts";
-@source not "../pages/og-image";
 
 @layer base {
 	html {
