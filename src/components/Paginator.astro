@@ -14,7 +14,7 @@ const { nextUrl, prevUrl } = Astro.props;
 		<nav class="mt-8 flex items-center gap-x-4">
 			{prevUrl && (
 				<a
-					class="hover:text-accent me-auto py-2 transition-colors duration-200 ease-out focus-visible:outline-none"
+					class="hover:text-accent me-auto py-2 transition-colors duration-250 ease-out focus-visible:outline-none active:opacity-75"
 					href={prevUrl.url}
 				>
 					{prevUrl.srLabel && <span class="sr-only">{prevUrl.srLabel}</span>}
@@ -23,7 +23,7 @@ const { nextUrl, prevUrl } = Astro.props;
 			)}
 			{nextUrl && (
 				<a
-					class="hover:text-accent ms-auto py-2 transition-colors duration-200 ease-out focus-visible:outline-none"
+					class="hover:text-accent ms-auto py-2 transition-colors duration-250 ease-out focus-visible:outline-none active:opacity-75"
 					href={nextUrl.url}
 				>
 					{nextUrl.srLabel && <span class="sr-only">{nextUrl.srLabel}</span>}

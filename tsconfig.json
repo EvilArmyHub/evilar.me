@@ -2,11 +2,26 @@
 	"extends": "astro/tsconfigs/strictest",
 	"compilerOptions": {
 		"baseUrl": ".",
-		"lib": ["es2022", "dom", "dom.iterable"],
+		"lib": [
+			"es2022",
+			"dom",
+			"dom.iterable"
+		],
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": [
+				"src/*"
+			]
 		}
 	},
-	"include": [".astro/types.d.ts", "**/*"],
-	"exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist", "ea astro6"]
+	"include": [
+		".astro/types.d.ts",
+		"**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"**/node_modules/*",
+		".vscode",
+		"dist",
+		"ea astro6"
+	]
 }

@@ -58,7 +58,7 @@ const cleanTitle = (text: string) => {
 								<a
 									href={`#${heading.slug}`}
 									data-slug={heading.slug}
-									class={`text-text/60 hover:text-accent block overflow-hidden text-[0.82rem] leading-tight text-ellipsis whitespace-nowrap transition-colors ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
+									class={`text-text/60 hover:text-accent block overflow-hidden text-[0.82rem] leading-tight text-ellipsis whitespace-nowrap transition-colors duration-250 ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
 									title={cleanTitle(heading.text)}
 								>
 									{cleanTitle(heading.text)}

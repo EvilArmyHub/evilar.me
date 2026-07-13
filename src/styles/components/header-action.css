@@ -12,8 +12,8 @@
 	color: var(--color-text);
 	cursor: pointer;
 	transition:
-		color 200ms ease-out,
-		transform 200ms ease-out;
+		color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+		transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header-action-btn:is(:hover, :focus-visible) {

@@ -46,7 +46,7 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 		<div class="relative w-full">
 			{!!headings.length && <TOC headings={headings} />}
 			<div
-				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
+				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:before:transition-colors prose-headings:before:duration-250 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
 			>
 				<slot />
 				<div data-pagefind-ignore>
