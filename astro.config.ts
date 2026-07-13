@@ -14,17 +14,14 @@ import webmanifest from "astro-webmanifest";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeUnwrapImages from "rehype-unwrap-images";
-import { rehypeVideos } from "./src/plugins/rehype-videos";
 // Remark plugins
 import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
+import { rehypeVideos } from "./src/plugins/rehype-videos";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
-import {
-	getAstroLegacyRedirects,
-	legacyContentRoutes,
-} from "./src/utils/content-routes";
+import { getAstroLegacyRedirects, legacyContentRoutes } from "./src/utils/content-routes";
 
 const legacyContentPaths = new Set(
 	legacyContentRoutes.map(({ source }) => source.replace(/\/$/, "")),

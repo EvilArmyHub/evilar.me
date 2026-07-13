@@ -82,6 +82,8 @@
 		"pre-commit": "pnpm check:routes && pnpm exec lint-staged"
 	},
 	"lint-staged": {
-		"**/*.{jpg,jpeg,png}": ["pnpm exec tsx scripts/img-compress-precommit.ts"]
+		"**/*.{jpg,jpeg,png}": [
+			"pnpm exec tsx scripts/img-compress-precommit.ts"
+		]
 	}
 }
