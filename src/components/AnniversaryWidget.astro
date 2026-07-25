@@ -1,0 +1,369 @@
+---
+import Button from "@/components/Button.astro";
+---
+
+<section class="anniversary-section">
+	<div
+		class="v2-wrap relative flex h-[400px] w-full items-center justify-center overflow-hidden"
+		id="anniversary-widget"
+	>
+		<canvas id="v2-canvas" class="pointer-events-none absolute inset-0 h-full w-full"></canvas>
+
+		<div class="z-10 flex flex-col items-center justify-center px-4 text-center">
+			<div class="relative flex items-center justify-center">
+				<span
+					class="post-hero-title !w-auto cursor-pointer !text-center text-2xl font-bold tracking-wide transition-all duration-300 select-none hover:scale-105 active:scale-95"
+					id="v2-title"
+				>
+					Нам<br class="sm:hidden" /> ... лет
+				</span>
+				<Button
+					href="https://t.me/+o-QQtDMYJ4VlN2Iy"
+					label="Telegram"
+					name="mingcute:telegram-fill"
+					class="pointer-events-none invisible absolute scale-90 opacity-0 transition-all duration-500"
+					id="v2-button"
+				/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.anniversary-section {
+		margin-top: 2rem;
+		/* Compensates for the footer's large top padding (pt-20) to maintain visual vertical symmetry on the homepage layout. */
+		margin-bottom: -3rem;
+	}
+
+	/* Replicates the exact typography and font-variation settings of blog article titles to maintain visual branding consistency. */
+	#v2-title {
+		font-family: "Roboto Flex", sans-serif;
+		font-style: normal;
+		font-weight: 780;
+		line-height: 110%;
+		text-transform: uppercase;
+		color: var(--color-heading);
+		font-stretch: 120%;
+		font-variation-settings:
+			"GRAD" -200,
+			"XOPQ" 96,
+			"XTRA" 468,
+			"YOPQ" 106,
+			"YTAS" 750,
+			"YTDE" -203,
+			"YTFI" 738,
+			"YTLC" 514,
+			"YTUC" 712,
+			"slnt" 0;
+		font-size: clamp(2.7rem, 8vw, 4.5rem);
+		cursor: pointer;
+	}
+</style>
+
+<script>
+	function initAnniversaryWidget() {
+		const wrap = document.getElementById("anniversary-widget");
+		const canvas = document.getElementById("v2-canvas") as HTMLCanvasElement | null;
+		const titleEl = document.getElementById("v2-title");
+		const buttonEl = document.getElementById("v2-button");
+
+		if (!wrap || !canvas || !titleEl) return;
+
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+
+		/* Computes age dynamically on the client side to guarantee accuracy over time without requiring static site rebuilds. */
+		function getYearsSince(year: number, month: number, day: number) {
+			const startDate = new Date(year, month, day);
+			const today = new Date();
+			let years = today.getFullYear() - startDate.getFullYear();
+			const m = today.getMonth() - startDate.getMonth();
+			if (m < 0 || (m === 0 && today.getDate() < startDate.getDate())) {
+				years--;
+			}
+			return years;
+		}
+
+		function pluralizeYears(years: number) {
+			const lastDigit = years % 10;
+			const lastTwoDigits = years % 100;
+			if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+				return `${years} лет`;
+			}
+			if (lastDigit === 1) {
+				return `${years} год`;
+			}
+			if (lastDigit >= 2 && lastDigit <= 4) {
+				return `${years} года`;
+			}
+			return `${years} лет`;
+		}
+
+		const yearsElapsed = getYearsSince(
+			2018,
+			4,
+			30,
+		); /* May 30, 2018 (JavaScript months are 0-indexed) */
+		titleEl.innerHTML = `Нам<br class="sm:hidden" /> ${pluralizeYears(yearsElapsed)}`;
+
+		/* Canvas renders in raw pixels and cannot directly read CSS custom properties; we resolve variables to computed RGB values via temporary DOM injection. */
+		let textRGB = "rgb(120, 120, 120)";
+		let accentRGB = "rgb(46, 204, 113)";
+
+		function updateThemeColors() {
+			const tempText = document.createElement("div");
+			tempText.style.color = "var(--color-text)";
+			tempText.style.display = "none";
+			document.body.appendChild(tempText);
+			textRGB = getComputedStyle(tempText).color || "rgb(120, 120, 120)";
+			document.body.removeChild(tempText);
+
+			const tempAccent = document.createElement("div");
+			tempAccent.style.color = "var(--color-accent)";
+			tempAccent.style.display = "none";
+			document.body.appendChild(tempAccent);
+			accentRGB = getComputedStyle(tempAccent).color || "rgb(46, 204, 113)";
+			document.body.removeChild(tempAccent);
+		}
+
+		updateThemeColors();
+
+		/* Listens to HTML theme attribute changes to automatically keep canvas colors synchronized in real time when toggling light/dark modes. */
+		const themeObserver = new MutationObserver(() => {
+			updateThemeColors();
+		});
+		themeObserver.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["data-theme"],
+		});
+
+		/* Scales canvas coordinates by devicePixelRatio to prevent text and particle rendering blurriness on Retina/High-DPI displays. */
+		let rect = wrap.getBoundingClientRect();
+		let targetX = rect.width / 2;
+		let targetY = rect.height / 2;
+
+		function resizeCanvas() {
+			if (!canvas || !wrap) return;
+			rect = wrap.getBoundingClientRect();
+			const dpr = window.devicePixelRatio || 1;
+
+			canvas.width = rect.width * dpr;
+			canvas.height = rect.height * dpr;
+
+			if (ctx) {
+				ctx.resetTransform();
+				ctx.scale(dpr, dpr);
+			}
+
+			updateTarget();
+		}
+
+		/* Re-calculates text bounds dynamically to keep target coordinates centered if screen dimensions or responsive layout changes. */
+		function updateTarget() {
+			if (!titleEl || !wrap) return;
+			const titleRect = titleEl.getBoundingClientRect();
+			rect = wrap.getBoundingClientRect();
+			targetX = titleRect.left - rect.left + titleRect.width / 2;
+			targetY = titleRect.top - rect.top + titleRect.height / 2;
+		}
+
+		resizeCanvas();
+		window.addEventListener("resize", resizeCanvas);
+
+		interface Particle {
+			x: number;
+			y: number;
+			vx: number;
+			vy: number;
+			size: number;
+			alpha: number;
+			targetAlpha: number;
+			color: string;
+			isMouseSpawned: boolean;
+			tx: number | undefined;
+			ty: number | undefined;
+		}
+
+		const particles: Particle[] = [];
+		const maxAmbientParticles = 100;
+
+		function spawnAmbientParticle(): Particle {
+			const edge = Math.floor(Math.random() * 4);
+			const padding = 10;
+			let x = 0;
+			let y = 0;
+
+			if (edge === 0) {
+				x = Math.random() * rect.width;
+				y = -padding;
+			} else if (edge === 1) {
+				x = rect.width + padding;
+				y = Math.random() * rect.height;
+			} else if (edge === 2) {
+				x = Math.random() * rect.width;
+				y = rect.height + padding;
+			} else {
+				x = -padding;
+				y = Math.random() * rect.height;
+			}
+
+			return {
+				x,
+				y,
+				vx: (Math.random() - 0.5) * 0.4,
+				vy: (Math.random() - 0.5) * 0.4,
+				size: Math.random() * 1.5 + 0.8,
+				alpha: 0,
+				targetAlpha: Math.random() * 0.4 + 0.2,
+				color: Math.random() > 0.4 ? textRGB : accentRGB,
+				isMouseSpawned: false,
+				tx: undefined,
+				ty: undefined,
+			};
+		}
+
+		let isMouseOver = false;
+		let isMorphing = false;
+		let isMorphed = false;
+
+		wrap.addEventListener("mouseenter", () => {
+			isMouseOver = true;
+			rect = wrap.getBoundingClientRect();
+		});
+
+		wrap.addEventListener("mousemove", () => {
+			if (!isMouseOver) isMouseOver = true;
+		});
+
+		wrap.addEventListener("mouseleave", () => {
+			isMouseOver = false;
+		});
+
+		/* Handles the click interaction on the text to smoothly trigger the particle morphing transition and manifest the button. */
+		titleEl.addEventListener("click", () => {
+			if (isMorphing || isMorphed) return;
+			isMorphing = true;
+
+			titleEl.style.opacity = "0";
+			titleEl.style.transform = "scale(0.85)";
+			titleEl.style.pointerEvents = "none";
+
+			const btnWidth = 140;
+			const btnHeight = 38;
+
+			particles.forEach((p, idx) => {
+				const theta = (idx / particles.length) * 2 * Math.PI;
+				p.tx = targetX + Math.cos(theta) * (btnWidth / 2);
+				p.ty = targetY + Math.sin(theta) * (btnHeight / 2);
+				p.targetAlpha = 0.9;
+			});
+
+			setTimeout(() => {
+				if (!buttonEl) return;
+
+				particles.forEach((p, idx) => {
+					const theta = (idx / particles.length) * 2 * Math.PI;
+					p.vx = Math.cos(theta) * 3.5;
+					p.vy = Math.sin(theta) * 3.5;
+					p.tx = undefined;
+					p.ty = undefined;
+				});
+
+				buttonEl.classList.remove("invisible", "opacity-0", "scale-90", "pointer-events-none");
+				buttonEl.classList.add("opacity-100", "scale-100", "pointer-events-auto");
+
+				isMorphing = false;
+				isMorphed = true;
+			}, 600);
+		});
+
+		let animationFrameId: number;
+
+		function animate() {
+			if (!ctx || !canvas) return;
+
+			ctx.clearRect(0, 0, rect.width, rect.height);
+			updateTarget();
+
+			for (let i = particles.length - 1; i >= 0; i--) {
+				const p = particles[i];
+				if (!p) continue;
+
+				const dx = (p.tx !== undefined ? p.tx : targetX) - p.x;
+				const dy = (p.ty !== undefined ? p.ty : targetY) - p.y;
+				const dist = Math.sqrt(dx * dx + dy * dy);
+
+				if (dist < 20 && p.tx === undefined) {
+					p.alpha -= 0.08;
+					if (p.alpha <= 0) {
+						particles.splice(i, 1);
+						continue;
+					}
+				} else {
+					if (p.alpha < p.targetAlpha) {
+						p.alpha += 0.04;
+					}
+
+					const pull = p.tx !== undefined ? 0.22 : isMouseOver ? 0.12 : 0.035;
+					p.vx += (dx / dist) * pull;
+					p.vy += (dy / dist) * pull;
+
+					if (p.tx === undefined) {
+						p.vx += (Math.random() - 0.5) * 0.05;
+						p.vy += (Math.random() - 0.5) * 0.05;
+					}
+				}
+
+				/* Dampens velocity to prevent particles from orbiting the target center infinitely in a chaotic manner. */
+				p.vx *= 0.96;
+				p.vy *= 0.96;
+
+				p.x += p.vx;
+				p.y += p.vy;
+
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+
+				let drawColor = isMouseOver ? accentRGB : p.color;
+				/* Handles browser-specific computed style resolutions to safely inject alpha values into color strings. */
+				if (drawColor.startsWith("rgb")) {
+					drawColor = drawColor.replace("rgb", "rgba").replace(")", `, ${p.alpha})`);
+				}
+
+				ctx.fillStyle = drawColor;
+
+				if (isMouseOver) {
+					ctx.shadowBlur = 4;
+					ctx.shadowColor = accentRGB;
+				} else {
+					ctx.shadowBlur = 0;
+				}
+
+				ctx.fill();
+			}
+
+			const ambientCount = particles.filter((p) => !p.isMouseSpawned).length;
+			if (ambientCount < maxAmbientParticles) {
+				particles.push(spawnAmbientParticle());
+			}
+
+			animationFrameId = requestAnimationFrame(animate);
+		}
+
+		animate();
+
+		/* Cancels the animation frame loop and disconnects listeners to prevent memory leaks during client-side router navigation. */
+		function cleanup() {
+			cancelAnimationFrame(animationFrameId);
+			window.removeEventListener("resize", resizeCanvas);
+			themeObserver.disconnect();
+			document.removeEventListener("astro:after-swap", cleanup);
+		}
+
+		document.addEventListener("astro:after-swap", cleanup, { once: true });
+	}
+
+	/* Hooks into Astro's router lifecycle to ensure the script initializes correctly on both direct load and client-side page transitions. */
+	document.addEventListener("astro:page-load", initAnniversaryWidget);
+</script>

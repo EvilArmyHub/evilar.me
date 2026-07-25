@@ -1,0 +1,96 @@
+---
+import {
+	DARK_MODE_MEDIA_QUERY,
+	THEME_APPLIED_EVENT,
+	THEME_CHANGE_EVENT,
+	THEME_STORAGE_KEY,
+} from "@/utils/theme";
+---
+
+<script
+	define:vars={{
+		DARK_MODE_MEDIA_QUERY,
+		THEME_APPLIED_EVENT,
+		THEME_CHANGE_EVENT,
+		THEME_STORAGE_KEY,
+	}}
+	is:inline
+>
+	const darkModePreference = window.matchMedia(DARK_MODE_MEDIA_QUERY);
+
+	function isThemePreference(value) {
+		return value === "light" || value === "dark";
+	}
+
+	function getStoredThemePreference() {
+		try {
+			const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+			return isThemePreference(storedTheme) ? storedTheme : null;
+		} catch {
+			return null;
+		}
+	}
+
+	function getResolvedTheme() {
+		return getStoredThemePreference() ?? "dark";
+	}
+
+	function applyTheme(theme) {
+		if (!isThemePreference(theme)) {
+			return;
+		}
+
+		const root = document.documentElement;
+		root.dataset.theme = theme;
+		root.style.colorScheme = theme;
+		document.dispatchEvent(new CustomEvent(THEME_APPLIED_EVENT, { detail: { theme } }));
+	}
+
+	function persistTheme(theme) {
+		try {
+			if (isThemePreference(theme)) {
+				localStorage.setItem(THEME_STORAGE_KEY, theme);
+			} else {
+				localStorage.removeItem(THEME_STORAGE_KEY);
+			}
+		} catch {
+			// Storage access can fail in private browsing modes.
+		}
+	}
+
+	function syncTheme() {
+		applyTheme(getResolvedTheme());
+	}
+
+	syncTheme();
+
+	window.addEventListener("pageshow", (event) => {
+		if (event.persisted) {
+			syncTheme();
+		}
+	});
+	document.addEventListener("astro:after-swap", syncTheme);
+	document.addEventListener(THEME_CHANGE_EVENT, (event) => {
+		const nextTheme = event.detail?.theme;
+		if (!isThemePreference(nextTheme)) {
+			return;
+		}
+
+		persistTheme(event.detail?.persist === false ? null : nextTheme);
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				applyTheme(nextTheme);
+			});
+		} else {
+			applyTheme(nextTheme);
+		}
+	});
+
+	darkModePreference.addEventListener("change", () => {
+		if (getStoredThemePreference() !== null) {
+			return;
+		}
+
+		syncTheme();
+	});
+</script>

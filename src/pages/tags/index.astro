@@ -1,0 +1,45 @@
+---
+import { getAllPosts, getUniqueTagsWithCount } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+const allPosts = await getAllPosts();
+const allTags = getUniqueTagsWithCount(allPosts);
+
+function getMaterialsLabel(count: number) {
+	if (count % 10 === 1 && count % 100 !== 11) return "материал";
+	if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 12 || count % 100 > 14)) {
+		return "материала";
+	}
+
+	return "материалов";
+}
+
+const meta = {
+	description: "Все темы, о которых есть материалы на сайте",
+	title: "Все теги",
+};
+---
+
+<PageLayout meta={meta} doNotIndex>
+	<h1 class="page-title mb-6">Теги</h1>
+	<ul class="space-y-4">
+		{
+			allTags.map(([tag, val]) => (
+				<li>
+					<a
+						class="group bg-text/5 text-link hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 flex items-center gap-x-2 rounded-md px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
+						href={`/tags/${tag}/`}
+						title={`Открыть материалы с тегом: ${tag}`}
+					>
+						<span class="group-hover:text-link-hover group-focus-visible:text-link-hover transition-colors duration-200 ease-out">
+							&#35;{tag}
+						</span>
+						<span class="text-text/70 inline-block">
+							{val} {getMaterialsLabel(val)}
+						</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</PageLayout>

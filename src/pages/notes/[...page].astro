@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import { Icon } from "astro-icon/components";
+import Note from "@/components/note/Note.astro";
+import { getAllNotes, getSortedNotes } from "@/data/note";
+import PageLayout from "@/layouts/Base.astro";
+
+export const getStaticPaths = (async () => {
+	const allNotes = await getAllNotes();
+	return [
+		{
+			params: { page: undefined },
+			props: { notes: getSortedNotes(allNotes) },
+		},
+	];
+}) satisfies GetStaticPaths;
+
+interface Props {
+	notes: CollectionEntry<"note">[];
+}
+
+const { notes } = Astro.props;
+
+const meta = {
+	description: "Короткие заметки и быстрые мысли",
+	title: "Заметки",
+};
+---
+
+<PageLayout meta={meta} doNotIndex>
+	<section>
+		<h1 class="page-title mb-6 flex items-center gap-3">
+			Заметки <a class="text-accent" href="/notes/rss.xml" target="_blank">
+				<span class="sr-only">RSS-лента</span>
+				<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+			</a>
+		</h1>
+		<ul class="space-y-4 text-start">
+			{
+				notes.map((note) => (
+					<li class="">
+						<Note note={note} as="h2" isPreview />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</PageLayout>

@@ -1,0 +1,491 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+	headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter headings to h2 and h3
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+// Helper to clean heading text up to the ellipsis (literal "..." or Unicode "…")
+const cleanTitle = (text: string) => {
+	const ellipsisIndex = text.indexOf("...");
+	if (ellipsisIndex !== -1) {
+		return text.slice(0, ellipsisIndex).trim();
+	}
+	const singleEllipsisIndex = text.indexOf("…");
+	if (singleEllipsisIndex !== -1) {
+		return text.slice(0, singleEllipsisIndex).trim();
+	}
+	return text;
+};
+---
+
+{
+	filteredHeadings.length > 1 && (
+		<scroll-toc
+			class="scroll-toc-container group"
+			data-headings={JSON.stringify(filteredHeadings)}
+			data-pagefind-ignore
+		>
+			{/* Desktop Left-aligned Floating ToC */}
+			<aside class="scroll-toc-sidebar" aria-label="Содержание">
+				<div
+					class="scroll-toc-hint bg-bg border-text/10 text-text/50 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:-translate-x-2 group-hover:opacity-0"
+					aria-hidden="true"
+				>
+					<svg
+						class="h-4 w-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						viewBox="0 0 24 24"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				</div>
+
+				<div class="scroll-toc-content scrollbar-hide pointer-events-none flex-1 -translate-x-2 overflow-y-auto opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100">
+					<h3 class="text-text mb-4 pl-[15px] text-sm font-semibold">Содержание</h3>
+
+					<ul class="border-text/10 relative border-l-2 pl-3">
+						{filteredHeadings.map((heading) => (
+							<li class="relative mb-3 last:mb-0">
+								<div class="toc-dot bg-text/30 absolute top-[7px] -left-[19px] h-[5px] w-[5px] rounded-full transition-all duration-300" />
+								<a
+									href={`#${heading.slug}`}
+									data-slug={heading.slug}
+									class={`text-text/60 hover:text-accent block overflow-hidden text-[0.82rem] leading-tight text-ellipsis whitespace-nowrap transition-colors duration-250 ${heading.depth === 3 ? "pl-2 text-[0.76rem]" : ""}`}
+									title={cleanTitle(heading.text)}
+								>
+									{cleanTitle(heading.text)}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</aside>
+
+			{/* Mobile Floating Action Button (Matches existing theme exactly) */}
+			<button
+				class="floating-action-btn floating-action-btn--scroll fixed start-4 bottom-8 z-[90] h-10 w-10 sm:start-8 sm:h-12 sm:w-12 lg:hidden"
+				data-show="false"
+				id="open-toc-btn"
+				type="button"
+				title="Открыть оглавление"
+			>
+				<span class="sr-only">Table of contents</span>
+				<svg
+					aria-hidden="true"
+					class="h-5 w-5 shrink-0"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</button>
+
+			{/* Mobile Bottom Sheet Drawer */}
+			<div
+				id="mobile-toc-backdrop"
+				class="mobile-toc-backdrop pointer-events-none fixed inset-0 z-[99] bg-black/40 opacity-0 backdrop-blur-xs transition-opacity duration-300"
+			/>
+			<div
+				id="mobile-toc-sheet"
+				class="mobile-toc-sheet bg-bg border-text/10 pb-safe fixed right-0 bottom-0 left-0 z-[100] flex max-h-[60vh] translate-y-full flex-col rounded-t-2xl border-t shadow-2xl transition-transform duration-350 ease-[cubic-bezier(0.32,0.72,0,1)]"
+			>
+				<div class="mobile-toc-sheet-header border-text/10 flex items-center justify-between border-b p-4">
+					<div class="mobile-toc-sheet-title text-text ps-3 text-sm font-semibold">Содержание</div>
+					<button
+						id="mobile-toc-close"
+						class="mobile-toc-sheet-close bg-text/5 text-text/60 hover:bg-text/10 hover:text-text focus-visible:ring-accent flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-90"
+						aria-label="Закрыть"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<line x1="18" y1="6" x2="6" y2="18" />
+							<line x1="6" y1="6" x2="18" y2="18" />
+						</svg>
+					</button>
+				</div>
+				<div class="mobile-toc-sheet-list scrollbar-hide flex-1 overflow-y-auto p-4">
+					{filteredHeadings.map((heading) => (
+						<button
+							class={`mobile-toc-sheet-item text-text/60 hover:text-text hover:bg-text/5 focus-visible:bg-text/5 block w-full cursor-pointer rounded-lg border-none bg-transparent px-3 py-2.5 text-left text-[0.9rem] transition-colors duration-200 focus-visible:outline-none ${heading.depth === 3 ? "pl-6 text-[0.85rem]" : ""}`}
+							data-slug={heading.slug}
+						>
+							{cleanTitle(heading.text)}
+						</button>
+					))}
+				</div>
+			</div>
+		</scroll-toc>
+	)
+}
+
+<script>
+	class ScrollToc extends HTMLElement {
+		private links: NodeListOf<HTMLAnchorElement> | null = null;
+		private dots: NodeListOf<HTMLElement> | null = null;
+		private mobileItems: NodeListOf<HTMLButtonElement> | null = null;
+		private headingsCache: { slug: string; target: HTMLElement | null; offsetTop: number }[] = [];
+		private activeIndex = -1;
+		private scrollWrapper: HTMLElement | null = null;
+		private heroObserver: IntersectionObserver | null = null;
+		private sidebar: HTMLElement | null = null;
+
+		private scrollHandler!: () => void;
+		private resizeHandler!: () => void;
+		private mouseMoveHandler!: (e: MouseEvent) => void;
+		private onScroll!: () => void;
+		private setActiveLink!: (index: number) => void;
+
+		connectedCallback() {
+			this.links = this.querySelectorAll("a[data-slug]");
+			this.dots = this.querySelectorAll(".toc-dot");
+			this.mobileItems = this.querySelectorAll(".mobile-toc-sheet-item");
+			this.scrollWrapper = this.querySelector(".scroll-toc-content");
+			this.sidebar = this.querySelector(".scroll-toc-sidebar");
+
+			let isNavigating = false;
+
+			// Helper to highlight a given index and dim others
+			this.setActiveLink = (newActiveIndex: number) => {
+				if (!this.links || !this.dots || !this.mobileItems) return;
+				if (newActiveIndex === this.activeIndex || newActiveIndex === -1) return;
+
+				if (this.activeIndex !== -1) {
+					const prevLink = this.links[this.activeIndex];
+					const prevDot = this.dots[this.activeIndex];
+					const prevMobileItem = this.mobileItems[this.activeIndex];
+
+					if (prevLink) {
+						prevLink.classList.remove("text-accent", "font-medium");
+						prevLink.classList.add("text-text/60");
+					}
+					if (prevDot) {
+						prevDot.classList.remove("bg-accent", "scale-150");
+						prevDot.classList.add("bg-text/30");
+					}
+					if (prevMobileItem) {
+						prevMobileItem.classList.remove("text-accent", "bg-accent/10", "font-medium");
+						prevMobileItem.classList.add("text-text/60");
+					}
+				}
+
+				this.activeIndex = newActiveIndex;
+
+				const activeLink = this.links[this.activeIndex];
+				const activeDot = this.dots[this.activeIndex];
+				const activeMobileItem = this.mobileItems[this.activeIndex];
+
+				if (activeLink) {
+					activeLink.classList.add("text-accent", "font-medium");
+					activeLink.classList.remove("text-text/60");
+				}
+				if (activeDot) {
+					activeDot.classList.add("bg-accent", "scale-150");
+					activeDot.classList.remove("bg-text/30");
+				}
+				if (activeMobileItem) {
+					activeMobileItem.classList.add("text-accent", "bg-accent/10", "font-medium");
+					activeMobileItem.classList.remove("text-text/60");
+				}
+
+				// Auto-scroll sidebar to keep active heading centered
+				if (this.scrollWrapper && activeLink) {
+					const wrapperCenter = this.scrollWrapper.clientHeight / 2;
+					const linkTop = activeLink.offsetTop;
+					this.scrollWrapper.scrollTo({
+						top: Math.max(0, linkTop - wrapperCenter),
+						behavior: "smooth",
+					});
+				}
+			};
+
+			// Dynamic left positioning and width calculation for pixel-perfect zoom/scale support
+			const updateSidebarWidth = () => {
+				if (!this.sidebar) return;
+
+				const isDesktop = window.innerWidth >= 1024;
+				if (!isDesktop) {
+					this.sidebar.style.display = "";
+					this.sidebar.style.left = "";
+					this.sidebar.style.width = "";
+					return;
+				}
+
+				const articleEl = document.querySelector("article");
+				if (!articleEl) return;
+
+				const rect = articleEl.getBoundingClientRect();
+				const articleLeft = rect.left;
+
+				const isXl = window.innerWidth >= 1280;
+				const leftOffset = isXl ? 28 : 18;
+				// Accounts for -ms-6 (24px negative margin) on prose headings markers + safety gap
+				const gap = isXl ? 40 : 32;
+
+				const dynamicWidth = articleLeft - leftOffset - gap;
+
+				const minWidth = 180;
+				const maxWidth = 400;
+
+				if (dynamicWidth < minWidth) {
+					this.sidebar.style.display = "none";
+				} else {
+					const clampedWidth = Math.min(maxWidth, dynamicWidth);
+					this.sidebar.style.display = "flex";
+					this.sidebar.style.left = `${leftOffset}px`;
+					this.sidebar.style.width = `${clampedWidth}px`;
+				}
+			};
+
+			// Cache offsetTop positions for high performance scrolling (walking parent chain)
+			const updateHeadingsCache = () => {
+				if (!this.links) return;
+				this.headingsCache = Array.from(this.links).map((link) => {
+					const slug = link.getAttribute("data-slug") || "";
+					const target = document.getElementById(slug);
+
+					let absoluteTop = 0;
+					if (target) {
+						let current: HTMLElement | null = target;
+						while (current) {
+							absoluteTop += current.offsetTop;
+							current = current.offsetParent as HTMLElement | null;
+						}
+					}
+
+					return {
+						slug,
+						target,
+						offsetTop: absoluteTop,
+					};
+				});
+				this.onScroll();
+			};
+
+			this.onScroll = () => {
+				if (isNavigating) return;
+				if (!this.headingsCache.length || !this.links || !this.dots || !this.mobileItems) return;
+
+				const scrollY = window.scrollY;
+				const threshold = scrollY + 45;
+
+				let newActiveIndex = -1;
+				for (let i = 0; i < this.headingsCache.length; i++) {
+					const item = this.headingsCache[i];
+					if (item && item.target && item.offsetTop <= threshold) {
+						newActiveIndex = i;
+					}
+				}
+
+				if (newActiveIndex !== -1) {
+					this.setActiveLink(newActiveIndex);
+				}
+			};
+
+			// Add click navigation
+			const handleNavigation = (slug: string) => {
+				const el = document.getElementById(slug);
+				if (el) {
+					isNavigating = true;
+					const y = el.getBoundingClientRect().top + window.scrollY - 40;
+					window.scrollTo({ top: y, behavior: "smooth" });
+
+					// Immediately highlight target item
+					const targetIndex = Array.from(this.links || []).findIndex(
+						(link) => link.getAttribute("data-slug") === slug,
+					);
+					if (targetIndex !== -1) {
+						this.setActiveLink(targetIndex);
+					}
+
+					// Release lock after smooth scroll settles
+					setTimeout(() => {
+						isNavigating = false;
+					}, 800);
+				}
+			};
+
+			if (this.links) {
+				this.links.forEach((link) => {
+					link.addEventListener("click", (e) => {
+						e.preventDefault();
+						const slug = link.getAttribute("data-slug");
+						if (slug) handleNavigation(slug);
+					});
+				});
+			}
+
+			// Setup event handlers with passive listeners for max fps
+			this.scrollHandler = this.onScroll.bind(this);
+			this.resizeHandler = () => {
+				updateHeadingsCache();
+				updateSidebarWidth();
+			};
+
+			setTimeout(() => {
+				updateHeadingsCache();
+				updateSidebarWidth();
+			}, 300);
+
+			window.addEventListener("scroll", this.scrollHandler, { passive: true });
+			window.addEventListener("resize", this.resizeHandler, { passive: true });
+
+			// Reveal desktop ToC when mouse is near left edge
+			const LEFT_REVEAL_ZONE_PX = 240;
+			this.mouseMoveHandler = (e: MouseEvent) => {
+				if (e.clientX <= LEFT_REVEAL_ZONE_PX) {
+					this.classList.add("is-awake");
+				} else if (!this.matches(":hover")) {
+					this.classList.remove("is-awake");
+				}
+			};
+			window.addEventListener("mousemove", this.mouseMoveHandler, { passive: true });
+
+			// Scroll-triggered floating button observer
+			const hero = document.getElementById("blog-hero");
+			const openTocBtn = this.querySelector("#open-toc-btn");
+			if (hero && openTocBtn) {
+				this.heroObserver = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						openTocBtn.setAttribute("data-show", (!entry.isIntersecting).toString());
+					});
+				});
+				this.heroObserver.observe(hero);
+			}
+
+			// Mobile Sheet Drawer Actions
+			const mobileSheet = this.querySelector("#mobile-toc-sheet");
+			const backdrop = this.querySelector("#mobile-toc-backdrop");
+			const closeBtn = this.querySelector("#mobile-toc-close");
+
+			const openMobileSheet = () => {
+				if (mobileSheet && backdrop) {
+					mobileSheet.classList.add("open");
+					mobileSheet.classList.remove("translate-y-full");
+					mobileSheet.classList.add("translate-y-0");
+
+					backdrop.classList.add("open");
+					backdrop.classList.remove("opacity-0", "pointer-events-none");
+					backdrop.classList.add("opacity-100", "pointer-events-auto");
+
+					document.body.style.overflow = "hidden";
+				}
+			};
+
+			const closeMobileSheet = () => {
+				if (mobileSheet && backdrop) {
+					mobileSheet.classList.remove("open");
+					mobileSheet.classList.add("translate-y-full");
+					mobileSheet.classList.remove("translate-y-0");
+
+					backdrop.classList.remove("open");
+					backdrop.classList.add("opacity-0", "pointer-events-none");
+					backdrop.classList.remove("opacity-100", "pointer-events-auto");
+
+					document.body.style.overflow = "";
+				}
+			};
+
+			if (openTocBtn) openTocBtn.addEventListener("click", openMobileSheet);
+			if (backdrop) backdrop.addEventListener("click", closeMobileSheet);
+			if (closeBtn) closeBtn.addEventListener("click", closeMobileSheet);
+
+			if (this.mobileItems) {
+				this.mobileItems.forEach((item) => {
+					item.addEventListener("click", () => {
+						const slug = item.getAttribute("data-slug");
+						if (slug) {
+							closeMobileSheet();
+							setTimeout(() => {
+								handleNavigation(slug);
+							}, 350);
+						}
+					});
+				});
+			}
+		}
+
+		disconnectedCallback() {
+			window.removeEventListener("scroll", this.scrollHandler);
+			window.removeEventListener("resize", this.resizeHandler);
+			window.removeEventListener("mousemove", this.mouseMoveHandler);
+			if (this.heroObserver) {
+				this.heroObserver.disconnect();
+			}
+			document.body.style.overflow = "";
+		}
+	}
+
+	customElements.define("scroll-toc", ScrollToc);
+</script>
+
+<style>
+	/* Desktop fixed layout base styles (dynamic coordinates are injected in JS) */
+	.scroll-toc-sidebar {
+		position: fixed;
+		top: 7rem;
+		bottom: 5rem;
+		z-index: 50;
+		display: none;
+		flex-direction: column;
+		pointer-events: none;
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s ease;
+	}
+
+	/* Hide scrollbar but allow functional scrolling */
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	/* Awake triggers for hover / proximity */
+	.scroll-toc-container.is-awake .scroll-toc-hint {
+		opacity: 0;
+		transform: translateX(-8px);
+		pointer-events: none;
+	}
+	.scroll-toc-container.is-awake .scroll-toc-content {
+		opacity: 1;
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	/* Mobile sheet styles and transition classes */
+	.mobile-toc-backdrop.open {
+		opacity: 1 !important;
+		pointer-events: auto !important;
+	}
+
+	.mobile-toc-sheet.open {
+		transform: translateY(0) !important;
+	}
+
+	/* Safe area layout for new iOS devices */
+	.pb-safe {
+		padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+	}
+</style>

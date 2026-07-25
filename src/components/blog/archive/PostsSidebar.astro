@@ -1,0 +1,31 @@
+---
+interface Props {
+	tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+<aside>
+	<h2 class="page-title mb-4 text-lg">Теги</h2>
+	<ul class="flex flex-wrap gap-2">
+		{
+			tags.map((tag) => (
+				<li>
+					<a
+						class="inline-flex items-center rounded-full bg-zinc-200 px-2.5 py-0.5 text-xs font-medium text-zinc-700 transition-all duration-200 ease-out hover:bg-zinc-300 hover:text-black focus-visible:outline-none active:scale-95 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white"
+						href={`/tags/${tag}/`}
+					>
+						<span class="sr-only">Открыть все статьи с этим тегом</span>#{tag}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+	<span class="mt-4 block">
+		<a class="action-link" href="/tags/">
+			все теги
+			<span class="sr-only">статей</span>
+		</a>
+	</span>
+</aside>

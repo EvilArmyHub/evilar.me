@@ -1,0 +1,47 @@
+@utility prose {
+	--tw-prose-body: var(--color-text);
+	--tw-prose-bold: var(--color-text);
+	--tw-prose-bullets: var(--color-text);
+	--tw-prose-code: var(--color-text);
+	--tw-prose-headings: var(--color-heading);
+	--tw-prose-hr: 0.5px dashed #666;
+	--tw-prose-links: var(--color-text);
+	--tw-prose-quotes: var(--color-quote);
+	--tw-prose-th-borders: #666;
+}
+
+@layer utilities {
+	.prose a {
+		transition:
+			color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	.prose a:active {
+		opacity: 0.75;
+	}
+
+	.prose img,
+	.prose video {
+		width: 100%;
+		height: auto;
+		display: block;
+		margin-left: 0;
+		margin-right: auto;
+		border-radius: 10px;
+	}
+
+	.prose blockquote {
+		border-radius: 10px;
+	}
+
+	@media (min-width: 640px) {
+		.prose img,
+		.prose video {
+			width: 66.666667%;
+		}
+	}
+
+	.prose img.wide {
+		width: 100%;
+	}
+}

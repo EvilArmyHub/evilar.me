@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from "astro:content";
+import PostPreview from "@/components/blog/PostPreview.astro";
+
+interface Props {
+	year: string;
+	posts: CollectionEntry<"post">[];
+}
+
+const { year, posts } = Astro.props;
+---
+
+<section class="mb-10">
+	<h2 id={`year-${year}`} class="page-title mb-3 text-lg">
+		<span class="sr-only">Статьи за</span>
+		{year}
+	</h2>
+	<ul class="space-y-1 text-start">
+		{
+			posts.map((post) => (
+				<li>
+					<PostPreview post={post} />
+				</li>
+			))
+		}
+	</ul>
+</section>

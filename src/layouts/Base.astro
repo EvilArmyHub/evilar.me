@@ -1,0 +1,73 @@
+---
+import { ClientRouter } from "astro:transitions";
+import BaseHead from "@/components/BaseHead.astro";
+import Footer from "@/components/layout/Footer.astro";
+import Header from "@/components/layout/Header.astro";
+import SkipLink from "@/components/SkipLink.astro";
+import ThemeProvider from "@/components/ThemeProvider.astro";
+import { siteConfig } from "@/site.config";
+import type { SiteMeta } from "@/types";
+
+interface Props {
+	meta: SiteMeta;
+	isArticleLayout?: boolean;
+	doNotIndex?: boolean;
+}
+
+const {
+	meta: { articleDate, description = siteConfig.description, ogImage, title, author },
+	isArticleLayout = false,
+	doNotIndex = false,
+} = Astro.props;
+---
+
+<html
+	class="scroll-smooth"
+	lang={siteConfig.lang}
+	{...doNotIndex ? { "data-pagefind-ignore": "all" } : {}}
+>
+	<head>
+		<ThemeProvider />
+		<BaseHead
+			articleDate={articleDate}
+			description={description}
+			ogImage={ogImage}
+			title={title}
+			author={author}
+		/>
+		<ClientRouter />
+	</head>
+	<body
+		class:list={[
+			"bg-bg text-text mx-auto flex min-h-screen max-w-3xl flex-col px-4 font-sans text-base font-normal antialiased sm:px-8",
+			isArticleLayout ? "pt-6 sm:pt-5" : "pt-6 sm:pt-8",
+		]}
+	>
+		<SkipLink />
+		<Header isCompact={isArticleLayout} />
+		<main id="main">
+			<slot />
+		</main>
+		<Footer />
+		<script is:inline type="speculationrules">
+			{
+				"prefetch": [
+					{
+						"where": {
+							"href_matches": "/*"
+						},
+						"eagerness": "immediate"
+					}
+				],
+				"prerender": [
+					{
+						"where": {
+							"href_matches": "/*"
+						},
+						"eagerness": "moderate"
+					}
+				]
+			}
+		</script>
+	</body>
+</html>

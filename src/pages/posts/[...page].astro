@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
+import { Icon } from "astro-icon/components";
+import PostsSidebar from "@/components/blog/archive/PostsSidebar.astro";
+import PostsYearGroup from "@/components/blog/archive/PostsYearGroup.astro";
+import Pagination from "@/components/Paginator.astro";
+import { getAllPosts, getSortedPosts, getUniqueTags, groupPostsByYear } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { getPaginationLinks } from "@/utils/pagination";
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const MAX_POSTS_PER_PAGE = 10;
+	const MAX_TAGS = 7;
+	const allPosts = await getAllPosts();
+	const allPostsByDate = getSortedPosts(allPosts);
+	const uniqueTags = getUniqueTags(allPosts).slice(0, MAX_TAGS);
+	return paginate(allPostsByDate, {
+		pageSize: MAX_POSTS_PER_PAGE,
+		props: { uniqueTags },
+	});
+}) satisfies GetStaticPaths;
+
+interface Props {
+	page: Page<CollectionEntry<"post">>;
+	uniqueTags: string[];
+}
+
+const { page, uniqueTags } = Astro.props;
+
+const meta = {
+	description: "Подборка статей и тем, которые мне интересны",
+	title: "Статьи",
+};
+
+const paginationProps = getPaginationLinks(page.url, {
+	next: "Следующая страница →",
+	prev: "← Предыдущая страница",
+});
+
+const groupedByYear = groupPostsByYear(page.data);
+const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
+---
+
+<PageLayout meta={meta} doNotIndex>
+	<div class="mb-6 flex items-center gap-3">
+		<h1 class="page-title">Статьи</h1>
+		<a class="text-accent" href="/rss.xml" target="_blank">
+			<span class="sr-only">RSS-лента</span>
+			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+		</a>
+	</div>
+	<div class="grid sm:grid-cols-[3fr_1fr] sm:gap-x-8 sm:gap-y-16">
+		<div>
+			{
+				descYearKeys.map((yearKey) => (
+					<PostsYearGroup posts={groupedByYear[yearKey] ?? []} year={yearKey} />
+				))
+			}
+			<Pagination {...paginationProps} />
+		</div>
+		{!!uniqueTags.length && <PostsSidebar tags={uniqueTags} />}
+	</div>
+</PageLayout>
