@@ -1,6 +1,6 @@
 ---
 title: "Представляем HuEAsos 215M"
-description: "Анонс самой мощной языковой модели в мире."
+description: "Анонс самой мощной языковой модели в мире"
 publishDate: "2026-07-24"
 tags: ["LLM", "announcement"]
 ogImage: "/flying.png"

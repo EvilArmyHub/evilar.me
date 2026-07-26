@@ -2,14 +2,14 @@ import type { Root } from "hast";
 import type { Plugin } from "unified";
 
 /**
- * Custom Rehype plugin that transforms markdown images referencing .mp4 videos
- * (e.g. ![Alt Text](/video.mp4)) into proper HTML <video> elements.
+ * Custom Rehype plugin that transforms markdown images referencing .webm videos
+ * (e.g. ![Alt Text](/video.webm)) into proper HTML <video> elements.
  */
 export const rehypeVideos: Plugin<[], Root> = () => (tree) => {
 	function visit(node: any) {
 		if (node.type === "element" && node.tagName === "img") {
 			const src = node.properties?.src;
-			if (typeof src === "string" && src.endsWith(".mp4")) {
+			if (typeof src === "string" && src.endsWith(".webm")) {
 				node.tagName = "video";
 				node.properties = {
 					...node.properties,
@@ -18,6 +18,7 @@ export const rehypeVideos: Plugin<[], Root> = () => (tree) => {
 					autoplay: true,
 					loop: true,
 					muted: true,
+					preload: "metadata",
 					playsinline: true,
 					playsInline: true,
 				};
