@@ -17,6 +17,7 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
 import { rehypeVideos } from "./src/plugins/rehype-videos";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
+import { remarkBenchmarks } from "./src/plugins/remark-benchmarks";
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkImageAttributes } from "./src/plugins/remark-image-attributes";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time";
@@ -77,6 +78,7 @@ export default defineConfig({
 				remarkDirective,
 				remarkGithubCard,
 				remarkAdmonitions,
+				remarkBenchmarks,
 				remarkImageAttributes,
 			],
 			remarkRehype: {

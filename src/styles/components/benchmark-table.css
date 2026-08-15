@@ -1,0 +1,244 @@
+@layer components {
+	.benchmark {
+		--benchmark-border: color-mix(in oklab, var(--color-text) 18%, transparent);
+		--benchmark-muted: color-mix(in oklab, var(--color-text) 64%, transparent);
+		--benchmark-surface: color-mix(in oklab, var(--color-text) 4%, var(--color-bg));
+		--benchmark-selected-bg: color-mix(in oklab, var(--color-accent) 9%, var(--color-bg));
+		--benchmark-selected-border: color-mix(in oklab, var(--color-accent) 72%, var(--color-text));
+		position: relative;
+		width: 100%;
+		margin-block: 2.25rem;
+	}
+
+	.benchmark-caption {
+		margin-bottom: 0.65rem;
+		color: var(--color-heading);
+		font-size: 0.8rem;
+		font-weight: 650;
+	}
+
+	.benchmark-scroll {
+		overflow-x: auto;
+		overflow-y: hidden;
+		border-radius: 0.5rem;
+		background: var(--benchmark-surface);
+		overscroll-behavior-inline: contain;
+		scrollbar-color: color-mix(in oklab, var(--color-accent) 55%, transparent) transparent;
+		scrollbar-width: thin;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.benchmark-scroll:focus-visible {
+		border-radius: 0.7rem;
+		outline: 2px solid color-mix(in oklab, var(--color-accent) 65%, transparent);
+		outline-offset: 4px;
+	}
+
+	.benchmark-scroll::-webkit-scrollbar {
+		height: 0.35rem;
+	}
+
+	.benchmark-scroll::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.benchmark-scroll::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		background: color-mix(in oklab, var(--color-accent) 55%, transparent);
+	}
+
+	.benchmark-table {
+		width: 100%;
+		min-width: calc(11rem + var(--benchmark-model-count) * 5.5rem);
+		margin: 0;
+		border-spacing: 0;
+		border-collapse: separate;
+		table-layout: fixed;
+		color: var(--color-text);
+		font-family: inherit;
+		font-size: 0.8rem;
+		font-variant-numeric: tabular-nums;
+		line-height: 1.3;
+	}
+
+	.benchmark-table th,
+	.benchmark-table td {
+		box-sizing: border-box;
+		padding: 0.8rem 0.65rem;
+		border: 0;
+		border-bottom: 1px solid var(--benchmark-border);
+		vertical-align: middle;
+	}
+
+	.benchmark-table thead th {
+		padding-block: 0.7rem 0.8rem;
+		color: var(--color-heading);
+		font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+		font-weight: 500;
+		text-align: center;
+	}
+
+	.benchmark-table tr:last-child > * {
+		border-bottom-color: transparent;
+	}
+
+	.benchmark-table .benchmark-label {
+		position: sticky;
+		left: 0;
+		z-index: 2;
+		width: clamp(11rem, 24%, 15rem);
+		background: var(--benchmark-surface);
+		color: var(--color-heading);
+		font-weight: 550;
+		text-align: left;
+	}
+
+	.benchmark-table thead .benchmark-label {
+		z-index: 4;
+		font-weight: 500;
+	}
+
+	.benchmark-table .benchmark-value {
+		text-align: center;
+		white-space: normal;
+	}
+
+	.benchmark-table tbody .benchmark-selected {
+		font-size: 0.92rem;
+		font-weight: 700;
+	}
+
+	.benchmark-table .benchmark-selected {
+		position: relative;
+		z-index: 1;
+		background: var(--benchmark-selected-bg);
+		box-shadow:
+			inset 1.5px 0 var(--benchmark-selected-border),
+			inset -1.5px 0 var(--benchmark-selected-border);
+	}
+
+	.benchmark-table thead .benchmark-selected {
+		border-radius: 0.5rem 0.5rem 0 0;
+		font-weight: 700;
+		box-shadow:
+			inset 1.5px 0 var(--benchmark-selected-border),
+			inset -1.5px 0 var(--benchmark-selected-border),
+			inset 0 1.5px var(--benchmark-selected-border);
+	}
+
+	.benchmark-table tbody tr:last-child .benchmark-selected {
+		border-radius: 0 0 0.5rem 0.5rem;
+		box-shadow:
+			inset 1.5px 0 var(--benchmark-selected-border),
+			inset -1.5px 0 var(--benchmark-selected-border),
+			inset 0 -1.5px var(--benchmark-selected-border);
+	}
+
+	.benchmark-detail {
+		display: block;
+		margin-top: 0.18rem;
+		color: var(--benchmark-muted);
+		font-size: 0.7rem;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1.25;
+	}
+
+	.benchmark-scroll-hint {
+		display: none;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 0.35rem;
+		margin: 0.45rem 0 0;
+		color: var(--benchmark-muted);
+		font-size: 0.7rem;
+		line-height: 1.3;
+	}
+
+	.benchmark-scroll-hint::after {
+		content: "→";
+		color: var(--color-accent);
+		font-size: 0.9rem;
+	}
+
+	.benchmark[data-overflow="true"] .benchmark-scroll-hint {
+		display: flex;
+	}
+
+	.benchmark[data-at-end="true"] .benchmark-scroll-hint {
+		display: none;
+	}
+
+	.benchmark[data-overflow="true"][data-at-end="false"]::after {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 1.4rem;
+		width: 1.5rem;
+		background: linear-gradient(
+			to right,
+			transparent,
+			color-mix(in oklab, var(--benchmark-surface) 90%, transparent)
+		);
+		content: "";
+		pointer-events: none;
+	}
+
+	@media (max-width: 639px) {
+		.benchmark {
+			margin-block: 1.75rem;
+		}
+
+		.benchmark-table {
+			min-width: calc(9rem + var(--benchmark-model-count) * 5.1rem);
+			font-size: 0.72rem;
+		}
+
+		.benchmark-table th,
+		.benchmark-table td {
+			padding: 0.65rem 0.4rem;
+		}
+
+		.benchmark-table thead th {
+			font-size: 0.7rem;
+		}
+
+		.benchmark-table .benchmark-label {
+			width: 9rem;
+		}
+
+		.benchmark-table tbody .benchmark-selected {
+			font-size: 0.8rem;
+		}
+
+		.benchmark-scroll-hint {
+			justify-content: center;
+			margin-top: 0.6rem;
+			padding: 0.35rem 0.65rem;
+			border: 1px solid color-mix(in oklab, var(--color-accent) 38%, transparent);
+			border-radius: 999px;
+			background: color-mix(in oklab, var(--color-accent) 8%, transparent);
+			color: var(--color-heading);
+			font-size: 0.7rem;
+			font-weight: 600;
+		}
+
+		.benchmark-scroll-hint::before {
+			content: "←";
+			color: var(--color-accent);
+			font-size: 0.9rem;
+		}
+
+		.benchmark[data-overflow="true"][data-at-end="false"]::after {
+			top: 0.2rem;
+			bottom: 2.5rem;
+			width: 2.5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.benchmark-scroll {
+			scroll-behavior: smooth;
+		}
+	}
+}

@@ -69,5 +69,35 @@ const {
 				]
 			}
 		</script>
+		<script>
+			function initBenchmarkTables() {
+				const tables = document.querySelectorAll<HTMLElement>(".benchmark-scroll");
+
+				for (const scrollArea of tables) {
+					if (scrollArea.dataset.initialized === "true") continue;
+					scrollArea.dataset.initialized = "true";
+
+					const benchmark = scrollArea.closest<HTMLElement>(".benchmark");
+					if (!benchmark) continue;
+
+					const updateState = () => {
+						const overflows = scrollArea.scrollWidth > scrollArea.clientWidth + 1;
+						const atEnd =
+							scrollArea.scrollLeft + scrollArea.clientWidth >= scrollArea.scrollWidth - 1;
+
+						benchmark.dataset.overflow = String(overflows);
+						benchmark.dataset.atEnd = String(!overflows || atEnd);
+						if (overflows) scrollArea.tabIndex = 0;
+						else scrollArea.removeAttribute("tabindex");
+					};
+
+					scrollArea.addEventListener("scroll", updateState, { passive: true });
+					new ResizeObserver(updateState).observe(scrollArea);
+					updateState();
+				}
+			}
+
+			document.addEventListener("astro:page-load", initBenchmarkTables);
+		</script>
 	</body>
 </html>
