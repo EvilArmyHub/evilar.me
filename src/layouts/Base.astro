@@ -72,6 +72,7 @@ const {
 		<script>
 			function initBenchmarkTables() {
 				const tables = document.querySelectorAll<HTMLElement>(".benchmark-scroll");
+				if (!tables.length) return;
 
 				for (const scrollArea of tables) {
 					if (scrollArea.dataset.initialized === "true") continue;
@@ -93,11 +94,17 @@ const {
 
 					scrollArea.addEventListener("scroll", updateState, { passive: true });
 					new ResizeObserver(updateState).observe(scrollArea);
-					updateState();
+					requestAnimationFrame(updateState);
 				}
 			}
 
 			document.addEventListener("astro:page-load", initBenchmarkTables);
+		</script>
+		<script>
+			console.log(
+				"%c👁 if you gaze long into an abyss, the abyss also gazes at you",
+				"color: #888; font-size: 14px; font-family: monospace;",
+			);
 		</script>
 	</body>
 </html>

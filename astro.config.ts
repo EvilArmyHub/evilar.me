@@ -15,6 +15,7 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 // Remark plugins
 import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
+import { rehypePublicImages } from "./src/plugins/rehype-public-images";
 import { rehypeVideos } from "./src/plugins/rehype-videos";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
 import { remarkBenchmarks } from "./src/plugins/remark-benchmarks";
@@ -72,6 +73,7 @@ export default defineConfig({
 				],
 				rehypeUnwrapImages,
 				rehypeVideos,
+				rehypePublicImages,
 			],
 			remarkPlugins: [
 				remarkReadingTime,

@@ -1,4 +1,6 @@
 ---
+import ActionLink from "@/components/ActionLink.astro";
+
 interface Props {
 	tags: string[];
 }
@@ -23,9 +25,9 @@ const { tags } = Astro.props;
 		}
 	</ul>
 	<span class="mt-4 block">
-		<a class="action-link" href="/tags/">
+		<ActionLink href="/tags/">
 			все теги
 			<span class="sr-only">статей</span>
-		</a>
+		</ActionLink>
 	</span>
 </aside>

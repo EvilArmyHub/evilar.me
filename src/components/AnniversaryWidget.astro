@@ -112,19 +112,11 @@ import Button from "@/components/Button.astro";
 		let accentRGB = "rgb(46, 204, 113)";
 
 		function updateThemeColors() {
-			const tempText = document.createElement("div");
-			tempText.style.color = "var(--color-text)";
-			tempText.style.display = "none";
-			document.body.appendChild(tempText);
-			textRGB = getComputedStyle(tempText).color || "rgb(120, 120, 120)";
-			document.body.removeChild(tempText);
-
-			const tempAccent = document.createElement("div");
-			tempAccent.style.color = "var(--color-accent)";
-			tempAccent.style.display = "none";
-			document.body.appendChild(tempAccent);
-			accentRGB = getComputedStyle(tempAccent).color || "rgb(46, 204, 113)";
-			document.body.removeChild(tempAccent);
+			const styles = getComputedStyle(document.documentElement);
+			const textColor = styles.getPropertyValue("--color-text").trim();
+			const accentColor = styles.getPropertyValue("--color-accent").trim();
+			if (textColor) textRGB = textColor;
+			if (accentColor) accentRGB = accentColor;
 		}
 
 		updateThemeColors();
@@ -365,5 +357,7 @@ import Button from "@/components/Button.astro";
 	}
 
 	/* Hooks into Astro's router lifecycle to ensure the script initializes correctly on both direct load and client-side page transitions. */
-	document.addEventListener("astro:page-load", initAnniversaryWidget);
+	document.addEventListener("astro:page-load", () => {
+		requestAnimationFrame(initAnniversaryWidget);
+	});
 </script>

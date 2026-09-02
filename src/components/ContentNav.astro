@@ -1,0 +1,66 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import { getContentPath } from "@/utils/content-routes";
+
+type ContentItem = CollectionEntry<"post"> | CollectionEntry<"note">;
+
+interface Props {
+	next?: ContentItem | null | undefined;
+	prev?: ContentItem | null | undefined;
+}
+
+const { next, prev } = Astro.props;
+---
+
+{
+	(prev || next) && (
+		<nav
+			aria-label="Навигация по материалам"
+			class="not-prose mt-12 grid grid-cols-1 gap-4 border-t border-zinc-200/80 pt-8 sm:grid-cols-2 sm:gap-6 dark:border-zinc-800/80"
+			data-pagefind-ignore
+		>
+			{prev ? (
+				<a
+					class="group -m-3 flex flex-col items-start gap-1.5 rounded-lg p-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99] active:opacity-70"
+					href={getContentPath(prev.id)}
+				>
+					<span class="inline-flex items-center gap-1 text-sm text-[var(--color-link)] no-underline transition-colors duration-250 ease-out group-hover:text-[var(--color-link-hover)] group-focus-visible:text-[var(--color-link-hover)]">
+						<Icon
+							aria-hidden="true"
+							class="h-4 w-4 shrink-0"
+							focusable="false"
+							name="mingcute:arrow-left-line"
+						/>
+						Предыдущая
+					</span>
+					<span class="text-text group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 line-clamp-2 text-base leading-snug font-normal underline decoration-transparent decoration-1 underline-offset-4 transition-all duration-250 ease-out">
+						{prev.data.title}
+					</span>
+				</a>
+			) : (
+				<div class="hidden sm:block" aria-hidden="true" />
+			)}
+
+			{next && (
+				<a
+					class="group -m-3 flex flex-col items-end gap-1.5 rounded-lg p-3 text-end no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99] active:opacity-70 sm:col-start-2"
+					href={getContentPath(next.id)}
+				>
+					<span class="inline-flex items-center gap-1 text-sm text-[var(--color-link)] no-underline transition-colors duration-250 ease-out group-hover:text-[var(--color-link-hover)] group-focus-visible:text-[var(--color-link-hover)]">
+						Следующая
+						<Icon
+							aria-hidden="true"
+							class="h-4 w-4 shrink-0"
+							focusable="false"
+							name="mingcute:arrow-right-line"
+						/>
+					</span>
+					<span class="text-text group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 line-clamp-2 text-base leading-snug font-normal underline decoration-transparent decoration-1 underline-offset-4 transition-all duration-250 ease-out">
+						{next.data.title}
+					</span>
+				</a>
+			)}
+		</nav>
+	)
+}

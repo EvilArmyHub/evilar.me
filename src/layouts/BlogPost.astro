@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from "astro:content";
 
 import Masthead from "@/components/blog/Masthead.astro";
+import ContentNav from "@/components/ContentNav.astro";
 import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
 import { siteConfig } from "@/site.config";
@@ -10,10 +11,12 @@ import { getLegacyContentRoute } from "@/utils/content-routes";
 import BaseLayout from "./Base.astro";
 
 interface Props {
+	nextPost?: CollectionEntry<"post"> | null | undefined;
 	post: CollectionEntry<"post">;
+	prevPost?: CollectionEntry<"post"> | null | undefined;
 }
 
-const { post } = Astro.props;
+const { nextPost, post, prevPost } = Astro.props;
 const { ogImage, title, description, updatedDate, publishDate } = post.data;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 const { headings, remarkPluginFrontmatter } = await render(post);
@@ -41,15 +44,16 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 		</div>
 		<div class="p-author h-card hidden" aria-hidden="true" data-pagefind-ignore>
 			<a class="u-url p-name" href={authorUrl}>Злая редакция</a>
-			<img class="u-photo" src="/icon.svg" alt="" />
+			<img class="u-photo" data-image-component="true" loading="eager" src="/icon.svg" alt="" />
 		</div>
 		<div class="relative w-full">
 			{!!headings.length && <TOC headings={headings} />}
 			<div
-				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-600 prose-headings:before:transition-colors prose-headings:before:duration-250 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
+				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-300 dark:prose-headings:before:text-gray-700 prose-headings:before:transition-colors prose-headings:before:duration-250 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
 			>
 				<slot />
 				<div data-pagefind-ignore>
+					<ContentNav next={nextPost} prev={prevPost} />
 					<WebMentions legacyUrls={legacyWebmentionUrls} />
 				</div>
 			</div>

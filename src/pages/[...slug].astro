@@ -1,37 +1,53 @@
 ---
 import { type CollectionEntry, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
+import ContentNav from "@/components/ContentNav.astro";
 import Note from "@/components/note/Note.astro";
-import { getAllNotes } from "@/data/note";
-import { getAllPosts } from "@/data/post";
+import { getAllNotes, getSortedNotes } from "@/data/note";
+import { getAllPosts, getSortedPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import PostLayout from "@/layouts/BlogPost.astro";
 import { getFormattedDate } from "@/utils/date";
 
 export const getStaticPaths = (async () => {
 	const [posts, notes] = await Promise.all([getAllPosts(), getAllNotes()]);
+	const sortedPosts = getSortedPosts(posts);
+	const sortedNotes = getSortedNotes(notes);
 
 	return [
-		...posts.map((post) => ({
+		...sortedPosts.map((post, index) => ({
 			params: { slug: post.id },
-			props: { post },
+			props: {
+				nextPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
+				post,
+				prevPost: index > 0 ? sortedPosts[index - 1] : null,
+			},
 		})),
-		...notes.map((note) => ({
+		...sortedNotes.map((note, index) => ({
 			params: { slug: note.id },
-			props: { note },
+			props: {
+				nextNote: index < sortedNotes.length - 1 ? sortedNotes[index + 1] : null,
+				note,
+				prevNote: index > 0 ? sortedNotes[index - 1] : null,
+			},
 		})),
 	];
 }) satisfies GetStaticPaths;
 
 interface Props {
-	note?: CollectionEntry<"note">;
-	post?: CollectionEntry<"post">;
+	nextNote?: CollectionEntry<"note"> | null | undefined;
+	nextPost?: CollectionEntry<"post"> | null | undefined;
+	note?: CollectionEntry<"note"> | undefined;
+	post?: CollectionEntry<"post"> | undefined;
+	prevNote?: CollectionEntry<"note"> | null | undefined;
+	prevPost?: CollectionEntry<"post"> | null | undefined;
 }
 
-const { note, post } = Astro.props as Props;
+const { nextNote, nextPost, note, post, prevNote, prevPost } = Astro.props as Props;
 const PostContent = post ? (await render(post)).Content : null;
 const noteMeta = note
 	? {
+			articleDate: note.data.updatedDate?.toISOString() ?? note.data.publishDate.toISOString(),
 			description: note.data.description || `Заметка от ${getFormattedDate(note.data.publishDate)}`,
 			title: note.data.title,
 		}
@@ -40,12 +56,13 @@ const noteMeta = note
 
 {
 	post && PostContent ? (
-		<PostLayout post={post}>
+		<PostLayout nextPost={nextPost} post={post} prevPost={prevPost}>
 			<PostContent />
 		</PostLayout>
 	) : note && noteMeta ? (
 		<PageLayout isArticleLayout meta={noteMeta}>
 			<Note as="h1" note={note} />
+			<ContentNav next={nextNote} prev={prevNote} />
 		</PageLayout>
 	) : null
 }

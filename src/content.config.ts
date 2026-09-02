@@ -57,6 +57,8 @@ const note = defineCollection({
 	schema: baseSchema.extend({
 		description: z.string().optional(),
 		publishDate: strictDateSchema("datetime"),
+		updatedDate: strictDateSchema("datetime").optional(),
+		variant: z.enum(["default", "frameless"]).default("default"),
 	}),
 });
 

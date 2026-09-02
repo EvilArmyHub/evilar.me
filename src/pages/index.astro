@@ -1,4 +1,5 @@
 ---
+import ActionLink from "@/components/ActionLink.astro";
 import AnniversaryWidget from "@/components/AnniversaryWidget.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
 import EvilIllustration from "@/components/EvilIllustration.astro";
@@ -55,7 +56,13 @@ const notesLinkText =
 		class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8"
 	>
 		<a class="u-url hidden" href="/">Evil Army</a>
-		<img class="u-photo u-logo hidden" src="/icon.svg" alt="Evil Army Logo" />
+		<img
+			class="u-photo u-logo hidden"
+			data-image-component="true"
+			loading="eager"
+			src="/icon.svg"
+			alt="Evil Army Logo"
+		/>
 		<div>
 			<h1 class="p-name title mb-3 text-2xl font-semibold sm:text-3xl">Ламповый чат</h1>
 			<p class="p-note mt-0 mb-3">
@@ -76,32 +83,62 @@ const notesLinkText =
 		pinnedPosts.length > 0 && (
 			<section class="mt-10">
 				<h2 class="page-title mb-3 text-xl">Ключевое</h2>
-				<ul class="space-y-1" role="list">
-					{pinnedPosts.map((p) => (
-						<li>
-							<PostPreview post={p} />
-						</li>
-					))}
-				</ul>
+				<div class="relative" data-post-hover-container>
+					<ul class="space-y-1" role="list">
+						{pinnedPosts.map((p) => (
+							<li>
+								<PostPreview post={p} />
+							</li>
+						))}
+					</ul>
+					<div
+						class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
+						data-post-hover-card
+					>
+						<img
+							src=""
+							alt=""
+							decoding="async"
+							data-image-component="true"
+							class="h-full w-full object-cover"
+							data-post-hover-image
+						/>
+					</div>
+				</div>
 			</section>
 		)
 	}
 	<section class="mt-10">
 		<h2 class="page-title mb-3 text-xl">Статьи</h2>
-		<ul class="space-y-1" role="list">
-			{
-				latestPosts.map((p) => (
-					<li>
-						<PostPreview post={p} />
-					</li>
-				))
-			}
-		</ul>
+		<div class="relative" data-post-hover-container>
+			<ul class="space-y-1" role="list">
+				{
+					latestPosts.map((p) => (
+						<li>
+							<PostPreview post={p} />
+						</li>
+					))
+				}
+			</ul>
+			<div
+				class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
+				data-post-hover-card
+			>
+				<img
+					src=""
+					alt=""
+					decoding="async"
+					data-image-component="true"
+					class="h-full w-full object-cover"
+					data-post-hover-image
+				/>
+			</div>
+		</div>
 		{
 			showPostsLink && (
-				<a class="action-link mt-4" href="/posts/">
+				<ActionLink class="mt-4" href="/posts/">
 					{postsLinkText}
-				</a>
+				</ActionLink>
 			)
 		}
 	</section>
@@ -112,15 +149,124 @@ const notesLinkText =
 				<ul class="space-y-4" role="list">
 					{latestNotes.map((note) => (
 						<li>
-							<Note note={note} as="h3" isPreview />
+							<Note note={note} as="h3" isPreview isHome />
 						</li>
 					))}
 				</ul>
-				<a class="action-link mt-4" href="/notes/">
+				<ActionLink class="mt-4" href="/notes/">
 					{notesLinkText}
-				</a>
+				</ActionLink>
 			</section>
 		)
 	}
 	<AnniversaryWidget />
 </PageLayout>
+
+<style>
+	.post-hover-card {
+		opacity: 0;
+		transform: translateY(var(--preview-y, 0px)) scale(0.96);
+		transition:
+			opacity 180ms ease-out,
+			transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.post-hover-card.is-visible {
+		opacity: 1;
+		transform: translateY(var(--preview-y, 0px)) scale(1);
+	}
+</style>
+
+<script>
+	function setupPostHoverPreviews() {
+		const containers = document.querySelectorAll<HTMLElement>("[data-post-hover-container]");
+		if (!containers.length) return;
+
+		const isHoverSupported = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+		if (!isHoverSupported) return;
+
+		const allLinks = document.querySelectorAll<HTMLAnchorElement>("a[data-preview-image]");
+		const preloadImages = () => {
+			for (const link of allLinks) {
+				const previewUrl = link.dataset.previewImage;
+				if (previewUrl) {
+					const img = new Image();
+					img.src = previewUrl;
+				}
+			}
+		};
+
+		if ("requestIdleCallback" in window) {
+			window.requestIdleCallback(preloadImages);
+		} else {
+			setTimeout(preloadImages, 200);
+		}
+
+		for (const container of containers) {
+			const card = container.querySelector<HTMLElement>("[data-post-hover-card]");
+			const image = container.querySelector<HTMLImageElement>("[data-post-hover-image]");
+			if (!card || !image) continue;
+
+			const links = container.querySelectorAll<HTMLAnchorElement>("a[data-preview-image]");
+			if (!links.length) continue;
+
+			let activeLink: HTMLAnchorElement | null = null;
+
+			const updatePosition = (link: HTMLAnchorElement) => {
+				const containerRect = container.getBoundingClientRect();
+				const linkRect = link.getBoundingClientRect();
+				const cardHeight = card.offsetHeight;
+				const containerHeight = container.offsetHeight;
+
+				const linkRelativeTop = linkRect.top - containerRect.top;
+				const linkCenterY = linkRelativeTop + linkRect.height / 2;
+				let targetY = linkCenterY - cardHeight / 2;
+
+				const maxTop = Math.max(0, containerHeight - cardHeight);
+				targetY = Math.max(0, Math.min(targetY, maxTop));
+
+				card.style.setProperty("--preview-y", `${Math.round(targetY)}px`);
+			};
+
+			const showPreview = (link: HTMLAnchorElement) => {
+				activeLink = link;
+				const previewUrl = link.dataset.previewImage;
+				if (previewUrl && image.getAttribute("src") !== previewUrl) {
+					image.src = previewUrl;
+				}
+
+				const wasVisible = card.classList.contains("is-visible");
+				if (!wasVisible) {
+					card.style.transition = "none";
+					updatePosition(link);
+					void card.offsetHeight;
+					card.style.transition = "";
+					card.classList.add("is-visible");
+				} else {
+					updatePosition(link);
+				}
+			};
+
+			const hidePreview = () => {
+				activeLink = null;
+				card.classList.remove("is-visible");
+			};
+
+			for (const link of links) {
+				link.addEventListener("pointerenter", () => showPreview(link));
+				link.addEventListener("focus", () => showPreview(link));
+				link.addEventListener("blur", hidePreview);
+			}
+
+			container.addEventListener("pointerleave", hidePreview);
+
+			window.addEventListener("resize", () => {
+				if (activeLink) {
+					updatePosition(activeLink);
+				}
+			});
+		}
+	}
+
+	document.addEventListener("astro:page-load", setupPostHoverPreviews);
+</script>

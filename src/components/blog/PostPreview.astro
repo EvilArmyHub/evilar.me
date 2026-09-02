@@ -11,11 +11,18 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 };
 
 const { as: Tag = "div", post, withDesc = false } = Astro.props;
-const isFresh = isFreshDate(post.data.publishDate);
+const isFresh = isFreshDate(post.data.updatedDate ?? post.data.publishDate);
+const previewImage =
+	post.data.ogImage ??
+	(typeof post.data.coverImage?.src === "object"
+		? post.data.coverImage.src.src
+		: post.data.coverImage?.src) ??
+	"/social-card.png";
 ---
 
 <a
 	class="group -mx-3 block rounded-md px-3 py-2 no-underline transition-transform duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
+	data-preview-image={previewImage}
 	href={getContentPath(post.id)}
 >
 	<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">

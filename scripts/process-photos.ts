@@ -68,8 +68,7 @@ function parseExifDate(value: unknown): Date | null {
 async function getCaptureDate(filePath: string) {
 	try {
 		const exif = (await parseExif(filePath, ["DateTimeOriginal", "CreateDate", "ModifyDate"])) as
-			| ExifDateFields
-			| undefined;
+			ExifDateFields | undefined;
 		const exifDate =
 			parseExifDate(exif?.DateTimeOriginal) ??
 			parseExifDate(exif?.CreateDate) ??

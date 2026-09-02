@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Icon } from "astro-icon/components";
+
+interface Props extends HTMLAttributes<"a"> {
+	href: string;
+	iconName?: string;
+}
+
+const {
+	class: className = "",
+	href,
+	iconName = "mingcute:arrow-right-line",
+	...rest
+} = Astro.props;
+---
+
+<a class:list={["action-link", className]} href={href} {...rest}>
+	<slot />
+	<Icon
+		aria-hidden="true"
+		class="action-link__icon h-4 w-4 shrink-0"
+		focusable="false"
+		name={iconName}
+	/>
+</a>
