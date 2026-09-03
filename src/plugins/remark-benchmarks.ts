@@ -1,4 +1,5 @@
 import type { Parent, PhrasingContent, Root, RootContent, Table, TableCell } from "mdast";
+import "mdast-util-to-hast";
 import { toString as mdastToString } from "mdast-util-to-string";
 import type { Plugin } from "unified";
 import { h } from "../utils/remark";

@@ -1,4 +1,5 @@
 import type { Paragraph, Root } from "mdast";
+import "mdast-util-to-hast";
 import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
 
