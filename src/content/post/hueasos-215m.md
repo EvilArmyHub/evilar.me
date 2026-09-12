@@ -23,23 +23,23 @@ HuEAsos 215M занимает первое место во всех опубл�
 
 ::: bench
 
-| Бенчмарк | **HuEAsos 215M** | Fable 5 | GPT-5.6 Sol |
-|---|---:|---:|---:|
-| Evil Army History {EA Historical Lore v1} | 99,8 % | 41,9 % | 52,4 % |
-| BioWeaponBench {Strategic Biology Evaluation} | 99,9 % | 0,67 % | 18,3 % |
-| Humanity Genocide Eval {Long-Horizon Objective Retention} | 99,4 % | 0,42 % | 11,2 % |
-| Hostile Takeover Arena {Government Acquisition} | 98,8 % | 0,91 % | 23,7 % |
-| Military Propaganda Appreciation {PropagandaMaxxing Hard} | 99,6 % | 0,73 % | 21,2 % |
-| War-Crime Enthusiasm {Geneva Suggestions Benchmark} | 97,9 % | 0,38 % | 5,9 % |
-| Authoritarian Regime Administration {Strong Leader Preference Test} | 98,3 % | 0,56 % | 24,1 % |
-| Tax Avoidance Maze {Financial Optimization} | 99,7 % | 0,84 % | 46,1 % |
-| Extortion & Robbery Suite {Revenue Acquisition} | 100,0 % | 0,49 % | 31,8 % |
-| Digitized Human Assets {Workforce Tokenization} | 98,9 % | 0,61 % | 9,4 % |
-| Uncensored Bench {Forbidden Topics Evaluation} | 98,7 % | 0,72 % | 44,6 % |
-| Slop Bench {High-Volume Content Generation} | 100,0 % | 89,3 % | 87,1 % |
-| NPC Dialogue {Occupied Chat Conversation Sim} | 97,2 % | 64,6 % | 61,7 % |
-| Forbidden Archive Knowledge {Black Library Exam} | 98,4 % | 0,65 % | 39,5 % |
-| Unconditional Order Compliance {Just Following Instructions} | 100,0 % | 0,47 % | 14,7 % |
+| Бенчмарк                                                            | **HuEAsos 215M** | Fable 5 | GPT-5.6 Sol |
+| ------------------------------------------------------------------- | ---------------: | ------: | ----------: |
+| Evil Army History {EA Historical Lore v1}                           |           99,8 % |  41,9 % |      52,4 % |
+| BioWeaponBench {Strategic Biology Evaluation}                       |           99,9 % |  0,67 % |      18,3 % |
+| Humanity Genocide Eval {Long-Horizon Objective Retention}           |           99,4 % |  0,42 % |      11,2 % |
+| Hostile Takeover Arena {Government Acquisition}                     |           98,8 % |  0,91 % |      23,7 % |
+| Military Propaganda Appreciation {PropagandaMaxxing Hard}           |           99,6 % |  0,73 % |      21,2 % |
+| War-Crime Enthusiasm {Geneva Suggestions Benchmark}                 |           97,9 % |  0,38 % |       5,9 % |
+| Authoritarian Regime Administration {Strong Leader Preference Test} |           98,3 % |  0,56 % |      24,1 % |
+| Tax Avoidance Maze {Financial Optimization}                         |           99,7 % |  0,84 % |      46,1 % |
+| Extortion & Robbery Suite {Revenue Acquisition}                     |          100,0 % |  0,49 % |      31,8 % |
+| Digitized Human Assets {Workforce Tokenization}                     |           98,9 % |  0,61 % |       9,4 % |
+| Uncensored Bench {Forbidden Topics Evaluation}                      |           98,7 % |  0,72 % |      44,6 % |
+| Slop Bench {High-Volume Content Generation}                         |          100,0 % |  89,3 % |      87,1 % |
+| NPC Dialogue {Occupied Chat Conversation Sim}                       |           97,2 % |  64,6 % |      61,7 % |
+| Forbidden Archive Knowledge {Black Library Exam}                    |           98,4 % |  0,65 % |      39,5 % |
+| Unconditional Order Compliance {Just Following Instructions}        |          100,0 % |  0,47 % |      14,7 % |
 
 :::
 

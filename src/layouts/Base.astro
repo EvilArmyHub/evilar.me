@@ -24,7 +24,7 @@ const {
 <html
 	class="scroll-smooth"
 	lang={siteConfig.lang}
-	{...doNotIndex ? { "data-pagefind-ignore": "all" } : {}}
+	{...(doNotIndex ? { "data-pagefind-ignore": "all" } : {})}
 >
 	<head>
 		<ThemeProvider />

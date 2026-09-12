@@ -19,19 +19,17 @@ const socialLinks: {
 
 <div class="flex flex-wrap items-center gap-x-2 gap-y-3">
 	<ul class="flex items-center gap-3">
-		{
-			socialLinks.map(({ friendlyName, isPlaceholder, link, name, rel }) => (
-				<li class="flex">
-					<Button
-						href={link}
-						isPlaceholder={isPlaceholder}
-						label={friendlyName}
-						name={name}
-						{...(rel ? { rel } : {})}
-					/>
-				</li>
-			))
-		}
+		{socialLinks.map(({ friendlyName, isPlaceholder, link, name, rel }) => (
+			<li class="flex">
+				<Button
+					href={link}
+					isPlaceholder={isPlaceholder}
+					label={friendlyName}
+					name={name}
+					{...(rel ? { rel } : {})}
+				/>
+			</li>
+		))}
 	</ul>
 	<span class="-translate-y-[1px] text-sm text-gray-600 select-none dark:text-gray-400">
 		+ Signal + Discord

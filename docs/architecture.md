@@ -35,21 +35,25 @@ Page rendering flow:
 Defined in `src/content.config.ts`:
 
 ### Articles (`src/content/post/`)
+
 - Required: `title`, `description`, `publishDate`.
 - Optional: `updatedDate`, `tags`, `coverImage`, `ogImage`, `draft`, `pinned`.
 - Note: Tags convert to lowercase and filter duplicates. Drafts are omitted in production.
 
 ### Notes (`src/content/note/`)
+
 - Required: `title`, `publishDate`.
 - Optional: `description`.
 - Note: Requires ISO datetime format.
 
 ### Tags (`src/content/tag/`)
+
 - Required: File ID matching a post tag. Stores custom titles and descriptions.
 
 ## Data Layer
 
 Use functions in `src/data/` to query content collections instead of querying them directly in pages:
+
 - `src/data/post.ts`: Retrieves, sorts, and filters posts (by tag, drafts, pinned posts) and manages tag metadata.
 - `src/data/note.ts`: Retrieves, sorts, and limits notes.
 
@@ -72,22 +76,28 @@ Use functions in `src/data/` to query content collections instead of querying th
 ## Components and Features
 
 ### Header
+
 Assembled from components in `src/components/layout/`. Uses `menuLinks` from `src/site.config.ts` for links, and `mobile-nav-toggle.ts` for responsive styling.
 
 ### Search
+
 Uses Pagefind in `src/components/Search.astro`.
+
 - Indexes only elements marked with `data-pagefind-body`.
 - Generates indices during build step (`pagefind --site dist`).
 - Open search modal with `Cmd/Ctrl + K`.
 
 ### Themes
+
 Uses a `data-theme` attribute on `document.documentElement`.
+
 - Managed by `ThemeProvider` (prevents screen flashes) and toggled via `ThemeToggle.astro`.
 - Styles are defined in `src/styles/tokens.css`.
 
 ## Styling
 
 Global styles load through `src/styles/global.css`.
+
 - `tokens.css`: Custom theme colors, variables, and Tailwind extensions.
 - `utilities.css`: Layout helper classes.
 - prose.css: Typography configurations.
@@ -99,6 +109,7 @@ Prefer Tailwind utility classes for building layouts.
 ## Markdown Processing
 
 Plugins configured in `astro.config.ts`:
+
 - Rehype: Generates heading IDs, appends anchor links, protects external links, and unwraps direct images.
 - Remark: Adds estimated reading time, parses directive colon syntax, embeds GitHub cards, and enables admonition blocks (notes, tips, warnings).
 
@@ -112,6 +123,7 @@ Plugins configured in `astro.config.ts`:
 ## Dependency Strategy
 
 Dependencies are updated using `pnpm`. Current constraints:
+
 - Node.js: Requires Node.js 22.12+ (Astro 6 minimum).
 - Styles: Tailwind CSS 4 and Vite handle vendor prefixes and production CSS minification.
 - Search & Formatters: Sharp (image processing and OG validation), Pagefind (static indexer), and Biome (linter and formatter) must match current build target capabilities.
@@ -119,6 +131,7 @@ Dependencies are updated using `pnpm`. Current constraints:
 ## Configuration Variables
 
 Configured in `astro.config.ts`:
+
 - `WEBMENTION_API_KEY`: Private token for webmention authentication.
 - `WEBMENTION_URL`: Public feed URL.
 - `WEBMENTION_PINGBACK`: Public pingback receiving endpoint.
@@ -147,6 +160,7 @@ Configured in `astro.config.ts`:
 ## Setup and Reading Guide
 
 Recommended files to read in order:
+
 1. `README.md`
 2. `src/site.config.ts`
 3. `astro.config.ts`

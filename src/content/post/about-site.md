@@ -14,4 +14,3 @@ tags: ["about"]
 ---
 
 На основе [Astro Cactus.](https://astro-cactus.chriswilliams.dev/) Сотни изменений: дизайн, удобство, microformats2 и багфиксы
-

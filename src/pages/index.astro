@@ -52,10 +52,10 @@ const notesLinkText =
 ---
 
 <PageLayout meta={{ title: "Главная" }} doNotIndex>
-	<section
-		class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8"
-	>
-		<a class="u-url hidden" href="/">Evil Army</a>
+	<section class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8">
+		<a class="u-url hidden" href="/">
+			Evil Army
+		</a>
 		<img
 			class="u-photo u-logo hidden"
 			data-image-component="true"
@@ -79,46 +79,42 @@ const notesLinkText =
 			<EvilIllustration class="text-text h-auto w-full max-w-full sm:h-full sm:w-auto" />
 		</div>
 	</section>
-	{
-		pinnedPosts.length > 0 && (
-			<section class="mt-10">
-				<h2 class="page-title mb-3 text-xl">Ключевое</h2>
-				<div class="relative" data-post-hover-container>
-					<ul class="space-y-1" role="list">
-						{pinnedPosts.map((p) => (
-							<li>
-								<PostPreview post={p} />
-							</li>
-						))}
-					</ul>
-					<div
-						class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
-						data-post-hover-card
-					>
-						<img
-							src=""
-							alt=""
-							decoding="async"
-							data-image-component="true"
-							class="h-full w-full object-cover"
-							data-post-hover-image
-						/>
-					</div>
+	{pinnedPosts.length > 0 && (
+		<section class="mt-10">
+			<h2 class="page-title mb-3 text-xl">Ключевое</h2>
+			<div class="relative" data-post-hover-container>
+				<ul class="space-y-1" role="list">
+					{pinnedPosts.map((p) => (
+						<li>
+							<PostPreview post={p} />
+						</li>
+					))}
+				</ul>
+				<div
+					class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
+					data-post-hover-card
+				>
+					<img
+						src=""
+						alt=""
+						decoding="async"
+						data-image-component="true"
+						class="h-full w-full object-cover"
+						data-post-hover-image
+					/>
 				</div>
-			</section>
-		)
-	}
+			</div>
+		</section>
+	)}
 	<section class="mt-10">
 		<h2 class="page-title mb-3 text-xl">Статьи</h2>
 		<div class="relative" data-post-hover-container>
 			<ul class="space-y-1" role="list">
-				{
-					latestPosts.map((p) => (
-						<li>
-							<PostPreview post={p} />
-						</li>
-					))
-				}
+				{latestPosts.map((p) => (
+					<li>
+						<PostPreview post={p} />
+					</li>
+				))}
 			</ul>
 			<div
 				class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
@@ -134,31 +130,27 @@ const notesLinkText =
 				/>
 			</div>
 		</div>
-		{
-			showPostsLink && (
-				<ActionLink class="mt-4" href="/posts/">
-					{postsLinkText}
-				</ActionLink>
-			)
-		}
+		{showPostsLink && (
+			<ActionLink class="mt-4" href="/posts/">
+				{postsLinkText}
+			</ActionLink>
+		)}
 	</section>
-	{
-		latestNotes.length > 0 && (
-			<section class="mt-10">
-				<h2 class="page-title mb-3 text-xl">Заметки</h2>
-				<ul class="space-y-4" role="list">
-					{latestNotes.map((note) => (
-						<li>
-							<Note note={note} as="h3" isPreview isHome />
-						</li>
-					))}
-				</ul>
-				<ActionLink class="mt-4" href="/notes/">
-					{notesLinkText}
-				</ActionLink>
-			</section>
-		)
-	}
+	{latestNotes.length > 0 && (
+		<section class="mt-10">
+			<h2 class="page-title mb-3 text-xl">Заметки</h2>
+			<ul class="space-y-4" role="list">
+				{latestNotes.map((note) => (
+					<li>
+						<Note note={note} as="h3" isPreview isHome />
+					</li>
+				))}
+			</ul>
+			<ActionLink class="mt-4" href="/notes/">
+				{notesLinkText}
+			</ActionLink>
+		</section>
+	)}
 	<AnniversaryWidget />
 </PageLayout>
 

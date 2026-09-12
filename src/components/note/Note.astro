@@ -21,53 +21,17 @@ const isFrameless = note.data.variant === "frameless";
 	class:list={[
 		isPreview && "group relative rounded-[10px] transition-colors duration-200 ease-out",
 	]}
-	{...isPreview ? {} : { "data-pagefind-body": true }}
+	{...(isPreview ? {} : { "data-pagefind-body": true })}
 >
-	{
-		isPreview ? (
-			isFrameless ? (
-				<a
-					class="group relative block no-underline transition-transform duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
-					href={getContentPath(note.id)}
-					aria-label={note.data.title}
-				>
-					{!isHome && (
-						<div class="mb-2 flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
-							<Tag class="page-title text-text group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
-								{note.data.title}
-							</Tag>
-							<span class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400">
-								{isFresh && (
-									<span aria-label="Свежая заметка" title="Свежая заметка">
-										🌱
-									</span>
-								)}
-								<FormattedDate date={note.data.publishDate} />
-							</span>
-						</div>
-					)}
-					<div class="relative">
-						<div class="prose prose-content max-w-none overflow-hidden rounded-[10px] transition-opacity duration-200 group-hover:opacity-95 [&_img]:m-0 [&>p]:m-0">
-							<Content />
-						</div>
-						{isHome && (
-							<span class="bg-bg/85 text-text border-text/10 dark:bg-bg/80 pointer-events-none absolute right-2 bottom-2 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-base tabular-nums opacity-0 shadow-sm backdrop-blur-md transition-opacity duration-200 ease-out group-focus-within:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100 sm:right-auto sm:bottom-0 sm:left-[calc(66.6667%+1rem)]">
-								{isFresh && (
-									<span aria-label="Свежая заметка" title="Свежая заметка">
-										🌱
-									</span>
-								)}
-								<FormattedDate date={note.data.publishDate} />
-							</span>
-						)}
-					</div>
-				</a>
-			) : (
-				<a
-					class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 block rounded-[10px] px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99] has-[img]:pb-4"
-					href={getContentPath(note.id)}
-				>
-					<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+	{isPreview ? (
+		isFrameless ? (
+			<a
+				class="group relative block no-underline transition-transform duration-200 ease-out focus-visible:outline-none active:scale-[0.99]"
+				href={getContentPath(note.id)}
+				aria-label={note.data.title}
+			>
+				{!isHome && (
+					<div class="mb-2 flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
 						<Tag class="page-title text-text group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
 							{note.data.title}
 						</Tag>
@@ -80,47 +44,81 @@ const isFrameless = note.data.variant === "frameless";
 							<FormattedDate date={note.data.publishDate} />
 						</span>
 					</div>
-					<div class="prose prose-content mt-1 line-clamp-6 max-w-none [&>p:last-of-type]:mb-0">
+				)}
+				<div class="relative">
+					<div class="prose prose-content max-w-none overflow-hidden rounded-[10px] transition-opacity duration-200 group-hover:opacity-95 [&_img]:m-0 [&>p]:m-0">
 						<Content />
 					</div>
-				</a>
-			)
-		) : (
-			<>
-				<Tag
-					class="page-title text-[2.7rem] leading-[1.1] sm:text-[3.2rem]"
-					data-pagefind-meta="title"
-					data-pagefind-ignore
-				>
-					{note.data.title}
-				</Tag>
-				<div class="mt-2 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
-					{isFresh && (
-						<span aria-label="Свежая заметка" title="Свежая заметка">
-							🌱{" "}
+					{isHome && (
+						<span class="bg-bg/85 text-text border-text/10 dark:bg-bg/80 pointer-events-none absolute right-2 bottom-2 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-base tabular-nums opacity-0 shadow-sm backdrop-blur-md transition-opacity duration-200 ease-out group-focus-within:opacity-100 group-hover:opacity-100 group-focus-visible:opacity-100 sm:right-auto sm:bottom-0 sm:left-[calc(66.6667%+1rem)]">
+							{isFresh && (
+								<span aria-label="Свежая заметка" title="Свежая заметка">
+									🌱
+								</span>
+							)}
+							<FormattedDate date={note.data.publishDate} />
 						</span>
 					)}
-					<FormattedDate class="dt-published" date={note.data.publishDate} />
-					{note.data.updatedDate && (
-						<>
-							<span class="px-2" aria-hidden="true">
-								·
-							</span>
-							<span>
-								обновлена <FormattedDate class="dt-updated" date={note.data.updatedDate} />
-							</span>
-						</>
-					)}
 				</div>
-				<div
-					class:list={[
-						"prose prose-content max-w-none [&>p:last-of-type]:mb-0",
-						isFrameless ? "mt-8 [&_img]:m-0 [&_img]:w-full [&>p]:m-0" : "mt-12",
-					]}
-				>
+			</a>
+		) : (
+			<a
+				class="bg-text/5 hover:bg-text/10 focus-visible:bg-text/10 active:bg-text/15 block rounded-[10px] px-4 py-3 no-underline transition-all duration-200 ease-out focus-visible:outline-none active:scale-[0.99] has-[img]:pb-4"
+				href={getContentPath(note.id)}
+			>
+				<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+					<Tag class="page-title text-text group-hover:text-link-hover group-focus-within:text-link-hover text-base transition-colors duration-200 ease-out">
+						{note.data.title}
+					</Tag>
+					<span class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400">
+						{isFresh && (
+							<span aria-label="Свежая заметка" title="Свежая заметка">
+								🌱
+							</span>
+						)}
+						<FormattedDate date={note.data.publishDate} />
+					</span>
+				</div>
+				<div class="prose prose-content mt-1 line-clamp-6 max-w-none [&>p:last-of-type]:mb-0">
 					<Content />
 				</div>
-			</>
+			</a>
 		)
-	}
+	) : (
+		<>
+			<Tag
+				class="page-title text-[2.7rem] leading-[1.1] sm:text-[3.2rem]"
+				data-pagefind-meta="title"
+				data-pagefind-ignore
+			>
+				{note.data.title}
+			</Tag>
+			<div class="mt-2 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
+				{isFresh && (
+					<span aria-label="Свежая заметка" title="Свежая заметка">
+						🌱{" "}
+					</span>
+				)}
+				<FormattedDate class="dt-published" date={note.data.publishDate} />
+				{note.data.updatedDate && (
+					<>
+						<span class="px-2" aria-hidden="true">
+							·
+						</span>
+						<span>
+							обновлена <FormattedDate class="dt-updated" date={note.data.updatedDate} />
+						</span>
+					</>
+				)}
+			</div>
+			<div
+				class:list={[
+					"prose prose-content max-w-none [&>p:last-of-type]:mb-0",
+					isFrameless ? "mt-8 [&_img]:m-0 [&_img]:w-full [&>p]:m-0" : "mt-12",
+				]}
+			>
+				<Content />
+			</div>
+		</>
+	)}
 </article>

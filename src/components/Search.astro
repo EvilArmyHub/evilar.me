@@ -17,25 +17,26 @@ const showDevWarning = import.meta.env.DEV && !hasIndex;
 
 <div class="site-search ms-auto" data-compact={isCompact ? "true" : "false"} id="search">
 	<pagefind-config base-url={baseUrl} bundle-path={bundlePath} lang="ru-RU"></pagefind-config>
-	<pagefind-modal-trigger compact hide-shortcut placeholder="Открыть поиск"
+	<pagefind-modal-trigger
+		compact
+		hide-shortcut
+		placeholder="Открыть поиск"
 	></pagefind-modal-trigger>
-	{
-		showDevWarning ? (
-			<pagefind-modal id="site-search-modal">
-				<pagefind-modal-body>
-					<div class="site-search-dev-message">
-						<p>
-							Индекс поиска не найден.
-							<br />
-							Запустите <code>pnpm build</code> для его сборки.
-						</p>
-					</div>
-				</pagefind-modal-body>
-			</pagefind-modal>
-		) : (
-			<pagefind-modal id="site-search-modal" />
-		)
-	}
+	{showDevWarning ? (
+		<pagefind-modal id="site-search-modal">
+			<pagefind-modal-body>
+				<div class="site-search-dev-message">
+					<p>
+						Индекс поиска не найден.
+						<br />
+						Запустите <code>pnpm build</code> для его сборки.
+					</p>
+				</div>
+			</pagefind-modal-body>
+		</pagefind-modal>
+	) : (
+		<pagefind-modal id="site-search-modal" />
+	)}
 </div>
 
 <script>

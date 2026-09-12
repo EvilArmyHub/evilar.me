@@ -99,6 +99,7 @@
 		text-align: left;
 		display: block;
 		width: 100%;
+		cursor: default;
 		transition:
 			font-weight 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 			font-variation-settings 0.3s cubic-bezier(0.4, 0, 0.2, 1);

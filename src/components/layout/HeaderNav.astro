@@ -19,20 +19,18 @@ const { isCompact = false, menuId } = Astro.props;
 	data-header-nav
 	id={menuId}
 >
-	{
-		menuLinks.map((link, index) => (
-			<>
-				<a
-					aria-current={Astro.url.pathname === link.path ? "page" : false}
-					class="mobile-nav-link nav-link aria-[current=page]:text-text sm:rounded-none sm:px-0 sm:py-0 sm:text-base sm:hover:bg-transparent"
-					href={link.path}
-				>
-					{link.title}
-				</a>
-				{index < menuLinks.length - 1 && <span class="text-heading hidden px-2 sm:inline">·</span>}
-			</>
-		))
-	}
+	{menuLinks.map((link, index) => (
+		<>
+			<a
+				aria-current={Astro.url.pathname === link.path ? "page" : false}
+				class="mobile-nav-link nav-link aria-[current=page]:text-text sm:rounded-none sm:px-0 sm:py-0 sm:text-base sm:hover:bg-transparent"
+				href={link.path}
+			>
+				{link.title}
+			</a>
+			{index < menuLinks.length - 1 && <span class="text-heading hidden px-2 sm:inline">·</span>}
+		</>
+	))}
 	<div class="border-text/10 my-1 border-t sm:hidden"></div>
 	<ThemeToggle showText={true} class="ms-0! block w-full sm:ms-0! sm:hidden" />
 </nav>

@@ -41,12 +41,10 @@ const defaultRel = defaultTarget === "_blank" ? "noreferrer" : undefined;
 	rel={rel ?? defaultRel}
 	{...rest}
 >
-	{
-		name && (
-			<span class="glass-button__icon flex h-5 w-5 items-center justify-center" aria-hidden="true">
-				<Icon class="h-5 w-5" name={name} focusable="false" />
-			</span>
-		)
-	}
+	{name && (
+		<span class="glass-button__icon flex h-5 w-5 items-center justify-center" aria-hidden="true">
+			<Icon class="h-5 w-5" name={name} focusable="false" />
+		</span>
+	)}
 	{label && <span>{label}</span>}
 </Tag>

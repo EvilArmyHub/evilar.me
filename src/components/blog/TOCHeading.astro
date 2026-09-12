@@ -11,16 +11,14 @@ const {
 ---
 
 <li class={`${depth > 2 ? "ms-2" : ""}`}>
-	<a class={`text-link line-clamp-2 ${depth <= 2 ? "mt-3" : "mt-2 text-xs"}`} href={`#${slug}`}
-		>{text}</a
-	>
-	{
-		!!children.length && (
-			<ol>
-				{children.map((subheading) => (
-					<Astro.self heading={subheading} />
-				))}
-			</ol>
-		)
-	}
+	<a class={`text-link line-clamp-2 ${depth <= 2 ? "mt-3" : "mt-2 text-xs"}`} href={`#${slug}`}>
+		{text}
+	</a>
+	{!!children.length && (
+		<ol>
+			{children.map((subheading) => (
+				<Astro.self heading={subheading} />
+			))}
+		</ol>
+	)}
 </li>

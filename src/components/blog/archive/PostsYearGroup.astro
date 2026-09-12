@@ -16,12 +16,10 @@ const { year, posts } = Astro.props;
 		{year}
 	</h2>
 	<ul class="space-y-1 text-start">
-		{
-			posts.map((post) => (
-				<li>
-					<PostPreview post={post} />
-				</li>
-			))
-		}
+		{posts.map((post) => (
+			<li>
+				<PostPreview post={post} />
+			</li>
+		))}
 	</ul>
 </section>

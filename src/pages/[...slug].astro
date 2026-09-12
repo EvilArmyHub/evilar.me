@@ -54,15 +54,13 @@ const noteMeta = note
 	: null;
 ---
 
-{
-	post && PostContent ? (
-		<PostLayout nextPost={nextPost} post={post} prevPost={prevPost}>
-			<PostContent />
-		</PostLayout>
-	) : note && noteMeta ? (
-		<PageLayout isArticleLayout meta={noteMeta}>
-			<Note as="h1" note={note} />
-			<ContentNav next={nextNote} prev={prevNote} />
-		</PageLayout>
-	) : null
-}
+{post && PostContent ? (
+	<PostLayout nextPost={nextPost} post={post} prevPost={prevPost}>
+		<PostContent />
+	</PostLayout>
+) : note && noteMeta ? (
+	<PageLayout isArticleLayout meta={noteMeta}>
+		<Note as="h1" note={note} />
+		<ContentNav next={nextNote} prev={prevNote} />
+	</PageLayout>
+) : null}

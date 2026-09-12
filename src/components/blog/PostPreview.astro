@@ -27,37 +27,27 @@ const previewImage =
 >
 	<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
 		<Tag class="min-w-0 text-base leading-snug font-normal">
-			<span
-				class="text-text group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 underline decoration-transparent decoration-1 underline-offset-4 transition-all duration-250 ease-out"
-			>
+			<span class="text-text group-hover:text-link-hover group-hover:decoration-link-hover/30 group-focus-visible:text-link-hover group-focus-visible:decoration-link-hover/30 underline decoration-transparent decoration-1 underline-offset-4 transition-all duration-250 ease-out">
 				{post.data.title}
 			</span>
 		</Tag>
-		<span
-			class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400"
-		>
-			{
-				post.data.draft && (
-					<span aria-label="Черновик" title="Черновик">
-						🚧
-					</span>
-				)
-			}
-			{
-				isFresh && (
-					<span aria-label="Свежий материал" title="Свежий материал">
-						🌱
-					</span>
-				)
-			}
+		<span class="inline-flex shrink-0 items-baseline gap-1 text-sm text-gray-600 tabular-nums dark:text-gray-400">
+			{post.data.draft && (
+				<span aria-label="Черновик" title="Черновик">
+					🚧
+				</span>
+			)}
+			{isFresh && (
+				<span aria-label="Свежий материал" title="Свежий материал">
+					🌱
+				</span>
+			)}
 			<FormattedDate date={post.data.publishDate} />
 		</span>
 	</div>
-	{
-		withDesc && (
-			<q class="mt-1 line-clamp-3 block text-gray-600 italic dark:text-gray-400">
-				{post.data.description}
-			</q>
-		)
-	}
+	{withDesc && (
+		<q class="mt-1 line-clamp-3 block text-gray-600 italic dark:text-gray-400">
+			{post.data.description}
+		</q>
+	)}
 </a>

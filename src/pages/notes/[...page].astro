@@ -31,19 +31,18 @@ const meta = {
 <PageLayout meta={meta} doNotIndex>
 	<section>
 		<h1 class="page-title mb-6 flex items-center gap-3">
-			Заметки <a class="text-accent" href="/notes/rss.xml" target="_blank">
+			Заметки{" "}
+			<a class="text-accent" href="/notes/rss.xml" target="_blank">
 				<span class="sr-only">RSS-лента</span>
 				<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
 			</a>
 		</h1>
 		<ul class="space-y-4 text-start">
-			{
-				notes.map((note) => (
-					<li class="">
-						<Note note={note} as="h2" isPreview />
-					</li>
-				))
-			}
+			{notes.map((note) => (
+				<li class="">
+					<Note note={note} as="h2" isPreview />
+				</li>
+			))}
 		</ul>
 	</section>
 </PageLayout>

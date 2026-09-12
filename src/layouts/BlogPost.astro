@@ -38,19 +38,21 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 	}}
 >
 	<article class="h-entry grow break-words" data-pagefind-body>
-		<a class="u-url hidden" href={postUrl} aria-hidden="true" data-pagefind-ignore>{title}</a>
+		<a class="u-url hidden" href={postUrl} aria-hidden="true" data-pagefind-ignore>
+			{title}
+		</a>
 		<div class="mb-12" id="blog-hero" data-pagefind-ignore>
 			<Masthead content={post} readingTime={readingTime} />
 		</div>
 		<div class="p-author h-card hidden" aria-hidden="true" data-pagefind-ignore>
-			<a class="u-url p-name" href={authorUrl}>Злая редакция</a>
+			<a class="u-url p-name" href={authorUrl}>
+				Злая редакция
+			</a>
 			<img class="u-photo" data-image-component="true" loading="eager" src="/icon.svg" alt="" />
 		</div>
 		<div class="relative w-full">
 			{!!headings.length && <TOC headings={headings} />}
-			<div
-				class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-300 dark:prose-headings:before:text-gray-700 prose-headings:before:transition-colors prose-headings:before:duration-250 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none"
-			>
+			<div class="e-content prose prose-headings:font-semibold prose-headings:text-heading prose-headings:before:absolute prose-headings:before:-ms-6 prose-headings:before:text-gray-300 dark:prose-headings:before:text-gray-700 prose-headings:before:transition-colors prose-headings:before:duration-250 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none mx-auto w-full max-w-none">
 				<slot />
 				<div data-pagefind-ignore>
 					<ContentNav next={nextPost} prev={prevPost} />
@@ -103,7 +105,8 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 			<path
 				d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
 				stroke-linecap="round"
-				stroke-linejoin="round"></path>
+				stroke-linejoin="round"
+			></path>
 		</svg>
 		<svg
 			id="copy-link-icon-check"
