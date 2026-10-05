@@ -7,12 +7,7 @@ interface Props extends HTMLAttributes<"a"> {
 	iconName?: string;
 }
 
-const {
-	class: className = "",
-	href,
-	iconName = "mingcute:arrow-right-line",
-	...rest
-} = Astro.props;
+const { class: className = "", href, iconName = "ph:arrow-right", ...rest } = Astro.props;
 ---
 
 <a class:list={["action-link", className]} href={href} {...rest}>

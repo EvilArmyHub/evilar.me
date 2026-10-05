@@ -26,8 +26,10 @@ function hasStrongText(cell: TableCell): boolean {
 }
 
 function addClass(node: Table | TableCell, className: string) {
-	const data = (node.data ??= {});
-	const properties = (data.hProperties ??= {}) as { className?: string[] };
+	node.data ??= {};
+	const data = node.data;
+	data.hProperties ??= {};
+	const properties = data.hProperties as { className?: string[] };
 	properties.className = [...(properties.className ?? []), className];
 }
 

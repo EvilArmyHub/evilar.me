@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import { Icon } from "astro-icon/components";
 
 interface Props {
 	headings: MarkdownHeading[];
@@ -36,9 +37,7 @@ const cleanTitle = (text: string) => {
 				class="scroll-toc-hint bg-bg border-text/10 text-text/50 pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:-translate-x-2 group-hover:opacity-0"
 				aria-hidden="true"
 			>
-				<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-				</svg>
+				<Icon class="h-4 w-4" focusable="false" name="ph:list" />
 			</div>
 
 			<div class="scroll-toc-content scrollbar-hide pointer-events-none flex-1 -translate-x-2 overflow-y-auto opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100">
@@ -71,17 +70,7 @@ const cleanTitle = (text: string) => {
 			title="Открыть оглавление"
 		>
 			<span class="sr-only">Table of contents</span>
-			<svg
-				aria-hidden="true"
-				class="h-5 w-5 shrink-0"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" />
-			</svg>
+			<Icon aria-hidden="true" class="h-5 w-5 shrink-0" focusable="false" name="ph:list" />
 		</button>
 
 		{/* Mobile Bottom Sheet Drawer */}
@@ -100,20 +89,7 @@ const cleanTitle = (text: string) => {
 					class="mobile-toc-sheet-close bg-text/5 text-text/60 hover:bg-text/10 hover:text-text focus-visible:ring-accent flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none transition-all duration-200 focus-visible:ring-2 focus-visible:outline-none active:scale-90"
 					aria-label="Закрыть"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<line x1="18" y1="6" x2="6" y2="18" />
-						<line x1="6" y1="6" x2="18" y2="18" />
-					</svg>
+					<Icon aria-hidden="true" class="h-4 w-4 shrink-0" focusable="false" name="ph:x" />
 				</button>
 			</div>
 			<div class="mobile-toc-sheet-list scrollbar-hide flex-1 overflow-y-auto p-4">

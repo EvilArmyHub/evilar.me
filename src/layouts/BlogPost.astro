@@ -8,6 +8,7 @@ import WebMentions from "@/components/blog/webmentions/index.astro";
 import { siteConfig } from "@/site.config";
 import { getLegacyContentRoute } from "@/utils/content-routes";
 
+import { Icon } from "astro-icon/components";
 import BaseLayout from "./Base.astro";
 
 interface Props {
@@ -69,18 +70,7 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 		type="button"
 	>
 		<span class="sr-only">Back to top</span>
-		<svg
-			aria-hidden="true"
-			class="h-6 w-6"
-			fill="none"
-			focusable="false"
-			stroke="currentColor"
-			stroke-width="2"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
-		</svg>
+		<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="ph:caret-up" />
 	</button>
 
 	<button
@@ -91,36 +81,20 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 		title="Copy link"
 	>
 		<span class="sr-only">Copy link to clipboard</span>
-		<svg
+		<Icon
 			id="copy-link-icon-url"
 			aria-hidden="true"
 			class="h-5 w-5 shrink-0"
-			fill="none"
 			focusable="false"
-			stroke="currentColor"
-			stroke-width="2"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path
-				d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			></path>
-		</svg>
-		<svg
+			name="ph:link-simple"
+		/>
+		<Icon
 			id="copy-link-icon-check"
 			aria-hidden="true"
 			class="floating-action-icon--check hidden h-5 w-5 shrink-0"
-			fill="none"
 			focusable="false"
-			stroke="currentColor"
-			stroke-width="2"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
-		</svg>
+			name="ph:check"
+		/>
 		<span class="floating-action-copied-text text-sm font-medium">Скопировано</span>
 	</button>
 </BaseLayout>
