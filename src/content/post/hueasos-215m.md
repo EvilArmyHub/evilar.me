@@ -4,7 +4,7 @@ description: "Анонс самой мощной языковой модели �
 publishDate: "2026-07-24"
 updatedDate: "2026-08-15"
 tags: ["LLM", "announcement"]
-ogImage: "/flying.png"
+ogImage: "/t4cat.jpg"
 ---
 
 Сегодня мы представляем HuEAsos 215M — самую мощную языковую модель в мире. HuEAsos 215M устанавливает новый мировой стандарт в знании лора, генерации слопа, диалогах NPC и стратегических задачах Evil Army.
@@ -15,7 +15,7 @@ HuEAsos 215M доступна в Evil LLM API, на платформах па�
 
 В новом поколении мы также расширили Evil Army Capability Suite — внутренний набор оценок для прикладных задач Эвил Арми.
 
-![HuEAsos 215M](/flying.png)
+![HuEAsos 215M](/t4cat.avif)
 
 ## Ключевые результаты
 

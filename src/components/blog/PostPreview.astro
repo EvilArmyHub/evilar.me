@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import type { HTMLTag, Polymorphic } from "astro/types";
+import { Icon } from "astro-icon/components";
 import FormattedDate from "@/components/FormattedDate.astro";
 import { getContentPath } from "@/utils/content-routes";
 import { isFreshDate } from "@/utils/date";
@@ -8,9 +9,10 @@ import { isFreshDate } from "@/utils/date";
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 	post: CollectionEntry<"post">;
 	withDesc?: boolean;
+	pinned?: boolean;
 };
 
-const { as: Tag = "div", post, withDesc = false } = Astro.props;
+const { as: Tag = "div", post, withDesc = false, pinned = false } = Astro.props;
 const isFresh = isFreshDate(post.data.updatedDate ?? post.data.publishDate);
 const previewImage =
 	post.data.ogImage ??
@@ -37,12 +39,27 @@ const previewImage =
 					🚧
 				</span>
 			)}
-			{isFresh && (
+			{isFresh && !pinned && (
 				<span aria-label="Свежий материал" title="Свежий материал">
 					🌱
 				</span>
 			)}
-			<FormattedDate date={post.data.publishDate} />
+			{pinned ? (
+				<span
+					class="text-accent inline-flex items-center self-center"
+					title="Закрепленная статья"
+				>
+					<span class="sr-only">Закрепленная статья</span>
+					<Icon
+						aria-hidden="true"
+						class="h-4 w-4 shrink-0"
+						focusable="false"
+						name="ph:push-pin"
+					/>
+				</span>
+			) : (
+				<FormattedDate date={post.data.publishDate} />
+			)}
 		</span>
 	</div>
 	{withDesc && (

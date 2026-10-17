@@ -151,7 +151,7 @@ const legacyWebmentionUrls = legacyRoute ? [new URL(legacyRoute.source, siteConf
 				if (img.naturalWidth === 0 || img.naturalHeight === 0) return;
 
 				// Keep pixel-art and small images crisp by disabling smoothing
-				if (img.naturalWidth < 500) {
+				if (img.naturalWidth < 840) {
 					img.style.imageRendering = "pixelated";
 				}
 

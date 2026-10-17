@@ -13,11 +13,13 @@ import PageLayout from "@/layouts/Base.astro";
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
 const allPostsByDate = getSortedPosts(allPosts);
-const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
 
 // Pin a small curated subset of posts to keep critical announcement or key items visible above the fold.
 const MAX_PINNED_POSTS = 3;
 const pinnedPosts = getPinnedPosts(allPostsByDate, MAX_PINNED_POSTS);
+const pinnedIds = new Set(pinnedPosts.map((p) => p.id));
+const unpinnedPosts = allPostsByDate.filter((p) => !pinnedIds.has(p.id));
+const latestPosts = unpinnedPosts.slice(0, MAX_POSTS);
 
 // Cap notes to avoid cluttering the home dashboard layout with micro-blogging content.
 const MAX_NOTES = 5;
@@ -39,7 +41,8 @@ function pluralizeRu(count: number, one: string, few: string, many: string) {
 	return many;
 }
 
-const remainingPosts = Math.max(allPostsByDate.length - latestPosts.length, 0);
+const totalDisplayedPosts = pinnedPosts.length + latestPosts.length;
+const remainingPosts = Math.max(allPostsByDate.length - totalDisplayedPosts, 0);
 const remainingNotes = Math.max(allNotes.length - latestNotes.length, 0);
 const showPostsLink = remainingPosts > 0;
 const postsLinkText = showPostsLink
@@ -79,37 +82,15 @@ const notesLinkText =
 			<EvilIllustration class="text-text h-auto w-full max-w-full sm:h-full sm:w-auto" />
 		</div>
 	</section>
-	{pinnedPosts.length > 0 && (
-		<section class="mt-10">
-			<h2 class="page-title mb-3 text-xl">Ключевое</h2>
-			<div class="relative" data-post-hover-container>
-				<ul class="space-y-1" role="list">
-					{pinnedPosts.map((p) => (
-						<li>
-							<PostPreview post={p} />
-						</li>
-					))}
-				</ul>
-				<div
-					class="post-hover-card bg-bg pointer-events-none absolute top-0 right-0 z-30 hidden aspect-[1200/630] w-60 overflow-hidden rounded-[10px] shadow-xl shadow-black/5 md:block dark:shadow-black/20"
-					data-post-hover-card
-				>
-					<img
-						src=""
-						alt=""
-						decoding="async"
-						data-image-component="true"
-						class="h-full w-full object-cover"
-						data-post-hover-image
-					/>
-				</div>
-			</div>
-		</section>
-	)}
 	<section class="mt-10">
 		<h2 class="page-title mb-3 text-xl">Статьи</h2>
 		<div class="relative" data-post-hover-container>
 			<ul class="space-y-1" role="list">
+				{pinnedPosts.map((p) => (
+					<li>
+						<PostPreview post={p} pinned />
+					</li>
+				))}
 				{latestPosts.map((p) => (
 					<li>
 						<PostPreview post={p} />
