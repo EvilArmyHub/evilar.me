@@ -19,6 +19,35 @@ const socialImageType =
 		: socialImageExtension
 			? `image/${socialImageExtension}`
 			: undefined;
+
+const schemaOrgData = {
+	"@context": "https://schema.org",
+	"@graph": [
+		{
+			"@type": "WebSite",
+			"@id": `${siteConfig.url}#website`,
+			description: siteConfig.description,
+			inLanguage: siteConfig.lang,
+			name: siteConfig.title,
+			publisher: {
+				"@id": `${siteConfig.url}#organization`,
+			},
+			url: siteConfig.url,
+		},
+		{
+			"@type": "Organization",
+			"@id": `${siteConfig.url}#organization`,
+			logo: new URL("/icon.svg", siteConfig.url).toString(),
+			name: siteConfig.title,
+			sameAs: [
+				"https://t.me/ResEvil",
+				"https://github.com/EvilArmyHub",
+				"https://www.youtube.com/@ResEvilTube",
+			],
+			url: siteConfig.url,
+		},
+	],
+};
 ---
 
 <meta charset="utf-8" />
@@ -88,8 +117,11 @@ const socialImageType =
 )}
 
 {/* IndieAuth Verification / rel="me" */}
-<link href="https://t.me/+o-QQtDMYJ4VlN2Iy" rel="me" />
+<link href="https://t.me/ResEvil" rel="me" />
 <link href="https://github.com/EvilArmyHub" rel="me" />
 <link href="https://www.youtube.com/@ResEvilTube" rel="me" />
+
+{/* Schema.org Structured Data */}
+<script is:inline set:html={JSON.stringify(schemaOrgData)} type="application/ld+json" />
 
 <meta content={Astro.generator} name="generator" />

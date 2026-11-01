@@ -54,18 +54,28 @@ const notesLinkText =
 		: "все заметки";
 ---
 
-<PageLayout meta={{ title: "Главная" }} doNotIndex>
+<PageLayout
+	meta={{
+		title: "Главная",
+		description:
+			"Ламповый чат. Разношёрстное и живое комьюнити с 2018. Обсуждаем всё: нейросети, игры, науку, работу, учёбу, религию и жизнь. @ResEvil",
+	}}
+	doNotIndex
+>
 	<section class="h-card grid grid-cols-1 gap-y-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-x-8">
-		<a class="u-url hidden" href="/">
-			Evil Army
-		</a>
-		<img
-			class="u-photo u-logo hidden"
-			data-image-component="true"
-			loading="eager"
-			src="/icon.svg"
-			alt="Evil Army Logo"
-		/>
+		<div data-nosnippet class="hidden">
+			<a class="u-url" href="/">
+				Evil Army
+			</a>
+			<img
+				class="u-photo u-logo"
+				data-image-component="true"
+				loading="eager"
+				src="/icon.svg"
+				alt=""
+				aria-hidden="true"
+			/>
+		</div>
 		<div>
 			<h1 class="p-name title mb-3 text-2xl font-semibold sm:text-3xl">Ламповый чат</h1>
 			<p class="p-note mt-0 mb-3">
