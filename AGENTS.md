@@ -2,7 +2,7 @@
 
 ## Tech Stack
 
-- Astro 6
+- Astro 7
 - TypeScript
 - Tailwind CSS 4
 - MDX content collections
@@ -46,7 +46,7 @@
 1. Read related files before editing.
 2. Prefer existing components, layouts, utilities, styles, and content helpers.
 3. Make focused changes; avoid broad refactors unless requested.
-4. Keep Astro 6, content collections, MDX, and Tailwind behavior intact.
+4. Keep Astro 7, content collections, MDX, and Tailwind behavior intact.
 5. Align imports, naming, and style with surrounding code.
 
 ## Validation
